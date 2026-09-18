@@ -32,15 +32,19 @@ ainda não visto aqui.
 size = 6 + len(payload)   (cobre code + cbytes + payload)
 ```
 
-- `cbytes` que mandamos: `68 00 65 00`. O daemon responde com `65 00 68 00`
-  (os dois pares trocados).
+- `cbytes` = endereço da sessão (ver abaixo); o daemon responde com os dois
+  pares trocados. O primeiro probe usou `68 00 65 00` (resposta `65 00 68 00`)
+  e só alcançou a sessão raiz; o cliente usa a sessão da HD 8, `6a 00 69 00`.
 - `JM`: payload = `uint32 LE len` + JSON.
 - `ZM`: payload = `uint32 LE len` (tamanho descomprimido) + zlib. O conteúdo é JSON.
 - `KA`: keepalive, payload vazio (mandamos a cada ~1 s; a conexão não caiu em 5 s).
 
-## Handshake (medido)
+## Handshake do primeiro probe (medido; superado)
 
-Mandamos `UM` (payload `00 00` + `uint16 LE 47809`) e depois
+> Superado pelas seções "Sessão da HD 8" e "Medidores": o payload do `UM` é
+> **só** `uint16 LE` porta UDP, e o estado vem na sessão `6a 00 69 00`.
+
+O primeiro probe mandou `UM` (payload `00 00` + `uint16 LE 47809`) e depois
 `JM {"id":"Subscribe", "clientName", "clientInternalName", "clientType",
 "clientDescription", "clientIdentifier", "clientOptions", "clientEncoding"}`
 (os mesmos campos aparecem como strings no binário do daemon).
@@ -67,7 +71,7 @@ mostrou várias sessões na mesma conexão TCP, cada uma com seu par de `cbytes`
 ## Sessão da HD 8 (medido e reproduzido sem o UC)
 
 ```
-UM   cbytes 00 00 69 00   payload 00 00 + uint16 LE porta UDP
+UM   cbytes 00 00 69 00   payload uint16 LE porta UDP (só 2 bytes; ver "Medidores")
 JM   cbytes 6a 00 69 00   {"id":"Subscribe","clientName":"quantum-hd8","clientInternalName":"ucapp", …}
 FR   cbytes 6a 00 69 00   01 00 "Listscene" 00 00          (lista de cenas)
 ```

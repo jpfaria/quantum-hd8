@@ -137,10 +137,10 @@ def test_preamp_non_numeric_channel_returns_2(capsys, monkeypatch):
     assert capsys.readouterr().err
 
 
-def test_preamp_out_of_range_gain_prints_error_returns_1(capsys, monkeypatch):
+def test_preamp_out_of_range_gain_prints_error_returns_2(capsys, monkeypatch):
     monkeypatch.setattr("quantum_hd8.cli.Client", ShortcutFakeClient)
     rc = main(["preamp", "1", "gain", "999"])
-    assert rc == 1
+    assert rc == 2  # validation error (final review #8: usage/validation = 2)
     assert "fora da faixa" in capsys.readouterr().err
 
 

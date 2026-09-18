@@ -70,6 +70,15 @@ def default_udp_factory() -> socket.socket:
     return s
 CONNECT_TIMEOUT = 3.0
 KEEPALIVE_INTERVAL = 1.0
+# After RecalledPreset the daemon re-sends every PV (docs/protocol.md,
+# "Escrita"). load_scene(keep_gains=True) keeps reading until the link has
+# been quiet this long, bounded by SCENE_SETTLE_MAX, before comparing gains.
+SCENE_QUIET = 0.3
+SCENE_SETTLE_MAX = 3.0
+# Echo tolerance for non-int params (int params compare quantized steps).
+ECHO_TOLERANCE = 1e-3
+# params.json types whose value is text, not a number -- never writable here.
+TEXT_TYPES = ("string", "color")
 
 NOT_RESPONDING = (
     "ucdaemon não respondeu -- o Universal Control está instalado e o "
@@ -136,6 +145,15 @@ class Client:
         self._decoder = ucnet.Decoder()
         self._keepalive_stop = threading.Event()
         self._keepalive_thread: threading.Thread | None = None
+        # Keepalive thread and main thread share the socket: every sendall
+        # goes through _send(), under this lock.
+        self._send_lock = threading.Lock()
+        self.scene_quiet = SCENE_QUIET
+        self.scene_settle_max = SCENE_SETTLE_MAX
+
+    def _send(self, data: bytes) -> None:
+        with self._send_lock:
+            self.sock.sendall(data)
 
     def connect(self) -> dict:
         self.sock = self._sock_factory((self.host, self.port))
@@ -145,11 +163,11 @@ class Client:
         if self._udp_factory is not None:
             self.udp_sock = self._udp_factory()
             udp_port = self.udp_sock.getsockname()[1]
-        self.sock.sendall(ucnet.encode(
+        self._send(ucnet.encode(
             "UM", struct.pack("<H", udp_port), cbytes=UM_CB))
-        self.sock.sendall(ucnet.encode(
+        self._send(ucnet.encode(
             "JM", ucnet.json_payload(SUBSCRIBE_PAYLOAD), cbytes=DEVICE_CB))
-        self.sock.sendall(ucnet.encode(
+        self._send(ucnet.encode(
             "FR", struct.pack("<H", 1) + b"Listscene" + b"\x00\x00", cbytes=DEVICE_CB))
 
         # ZM/ZB (state) and FD (scene list) can arrive in separate TCP
@@ -267,6 +285,8 @@ class Client:
         row = self._param_row(path)
         if "readonly" in row.get("flags", []):
             raise PermissionError(f"{path} é readonly")
+        if row.get("type") in TEXT_TYPES:
+            raise ValueError(f"{path}: parâmetro de texto não suportado")
 
         curve, lo, hi = self._curve_and_range(path)
         if curve == "linear" and lo is not None and hi is not None:
@@ -287,7 +307,7 @@ class Client:
             return current
 
         before = self.state.get(path)
-        echoed = self._write_pv(path, normalized)
+        echoed = self._write_pv(path, normalized, row)
         undo.record(path, before, echoed, journal=self.undo_journal)
         return echoed
 
@@ -312,7 +332,7 @@ class Client:
             return current
 
         before = self.state.get(path)
-        echoed = self._write_pv(path, normalized)
+        echoed = self._write_pv(path, normalized, row)
         undo.record(path, before, echoed, journal=self.undo_journal)
         return echoed
 
@@ -326,32 +346,54 @@ class Client:
         param's integer step (round(v * (max-min)) / (max-min)); every
         other type compares with abs diff < 1e-4."""
         current = self.state.get(path)
-        if current is None:
+        if not isinstance(current, (int, float)):
             return False, None
+        if self._values_match(path, normalized, current, row, 1e-4):
+            return True, current
+        return False, None
 
+    def _values_match(self, path: str, wanted: float, got: float,
+                      row: dict | None, tolerance: float) -> bool:
+        """int params: same quantized step (round(v * (max-min)));
+        everything else: abs diff < tolerance."""
         if row is not None and row.get("type") == "int":
             _, lo, hi = self._curve_and_range(path)
             if lo is not None and hi is not None and hi != lo:
                 step = hi - lo
-                if round(normalized * step) == round(current * step):
-                    return True, current
-                return False, None
-
-        if abs(normalized - current) < 1e-4:
-            return True, current
-        return False, None
+                return round(wanted * step) == round(got * step)
+        return abs(wanted - got) < tolerance
 
     def set_raw(self, path: str, normalized: float) -> object:
         """Write a raw normalized value directly, bypassing curve conversion,
         range validation and undo recording. Used by the CLI `undo` command
         to restore the exact previous value (ruling: "bypassing human
-        conversion")."""
-        return self._write_pv(path, normalized)
+        conversion"). No-op (returns the current value, sends nothing) when
+        the state already holds `normalized` -- the daemon would not echo."""
+        if not isinstance(normalized, (int, float)):
+            raise ValueError(f"{path}: valor anterior desconhecido ({normalized!r})")
+        try:
+            row = self._param_row(path)
+        except KeyError:
+            row = None
+        is_noop, current = self._is_noop_write(path, normalized, row)
+        if is_noop:
+            return current
+        return self._write_pv(path, normalized, row)
 
-    def _write_pv(self, path: str, normalized: float) -> object:
-        self.sock.sendall(ucnet.encode("PV", ucnet.pv_payload(path, normalized), cbytes=DEVICE_CB))
-        m = self._drain_until(
-            lambda m: m.code == "PV" and ucnet.parse_pv(m)[0] == path, timeout=1.0)
+    def _write_pv(self, path: str, normalized: float, row: dict | None = None) -> object:
+        """Send the PV and wait for *its* echo: a PV for `path` whose value
+        matches `normalized` (quantized step for int params, ECHO_TOLERANCE
+        otherwise). Stale PVs for the same path -- e.g. re-sent by a scene
+        recall still in flight -- update state but are not the echo."""
+        self._send(ucnet.encode("PV", ucnet.pv_payload(path, normalized), cbytes=DEVICE_CB))
+
+        def is_echo(m):
+            if m.code != "PV":
+                return False
+            p, v = ucnet.parse_pv(m)
+            return p == path and self._values_match(path, normalized, v, row, ECHO_TOLERANCE)
+
+        m = self._drain_until(is_echo, timeout=1.0)
         if m is None:
             raise WriteNotConfirmed(f"{path}: o daemon não confirmou a escrita em 1 s")
         return ucnet.parse_pv(m)[1]
@@ -361,11 +403,15 @@ class Client:
         missing) and wait up to 3 s for JM RecalledPreset.
 
         With keep_gains=True: snapshot line/ch1..8/preampgain (human dB)
-        before sending, snapshot them again once RecalledPreset arrives, and
+        before sending; after RecalledPreset keep reading (the daemon
+        re-sends every PV *after* it, docs/protocol.md) until the link is
+        quiet for scene_quiet s, bounded by scene_settle_max s; then
         re-set (via `set`, one at a time) every channel whose value changed
-        -- loading a scene resets preamp gains on the rig (docs/protocol.md).
-        Returns {"preset_file": ..., "gains": [(path, before, after), ...]}
-        for channels that were restored.
+        -- loading a scene resets preamp gains on the rig.
+        Returns {"preset_file": ..., "gains": [(path, before, after), ...],
+        "failed": [(path, before, after, error), ...]}: a channel whose
+        re-set fails (WriteNotConfirmed/ValueError) is collected in
+        "failed" and the rest still run.
         """
         preset_file = name if name.endswith(".scene") else f"{name}.scene"
         gain_paths = [f"line/ch{ch}/preampgain" for ch in range(1, 9)]
@@ -378,7 +424,7 @@ class Client:
             "presetTargetSlave": 0,
             "presetFile": f"scene/{preset_file}",
         })
-        self.sock.sendall(ucnet.encode("JM", payload, cbytes=DEVICE_CB))
+        self._send(ucnet.encode("JM", payload, cbytes=DEVICE_CB))
 
         m = self._drain_until(
             lambda m: m.code == "JM" and ucnet.parse_json(m).get("id") == "RecalledPreset",
@@ -387,14 +433,40 @@ class Client:
             raise SceneLoadTimeout(name)
 
         gains = []
+        failed = []
         if keep_gains:
+            self._drain_quiet(self.scene_quiet, self.scene_settle_max)
             after = {p: self._human_value(p) for p in gain_paths}
             for p in gain_paths:
                 b, a = before[p], after[p]
                 if a != b:
-                    self.set(p, b)
+                    try:
+                        self.set(p, b)
+                    except (WriteNotConfirmed, ValueError) as e:
+                        failed.append((p, b, a, str(e)))
+                        continue
                     gains.append((p, b, a))
-        return {"preset_file": preset_file, "gains": gains}
+        return {"preset_file": preset_file, "gains": gains, "failed": failed}
+
+    def _drain_quiet(self, quiet: float, max_total: float) -> None:
+        """Feed every incoming message through _handle() until nothing
+        arrives for `quiet` s, the connection closes, or `max_total` s pass."""
+        deadline = time.monotonic() + max_total
+        while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                return
+            self.sock.settimeout(min(quiet, remaining))
+            try:
+                data = self.sock.recv(4096)
+            except socket.timeout:
+                return
+            if not data:
+                return
+            if self._raw_sink is not None:
+                self._raw_sink(data)
+            for m in self._decoder.feed(data):
+                self._handle(m)
 
     def _drain_until(self, predicate, timeout: float):
         """Read from the socket, feeding every decoded message through
@@ -479,7 +551,7 @@ class Client:
         def loop():
             while not self._keepalive_stop.wait(KEEPALIVE_INTERVAL):
                 try:
-                    self.sock.sendall(ucnet.encode("KA", b"", cbytes=DEVICE_CB))
+                    self._send(ucnet.encode("KA", b"", cbytes=DEVICE_CB))
                 except OSError:
                     return
         self._keepalive_thread = threading.Thread(target=loop, daemon=True)

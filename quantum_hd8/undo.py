@@ -1,8 +1,10 @@
 """LIFO undo journal for writes made by Client.set (see client.py).
 
-One JSON object per line: {"path", "before", "after"}. pop() removes and
-returns the last line's (path, before) -- the caller re-sends `before` as
-the raw normalized value to restore it. Tests always pass an explicit
+One JSON object per line: {"path", "before", "after"}. peek() returns the
+last line's (path, before) without removing it; the caller re-sends
+`before` as the raw normalized value and only calls drop_last() once the
+write is confirmed, so a failed undo keeps its entry. pop() = peek() +
+drop_last(). Tests always pass an explicit
 `journal` (tmp_path); the default is only used by the real CLI.
 """
 from __future__ import annotations
@@ -20,18 +22,34 @@ def record(path: str, before: object, after: object, journal: Path = DEFAULT_JOU
         f.write(json.dumps({"path": path, "before": before, "after": after}) + "\n")
 
 
+def _lines(journal: Path) -> list[str]:
+    journal = Path(journal)
+    if not journal.exists():
+        return []
+    return journal.read_text().splitlines()
+
+
+def peek(journal: Path = DEFAULT_JOURNAL) -> tuple[str, object] | None:
+    lines = _lines(journal)
+    if not lines:
+        return None
+    entry = json.loads(lines[-1])
+    return entry["path"], entry["before"]
+
+
+def drop_last(journal: Path = DEFAULT_JOURNAL) -> None:
+    lines = _lines(journal)
+    if not lines:
+        return
+    Path(journal).write_text("".join(line + "\n" for line in lines[:-1]))
+
+
 def pop(journal: Path = DEFAULT_JOURNAL) -> tuple[str, object] | None:
     # Rewrites the whole file, no file locking: fine for this CLI's single
     # local user running one command at a time (incl. `scene load
     # --keep-gains`, which calls record() several times in a row via
     # Client.set) -- would race under concurrent writers, out of scope here.
-    journal = Path(journal)
-    if not journal.exists():
-        return None
-    lines = journal.read_text().splitlines()
-    if not lines:
-        return None
-    last = lines.pop()
-    journal.write_text("".join(line + "\n" for line in lines))
-    entry = json.loads(last)
-    return entry["path"], entry["before"]
+    entry = peek(journal)
+    if entry is not None:
+        drop_last(journal)
+    return entry

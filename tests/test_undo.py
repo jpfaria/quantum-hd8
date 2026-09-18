@@ -61,3 +61,18 @@ def test_pop_removes_only_the_last_line(tmp_path):
     lines = journal.read_text().splitlines()
     assert len(lines) == 1
     assert json.loads(lines[0])["path"] == "a"
+
+
+def test_peek_returns_last_without_removing(tmp_path):
+    journal = tmp_path / "undo.jsonl"
+    undo.record("a", 1, 2, journal=journal)
+    undo.record("b", 3, 4, journal=journal)
+
+    assert undo.peek(journal=journal) == ("b", 3)
+    assert undo.peek(journal=journal) == ("b", 3)
+    undo.drop_last(journal=journal)
+    assert undo.peek(journal=journal) == ("a", 1)
+
+
+def test_peek_missing_or_empty_returns_none(tmp_path):
+    assert undo.peek(journal=tmp_path / "nope.jsonl") is None

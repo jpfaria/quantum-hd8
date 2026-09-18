@@ -267,3 +267,106 @@ def test_set_raw_writes_without_conversion_or_validation(tmp_path):
     echoed = c.set_raw("line/ch1/preampgain", 0.26)
 
     assert echoed == pytest.approx(0.26, abs=1e-4)
+
+
+# --- final review fix wave -------------------------------------------------
+
+def test_set_ignores_stale_pv_for_same_path_and_waits_for_matching_echo(tmp_path):
+    # A PV for the same path with an old value (e.g. re-sent by a scene
+    # recall) arriving before the real echo must not be taken as the echo.
+    c, fake = make_client(tmp_path)
+    real_sendall = fake.sendall
+
+    def sendall(b):
+        fake._pending.append(ucnet.encode(
+            "PV", ucnet.pv_payload("line/ch1/preampgain", 0.0), cbytes=b"\x69\x00\x6a\x00"))
+        real_sendall(b)
+
+    fake.sendall = sendall
+
+    echoed = c.set("line/ch1/preampgain", 37.5)
+
+    assert echoed == pytest.approx(0.5, abs=1e-4)
+    assert c.state["line/ch1/preampgain"] == pytest.approx(0.5, abs=1e-4)
+
+
+def test_set_raises_when_only_a_stale_pv_arrives(tmp_path):
+    c, fake = make_client(tmp_path)
+
+    def sendall(b):
+        fake.tx += b
+        fake._pending.append(ucnet.encode(
+            "PV", ucnet.pv_payload("line/ch1/preampgain", 0.0), cbytes=b"\x69\x00\x6a\x00"))
+
+    fake.sendall = sendall
+
+    with pytest.raises(WriteNotConfirmed):
+        c.set("line/ch1/preampgain", 37.5)
+
+
+def test_set_int_param_accepts_quantized_echo(tmp_path):
+    # Measured: ledBrightness 0.2 requested -> 0.202 echoed (1/99 step).
+    c, fake = make_client(tmp_path)
+
+    def sendall(b):
+        fake.tx += b
+        fake._pending.append(ucnet.encode(
+            "PV", ucnet.pv_payload("global/ledBrightness", 19 / 99 + 0.003), cbytes=b"\x69\x00\x6a\x00"))
+
+    fake.sendall = sendall
+
+    # asked 20 -> 19/99; the echo is off by 0.003 (> ECHO_TOLERANCE) but in
+    # the same 1/99 step, so it is the echo.
+    echoed = c.set("global/ledBrightness", 20)
+
+    assert echoed == pytest.approx(19 / 99 + 0.003, abs=1e-4)
+
+
+def test_set_on_string_param_raises_clear_value_error(tmp_path):
+    c, fake = make_client(tmp_path)
+    c.state["line/ch1/username"] = "Guitarra"
+
+    with pytest.raises(ValueError, match="texto"):
+        c.set("line/ch1/username", 0.5)
+
+    assert fake.tx == b""
+
+
+def test_set_raw_is_noop_when_state_already_at_value(tmp_path):
+    c, fake = make_client(tmp_path)
+
+    assert c.set_raw("line/ch1/preampgain", 0.26) == 0.26
+    assert fake.tx == b""
+
+
+def test_set_raw_rejects_none(tmp_path):
+    c, fake = make_client(tmp_path)
+
+    with pytest.raises(ValueError):
+        c.set_raw("line/ch1/preampgain", None)
+    assert fake.tx == b""
+
+
+def test_every_sendall_happens_under_the_send_lock(tmp_path, monkeypatch):
+    import threading
+    import time as _time
+    from quantum_hd8 import client as client_mod
+
+    c, fake = make_client(tmp_path)
+    unlocked = []
+    real_sendall = fake.sendall
+
+    def sendall(b):
+        if not c._send_lock.locked():
+            unlocked.append(threading.current_thread().name)
+        real_sendall(b)
+
+    fake.sendall = sendall
+    monkeypatch.setattr(client_mod, "KEEPALIVE_INTERVAL", 0.01)
+    c._start_keepalive()
+    c.set("line/ch1/preampgain", 37.5)
+    _time.sleep(0.05)
+    c.close()
+
+    assert b"KA" in fake.tx
+    assert unlocked == []

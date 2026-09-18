@@ -42,10 +42,20 @@ Claude Code plugin (skill `quantum-hd8`): add this repo as a marketplace
 ### Values
 
 The daemon keeps every value normalized 0..1. `set` takes human units only for `linear` curves
-(e.g. `line/chN/preampgain` in dB, `global/ledBrightness` 1..100), `0/1` (`on`/`off`) for toggles,
-and the normalized 0..1 value for `fader`/`exp` and everything else. Curves and ranges per path:
+(e.g. `line/chN/preampgain` in dB, `global/ledBrightness` 1..100), `0/1` (`on`/`off`) for toggles
+(`on`/`off` is refused on any non-toggle path), and the normalized 0..1 value for `fader`/`exp` and
+everything else. Text params (`string`/`color`, e.g. `line/chN/username`) are not writable. Curves and ranges per path:
 `quantum_hd8/params.json`. Writing the value a parameter already has is a no-op (the daemon does
-not echo it). Every write goes to `~/.quantum-hd8/undo.jsonl`; `undo` pops it.
+not echo it). Every write goes to `~/.quantum-hd8/undo.jsonl`; `undo` restores the last entry and
+removes it only once the write is confirmed (a failed undo keeps it).
+
+`scene load --keep-gains` waits for the daemon's post-recall PVs to settle (link quiet 300 ms, max
+3 s) before comparing gains; channels it could not restore are listed on stderr and it exits 1.
+
+### Exit codes
+
+`0` ok · `1` runtime/device error (daemon not running, write not confirmed, no meters) ·
+`2` usage/validation error (bad value, unknown path, readonly, missing subcommand).
 
 ### Re-amp outputs
 
@@ -75,4 +85,5 @@ Protocol notes, measured vs hypothesis: [`docs/protocol.md`](docs/protocol.md).
 PYTHONPATH=. python3 -m pytest -q     # offline, fixtures only
 ```
 
-Tests marked `device` touch the real interface and are skipped by default.
+`tests/test_device.py` (marked `device`, read-only: connect + one `get`) touches the real interface
+and is deselected by default; run it only by hand with UC running: `python3 -m pytest -m device`.

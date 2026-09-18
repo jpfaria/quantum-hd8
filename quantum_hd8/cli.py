@@ -7,7 +7,14 @@ import sys
 
 from . import __version__
 from . import undo
-from .client import Client, SceneLoadTimeout, WriteNotConfirmed, default_udp_factory
+from .client import (NOT_RESPONDING, Client, SceneLoadTimeout, WriteNotConfirmed,
+                     default_udp_factory)
+
+# Exit codes: 0 ok, 1 runtime/device error (daemon down, write not
+# confirmed, no meters), 2 usage/validation error (bad value, unknown path,
+# readonly, missing subcommand).
+EXIT_RUNTIME = 1
+EXIT_USAGE = 2
 
 METER_SECTIONS = ("in", "aux", "main")
 METER_HEADER = "valores crus do daemon — escala não calibrada"
@@ -83,7 +90,7 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("undo", help="Desfaz a última escrita")
 
     scene = sub.add_parser("scene", help="Cenas (presets)")
-    scene_sub = scene.add_subparsers(dest="scene_cmd")
+    scene_sub = scene.add_subparsers(dest="scene_cmd", required=True)
     scene_sub.add_parser("list", help="Lista as cenas")
     scene_load = scene_sub.add_parser("load", help="Carrega uma cena")
     scene_load.add_argument("name")
@@ -112,12 +119,36 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
-def _parse_set_value(raw: str):
-    if raw.lower() == "on":
-        return 1
-    if raw.lower() == "off":
-        return 0
-    return float(raw)
+def _parse_set_value(raw: str, param_type: str | None):
+    """"on"/"off" -> 1/0, only for toggle params (a fader must never jump
+    to 1.0 = +10 dB); anything else must parse as a float. ValueError
+    otherwise."""
+    if raw.lower() in ("on", "off"):
+        if param_type != "toggle":
+            raise ValueError(f"on/off só vale para parâmetros toggle (tipo: {param_type})")
+        return 1 if raw.lower() == "on" else 0
+    try:
+        return float(raw)
+    except ValueError:
+        raise ValueError(f"valor inválido: {raw}") from None
+
+
+def _print_unknown_path(c: Client, path: str) -> None:
+    print(f"caminho desconhecido: {path}", file=sys.stderr)
+    matches = difflib.get_close_matches(path, getattr(c, "state", {}).keys(), n=5)
+    if matches:
+        print("você quis dizer: " + ", ".join(matches), file=sys.stderr)
+
+
+def _write_errors(c: Client, path: str, e: Exception) -> int:
+    """Print a set/preamp error cleanly; return the exit code."""
+    if isinstance(e, KeyError):
+        _print_unknown_path(c, path)
+        return EXIT_USAGE
+    print(str(e), file=sys.stderr)
+    if isinstance(e, WriteNotConfirmed):
+        return EXIT_RUNTIME
+    return EXIT_USAGE
 
 
 def _format_set_result(c: Client, path: str, echoed: object) -> str:
@@ -139,8 +170,8 @@ def _labeled_source(c: Client, path: str):
     label list for it is known (index = round(value * (n - 1))), else the
     raw normalized value."""
     value = c.get(path)
-    labels = c.lists.get(path)
-    if labels:
+    labels = c.lists.get(path) or STATIC_LABELS.get(path)
+    if labels and isinstance(value, (int, float)):
         idx = round(value * (len(labels) - 1))
         if 0 <= idx < len(labels):
             return labels[idx]
@@ -222,7 +253,13 @@ def main(argv: list[str] | None = None) -> int:
     udp_factory = default_udp_factory if args.cmd == "meters" else None
     c = Client(raw_sink=raw_sink, udp_factory=udp_factory)
     try:
-        c.connect()
+        try:
+            c.connect()
+        except OSError as e:  # refused/reset/timeout: UC not running
+            detail = str(e)
+            msg = NOT_RESPONDING if detail in ("", NOT_RESPONDING) else f"{NOT_RESPONDING} ({detail})"
+            print(msg, file=sys.stderr)
+            return EXIT_RUNTIME
 
         if args.cmd == "dump":
             state = dict(sorted(c.state.items()))
@@ -238,11 +275,8 @@ def main(argv: list[str] | None = None) -> int:
             try:
                 value = c.get(args.path)
             except KeyError:
-                matches = difflib.get_close_matches(args.path, c.state.keys(), n=5)
-                print(f"caminho desconhecido: {args.path}", file=sys.stderr)
-                if matches:
-                    print("você quis dizer: " + ", ".join(matches), file=sys.stderr)
-                return 1
+                _print_unknown_path(c, args.path)
+                return EXIT_USAGE
             print(value)
             return 0
 
@@ -260,29 +294,33 @@ def main(argv: list[str] | None = None) -> int:
 
         if args.cmd == "set":
             try:
-                value = _parse_set_value(args.value)
-            except ValueError:
-                print(f"valor inválido: {args.value}", file=sys.stderr)
-                return 1
-            try:
+                param_type = c.param_row(args.path).get("type")
+                value = _parse_set_value(args.value, param_type)
                 echoed = c.set(args.path, value)
             except (KeyError, ValueError, PermissionError, WriteNotConfirmed) as e:
-                print(str(e), file=sys.stderr)
-                return 1
+                return _write_errors(c, args.path, e)
             print(f"{args.path} = {_format_set_result(c, args.path, echoed)}")
             return 0
 
         if args.cmd == "undo":
-            entry = undo.pop(journal=c.undo_journal)
+            # peek, write, and only drop the entry once the write is
+            # confirmed (or was a no-op: already at `before`).
+            entry = undo.peek(journal=c.undo_journal)
             if entry is None:
                 print("nada para desfazer")
                 return 0
             path, before = entry
+            if not isinstance(before, (int, float)):
+                print(f"{path}: valor anterior desconhecido -- entrada descartada do undo",
+                      file=sys.stderr)
+                undo.drop_last(journal=c.undo_journal)
+                return EXIT_RUNTIME
             try:
                 echoed = c.set_raw(path, before)
             except WriteNotConfirmed as e:
-                print(str(e), file=sys.stderr)
-                return 1
+                print(f"{e} -- entrada mantida no undo", file=sys.stderr)
+                return EXIT_RUNTIME
+            undo.drop_last(journal=c.undo_journal)
             print(f"{path}: restaurado para {echoed}")
             return 0
 
@@ -295,14 +333,22 @@ def main(argv: list[str] | None = None) -> int:
                     result = c.load_scene(args.name, keep_gains=args.keep_gains)
                 except SceneLoadTimeout as e:
                     print(f"cena não confirmada (RecalledPreset não chegou): {e}", file=sys.stderr)
-                    return 1
+                    return EXIT_RUNTIME
+                except (WriteNotConfirmed, ValueError) as e:
+                    print(f"cena carregada, mas a restauração de ganhos falhou: {e}",
+                          file=sys.stderr)
+                    return EXIT_RUNTIME
                 for path, before, after in result["gains"]:
                     print(f"{path}: {before:.1f} dB -> {after:.1f} dB (restaurado)")
-                return 0
+                failed = result.get("failed", [])
+                for path, before, after, err in failed:
+                    print(f"{path}: {after:.1f} dB, NÃO restaurado para {before:.1f} dB ({err})",
+                          file=sys.stderr)
+                return EXIT_RUNTIME if failed else 0
             if args.scene_cmd == "save":
                 print("scene save: formato ainda não capturado", file=sys.stderr)
-                return 2
-            return 0
+                return EXIT_USAGE
+            return EXIT_USAGE
 
         if args.cmd == "preamp":
             try:
@@ -319,7 +365,7 @@ def main(argv: list[str] | None = None) -> int:
                     value = float(args.db)
                 except ValueError:
                     print(f"valor inválido: {args.db}", file=sys.stderr)
-                    return 2
+                    return EXIT_USAGE
                 path = f"{base}/preampgain"
             else:
                 value = 1 if args.state == "on" else 0
@@ -328,8 +374,7 @@ def main(argv: list[str] | None = None) -> int:
             try:
                 echoed = c.set(path, value)
             except (KeyError, ValueError, PermissionError, WriteNotConfirmed) as e:
-                print(str(e), file=sys.stderr)
-                return 1
+                return _write_errors(c, path, e)
             print(f"{path} = {_format_set_result(c, path, echoed)}")
             return 0
 
@@ -338,6 +383,13 @@ def main(argv: list[str] | None = None) -> int:
             if args.once:
                 try:
                     m = c.read_meters()
+                except socket.timeout:
+                    print("sem medidores do daemon (timeout)", file=sys.stderr)
+                    return EXIT_RUNTIME
+                except OSError as e:
+                    print(f"erro lendo medidores: {e}", file=sys.stderr)
+                    return EXIT_RUNTIME
+                try:
                     print(json.dumps(_meters_snapshot(m, labels), ensure_ascii=False))
                 except BrokenPipeError:
                     _handle_broken_pipe()

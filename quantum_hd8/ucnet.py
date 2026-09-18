@@ -6,8 +6,13 @@ public StudioLive UCNet hypothesis, where the two differ:
     "UC" 00 01 | size: uint16 LE | code: 2 ASCII | cbytes: 4 | payload
     size = 6 + len(payload)   (covers code + cbytes + payload)
 
-- cbytes we send: 68 00 65 00. The daemon replies with the two pairs
-  swapped: 65 00 68 00.
+- cbytes are the session address (docs/protocol.md, "cbytes são o
+  endereço da sessão"); the daemon replies with the two pairs swapped.
+  CB (68 00 65 00, encode()'s default) is the pair of the first probe,
+  which only reaches the root session (MIDI endpoints). The client talks
+  to the HD 8 on the device session 6a 00 69 00 (replies 69 00 6a 00) and
+  sends UM on 00 00 69 00 with payload = uint16 LE UDP port only
+  (see client.py: DEVICE_CB, UM_CB).
 - JM: payload = uint32 LE len + JSON.
 - ZM: payload = uint32 LE len + zlib body. The uint32 does NOT bound the
   zlib body's length (measured) -- decompress the whole remainder of the
