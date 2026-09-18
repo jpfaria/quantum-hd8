@@ -104,3 +104,30 @@ um `PV` com o valor aplicado em ~ms (`tests/fixtures/led-write-echo-rx.bin`).
 Parâmetro inteiro volta quantizado: pedi 0,2 → veio 0,202 (= passo de 1/99 na
 faixa 1..100). Restaurei o valor original (0,7475) e a releitura numa conexão
 nova bateu.
+
+## Medidores (medido, 18/09)
+
+- **Correção do handshake:** o payload do `UM` é **só** `uint16 LE` porta UDP
+  (2 bytes). O UC manda assim (captura: `7d ec`). Com `00 00` na frente o daemon
+  lê porta 0 e não manda medidor nenhum.
+- Com a porta certa, o daemon manda por **UDP** para `127.0.0.1:<porta>` ~4–5
+  pacotes/s, 171 bytes cada (`tests/fixtures/meters-udp-1.bin`):
+
+```
+"UC" 00 01 | size | "MS" | cbytes 69 00 6a 00 | "levl" 00 00 | uint16 LE n=66
+| n × uint16 LE valores | rodapé
+```
+
+- Rodapé (18 bytes, lido como `uint16 LE`): `3` seções; os pares
+  `(0, 36)`, `(36, 28)`, `(64, 2)` aparecem com tipos `4`, `7`, `2` (a ordem
+  exata dos campos por seção não está provada). Leitura:
+  - valores 0–35 → entradas `line/ch1..36`
+  - valores 36–63 → 14 saídas `aux` × L/R
+  - valores 64–65 → `main` L/R
+- Prova parcial: `line/ch16` e `ch17` (ADAT 6/7 = ADA #1 In 6/7, retorno da
+  MK-300) marcam ~270–450 com a pedaleira ligada; entradas sem nada marcam 0–1.
+- **Não calibrado:** um tom de amplitude 0,5 no USB 4 (vai só para o aux1 →
+  Out 3/4, livres no patchbay) não mexeu em nenhum valor de entrada, aux ou
+  main. Hipóteses abertas: medidor de canal DAW pós-fader (o fader do USB 4
+  está em −∞) e/ou o UC pedir outro modo de medição (`global/meterSource`?).
+  A escala (valor → dBFS) precisa de um sinal conhecido numa entrada física.
