@@ -1,6 +1,7 @@
 import argparse
 import difflib
 import json
+import os
 import socket
 import sys
 
@@ -144,6 +145,21 @@ def _labeled_source(c: Client, path: str):
         if 0 <= idx < len(labels):
             return labels[idx]
     return value
+
+
+def _handle_broken_pipe() -> None:
+    """Downstream reader gone (e.g. `quantum-hd8 meters | head -5`):
+    redirect stdout to devnull -- the recipe from the Python docs
+    (https://docs.python.org/3/library/signal.html#note-on-sigpipe) --
+    so the interpreter doesn't print an "Exception ignored" warning for
+    the pending flush at exit. Best-effort: sys.stdout may not have a
+    real fd (e.g. under a test double), in which case there is nothing to
+    redirect and we just swallow it."""
+    try:
+        devnull = os.open(os.devnull, os.O_WRONLY)
+        os.dup2(devnull, sys.stdout.fileno())
+    except OSError:
+        pass
 
 
 def _meters_snapshot(m: dict, labels: dict) -> dict:
@@ -320,18 +336,21 @@ def main(argv: list[str] | None = None) -> int:
         if args.cmd == "meters":
             labels = c.meter_labels()
             if args.once:
-                m = c.read_meters()
-                print(json.dumps(_meters_snapshot(m, labels), ensure_ascii=False))
+                try:
+                    m = c.read_meters()
+                    print(json.dumps(_meters_snapshot(m, labels), ensure_ascii=False))
+                except BrokenPipeError:
+                    _handle_broken_pipe()
                 return 0
 
             is_tty = sys.stdout.isatty()
-            if not is_tty:
-                # Scrolling terminal / redirected output: header once, then
-                # one block of lines per packet (rate = packets arriving,
-                # ~4-5 Hz measured -- no artificial sleep).
-                print(METER_HEADER)
             consecutive_timeouts = 0
             try:
+                if not is_tty:
+                    # Scrolling terminal / redirected output: header once,
+                    # then one block of lines per packet (rate = packets
+                    # arriving, ~4-5 Hz measured -- no artificial sleep).
+                    print(METER_HEADER)
                 while True:
                     try:
                         m = c.read_meters()
@@ -355,6 +374,9 @@ def main(argv: list[str] | None = None) -> int:
                         print(lines)
             except KeyboardInterrupt:
                 pass
+            except BrokenPipeError:
+                # Downstream reader closed (e.g. `quantum-hd8 meters | head -5`).
+                _handle_broken_pipe()
             return 0
 
         if args.cmd == "route":

@@ -1,3 +1,4 @@
+import io
 import json
 import socket
 import sys
@@ -517,3 +518,61 @@ def test_meters_tty_redraw_clears_screen_and_repeats_header_each_frame(capsys, m
     assert out.count("valores crus do daemon") == 2  # header re-drawn every frame
     assert "In  1: 1" in out
     assert "In  1: 2" in out
+
+
+class ForeverMetersClient:
+    """read_meters() never stops on its own -- exercises that a downstream
+    reader closing the pipe (e.g. `quantum-hd8 meters | head -5`) is what
+    ends the command, not the fake reaching some call limit."""
+    closed = False
+
+    def __init__(self, *a, **k):
+        pass
+
+    def connect(self):
+        return {}
+
+    def meter_labels(self):
+        return {"in": ["In  1"], "aux": ["aux/ch1 L"], "main": ["main L"]}
+
+    def read_meters(self, timeout=1.0):
+        return {"in": [1], "aux": [0], "main": [0]}
+
+    def close(self):
+        self.closed = True
+
+
+class BrokenPipeStdout:
+    """Fake stdout whose write() raises BrokenPipeError once the reader on
+    the other end of a pipe has gone away (e.g. `| head -5`), after
+    `n_ok` successful writes. fileno() raises like a non-fd stream (a
+    StringIO-style double) so the fix's best-effort os.dup2 redirect must
+    not itself blow up in a test."""
+
+    def __init__(self, n_ok):
+        self.n_ok = n_ok
+        self.calls = 0
+
+    def write(self, s):
+        self.calls += 1
+        if self.calls > self.n_ok:
+            raise BrokenPipeError()
+        return len(s)
+
+    def isatty(self):
+        return False
+
+    def flush(self):
+        pass
+
+    def fileno(self):
+        raise io.UnsupportedOperation("fileno")
+
+
+def test_meters_broken_pipe_returns_0_without_a_traceback(monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", ForeverMetersClient)
+    monkeypatch.setattr(sys, "stdout", BrokenPipeStdout(n_ok=1))
+
+    rc = main(["meters"])
+
+    assert rc == 0
