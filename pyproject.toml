@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantum-hd8"
+version = "0.1.0"
+description = "Control a PreSonus Quantum HD 8 without Universal Control: UCNet client, CLI, Claude Code skill."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+quantum-hd8 = "quantum_hd8.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["quantum_hd8*"]
+
+[tool.setuptools.package-data]
+quantum_hd8 = ["params.json"]
+
+[tool.pytest.ini_options]
+markers = ["device: touches the real Quantum HD 8 via ucdaemon"]
+addopts = "-m 'not device'"
