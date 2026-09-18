@@ -70,9 +70,12 @@ Respostas (`tests/fixtures/probe-device-rx.bin`):
 3. `FD` → cabeçalho binário (14 bytes) + JSON `{"files":[{"name":"ELEMENT.scene",…}]}`.
 
 Eventos que o daemon empurra para a sessão (medido):
-- `PV` → `caminho` + `00 00 00` + `float32 LE` normalizado. Ex.: `aux/ch1/volume`
+- `PV` → `caminho` + `00` + `uint16 LE` (flag, visto 0) + `float32 LE` normalizado. Ex.: `aux/ch1/volume`
   = `0x3f3c28f6` = 0,735.
-- `PL` → `caminho` + `00` + `uint16`… + lista de rótulos separados por `\n`
+- `PL` → `caminho` + `00` + `uint16 LE` (flag; visto 0 e 1) + `float32 LE` valor
+  normalizado + rótulos separados por `\n` + `00`. Ex.: `global/mainOutVolumeLink`
+  = 0,333 com `None\nAll\n1-2\n1-4\n1-6\n1-8\nAll + ADAT`
+  (`tests/fixtures/uc-pl.bin`)
   (fontes de fone/S-PDIF: `Main L/R`, `Out 3/4` … `ADAT 15/16`, `Loopback 1`,
   `Loopback 2`, `S/PDIF Out`).
 - `JM RecalledPreset` depois de carregar cena.
@@ -89,3 +92,7 @@ Eventos que o daemon empurra para a sessão (medido):
 Strings de ids de mensagem no binário `ucdaemon` (candidatas, não medidas):
 `UpdateDevices`, `AudioDeviceInfoRequest`/`AudioDeviceInfoReply`,
 `DevicePropertyChanged`, `DeviceUnresponsive`, `ObjectList`, `StringList`.
+
+Fixtures extraídas da captura do UC: `uc-restore.bin` (RestorePreset que o UC
+mandou), `uc-recalled.bin` (resposta RecalledPreset), `uc-pvwrite.bin` (PV que o
+UC escreveu: `global/mixerMode`).
