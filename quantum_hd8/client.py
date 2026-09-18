@@ -185,15 +185,39 @@ class Client:
         return self.state[path]
 
     def human(self, path: str) -> str:
-        r = self.ranges.get(path)
-        if not r or r.get("curve") != "linear":
+        curve, lo, hi = self._curve_and_range(path)
+        if curve != "linear" or lo is None or hi is None:
             return f"{self.get(path)} (normalizado)"
         return f"{self._human_value(path):.1f} dB"
 
     def _human_value(self, path: str) -> float:
-        r = self.ranges[path]
-        lo, hi = r["min"], r["max"]
+        _, lo, hi = self._curve_and_range(path)
         return lo + self.state[path] * (hi - lo)
+
+    def to_human(self, path: str, normalized: float) -> float | None:
+        """normalized -> human units for `path`, or None when it isn't a
+        linear-curve param with a known range (daemon or params.json)."""
+        curve, lo, hi = self._curve_and_range(path)
+        if curve != "linear" or lo is None or hi is None:
+            return None
+        return lo + normalized * (hi - lo)
+
+    def _curve_and_range(self, path: str) -> tuple[str | None, float | None, float | None]:
+        """(curve, min, max) for `path`. Prefers the daemon's live `ranges`
+        (self.ranges); falls back to params.json (the XML's curve/min/max,
+        via tools/gen_params.py) when the daemon reported no range for it --
+        e.g. global/ledBrightness: Synchronize carries no `ranges` entry for
+        it, but the XML has curve="linear" min="1" max="100" (fix round 1,
+        finding 1)."""
+        r = self.ranges.get(path)
+        if r and r.get("curve") is not None:
+            return r.get("curve"), r.get("min"), r.get("max")
+        row = self._param_row(path)
+        return row.get("curve"), row.get("min"), row.get("max")
+
+    def param_row(self, path: str) -> dict:
+        """The params.json row for `path` (raises KeyError if unknown)."""
+        return self._param_row(path)
 
     def _param_row(self, path: str) -> dict:
         try:
@@ -207,7 +231,8 @@ class Client:
         and return the echoed (raw normalized) value.
 
         Ruling (task-7-brief.md): curve "linear" params take HUMAN units
-        (e.g. dB), converted with self.ranges' min/max; type "toggle" takes
+        (e.g. dB), converted with the known min/max (self.ranges, falling
+        back to params.json -- see _curve_and_range); type "toggle" takes
         0/1; every other curve (fader, exp, unknown/None) takes a raw
         normalized value in 0..1.
         """
@@ -215,9 +240,8 @@ class Client:
         if "readonly" in row.get("flags", []):
             raise PermissionError(f"{path} é readonly")
 
-        r = self.ranges.get(path)
-        if r and r.get("curve") == "linear":
-            lo, hi = r["min"], r["max"]
+        curve, lo, hi = self._curve_and_range(path)
+        if curve == "linear" and lo is not None and hi is not None:
             if not (lo <= value <= hi):
                 raise ValueError(f"{path}: {value} fora da faixa [{lo}, {hi}]")
             normalized = (value - lo) / (hi - lo)

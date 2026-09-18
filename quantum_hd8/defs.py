@@ -16,6 +16,7 @@ class Param:
     max: float | None
     default: str | None
     units: str | None
+    curve: str | None = None
     flags: list[str] = field(default_factory=list)
     component: str = ""
 
@@ -66,7 +67,7 @@ def _component(el, cid, prefix, lists, out, var, val):
             out.append(Param(
                 path=f"{path}/{p.get('id')}", id=p.get("id"), name=p.get("name") or "",
                 type=p.get("type"), min=_num(p.get("min")), max=_num(p.get("max")),
-                default=p.get("def"), units=p.get("units"),
+                default=p.get("def"), units=p.get("units"), curve=p.get("curve"),
                 flags=(p.get("flags") or "").split(), component=path))
     _walk(el, path, lists, out)
 

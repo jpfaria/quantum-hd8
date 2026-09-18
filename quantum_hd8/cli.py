@@ -52,6 +52,20 @@ def _parse_set_value(raw: str):
     return float(raw)
 
 
+def _format_set_result(c: Client, path: str, echoed: object) -> str:
+    """"21 (0.202)" for a linear param (human units, then the raw echo);
+    the raw echo alone otherwise (controller decision, fix round 1)."""
+    human_value = c.to_human(path, echoed)
+    if human_value is None:
+        return str(echoed)
+    try:
+        is_int = c.param_row(path).get("type") == "int"
+    except KeyError:
+        is_int = False
+    human_str = str(round(human_value)) if is_int else f"{human_value:.1f}"
+    return f"{human_str} ({echoed:.3f})"
+
+
 def _labeled_source(c: Client, path: str):
     """Value for a *_src/spdifSource path: the matching label when the PL
     label list for it is known (index = round(value * (n - 1))), else the
@@ -148,7 +162,7 @@ def main(argv: list[str] | None = None) -> int:
             except (KeyError, ValueError, PermissionError, WriteNotConfirmed) as e:
                 print(str(e), file=sys.stderr)
                 return 1
-            print(f"{args.path} = {echoed}")
+            print(f"{args.path} = {_format_set_result(c, args.path, echoed)}")
             return 0
 
         if args.cmd == "undo":

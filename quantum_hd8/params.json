@@ -8,6 +8,7 @@
   "max": 0.0,
   "default": "-96",
   "units": "db.inf",
+  "curve": "exp",
   "flags": [],
   "component": "global",
   "verified": false,
@@ -22,6 +23,7 @@
   "max": null,
   "default": "2",
   "units": "MainOutLinkList",
+  "curve": null,
   "flags": [
    "mutable"
   ],
@@ -38,6 +40,7 @@
   "max": null,
   "default": "0",
   "units": "EmptyParamList",
+  "curve": null,
   "flags": [
    "mutable"
   ],
@@ -54,6 +57,7 @@
   "max": 0.0,
   "default": "-96",
   "units": "db.inf",
+  "curve": "exp",
   "flags": [],
   "component": "global",
   "verified": false,
@@ -68,6 +72,7 @@
   "max": null,
   "default": "0",
   "units": "EmptyParamList",
+  "curve": null,
   "flags": [
    "mutable"
   ],
@@ -84,6 +89,7 @@
   "max": null,
   "default": "0",
   "units": "MuteButtonModeList",
+  "curve": null,
   "flags": [],
   "component": "global",
   "verified": false,
@@ -98,6 +104,7 @@
   "max": 0.0,
   "default": "-10",
   "units": "gain",
+  "curve": null,
   "flags": [],
   "component": "global",
   "verified": false,
@@ -112,6 +119,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "global",
   "verified": false,
@@ -126,6 +134,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -142,6 +151,7 @@
   "max": null,
   "default": "2",
   "units": "MixerModeList",
+  "curve": null,
   "flags": [
    "storable",
    "mutable"
@@ -159,6 +169,7 @@
   "max": 100.0,
   "default": "75",
   "units": null,
+  "curve": "linear",
   "flags": [],
   "component": "global",
   "verified": false,
@@ -173,6 +184,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -189,6 +201,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -205,6 +218,7 @@
   "max": null,
   "default": "0",
   "units": "SpeakerSelectModeList",
+  "curve": null,
   "flags": [
    "storable",
    "mutable"
@@ -222,6 +236,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -238,6 +253,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -254,6 +270,7 @@
   "max": null,
   "default": "0",
   "units": "EmptyParamList",
+  "curve": null,
   "flags": [
    "mutable"
   ],
@@ -270,6 +287,7 @@
   "max": 0.0,
   "default": "-96",
   "units": "db.inf",
+  "curve": "exp",
   "flags": [],
   "component": "global",
   "verified": false,
@@ -284,6 +302,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -300,6 +319,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch1",
   "verified": false,
@@ -314,6 +334,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -330,6 +351,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -346,6 +368,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -363,6 +386,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -381,6 +405,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -397,6 +422,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -414,6 +440,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -431,6 +458,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -447,6 +475,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -464,6 +493,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -481,6 +511,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -498,6 +529,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -515,6 +547,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -531,6 +564,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -548,6 +582,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -565,6 +600,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -582,6 +618,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -599,6 +636,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -616,6 +654,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -633,6 +672,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -650,6 +690,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -667,6 +708,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -684,6 +726,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -701,6 +744,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -718,6 +762,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -735,6 +780,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -752,6 +798,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -769,6 +816,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -785,6 +833,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -801,6 +850,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -818,6 +868,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -834,6 +885,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -850,6 +902,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -866,6 +919,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -882,6 +936,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -898,6 +953,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -914,6 +970,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch2",
   "verified": false,
@@ -928,6 +985,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -944,6 +1002,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -960,6 +1019,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -977,6 +1037,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -995,6 +1056,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -1011,6 +1073,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -1028,6 +1091,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -1045,6 +1109,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -1061,6 +1126,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -1078,6 +1144,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -1095,6 +1162,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -1112,6 +1180,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -1129,6 +1198,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -1145,6 +1215,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1162,6 +1233,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1179,6 +1251,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1196,6 +1269,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1213,6 +1287,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1230,6 +1305,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1247,6 +1323,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1264,6 +1341,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1281,6 +1359,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1298,6 +1377,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1315,6 +1395,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1332,6 +1413,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1349,6 +1431,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1366,6 +1449,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1383,6 +1467,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -1399,6 +1484,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -1415,6 +1501,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -1432,6 +1519,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -1448,6 +1536,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -1464,6 +1553,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -1480,6 +1570,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -1496,6 +1587,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -1512,6 +1604,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -1528,6 +1621,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch3",
   "verified": false,
@@ -1542,6 +1636,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -1558,6 +1653,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -1574,6 +1670,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -1591,6 +1688,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -1609,6 +1707,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -1625,6 +1724,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -1642,6 +1742,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -1659,6 +1760,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -1675,6 +1777,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -1692,6 +1795,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -1709,6 +1813,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -1726,6 +1831,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -1743,6 +1849,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -1759,6 +1866,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1776,6 +1884,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1793,6 +1902,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1810,6 +1920,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1827,6 +1938,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1844,6 +1956,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1861,6 +1974,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1878,6 +1992,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1895,6 +2010,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1912,6 +2028,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1929,6 +2046,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1946,6 +2064,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1963,6 +2082,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1980,6 +2100,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -1997,6 +2118,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -2013,6 +2135,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -2029,6 +2152,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -2046,6 +2170,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -2062,6 +2187,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -2078,6 +2204,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -2094,6 +2221,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -2110,6 +2238,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -2126,6 +2255,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -2142,6 +2272,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch4",
   "verified": false,
@@ -2156,6 +2287,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -2172,6 +2304,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -2188,6 +2321,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -2205,6 +2339,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -2223,6 +2358,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -2239,6 +2375,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -2256,6 +2393,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -2273,6 +2411,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -2289,6 +2428,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -2306,6 +2446,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -2323,6 +2464,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -2340,6 +2482,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -2357,6 +2500,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -2373,6 +2517,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2390,6 +2535,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2407,6 +2553,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2424,6 +2571,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2441,6 +2589,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2458,6 +2607,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2475,6 +2625,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2492,6 +2643,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2509,6 +2661,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2526,6 +2679,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2543,6 +2697,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2560,6 +2715,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2577,6 +2733,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2594,6 +2751,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -2611,6 +2769,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -2627,6 +2786,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -2643,6 +2803,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -2660,6 +2821,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -2676,6 +2838,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -2692,6 +2855,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -2708,6 +2872,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -2724,6 +2889,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -2740,6 +2906,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -2756,6 +2923,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch5",
   "verified": false,
@@ -2770,6 +2938,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -2786,6 +2955,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -2802,6 +2972,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -2819,6 +2990,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -2837,6 +3009,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -2853,6 +3026,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -2870,6 +3044,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -2887,6 +3062,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -2903,6 +3079,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -2920,6 +3097,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -2937,6 +3115,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -2954,6 +3133,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -2971,6 +3151,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -2987,6 +3168,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3004,6 +3186,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3021,6 +3204,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3038,6 +3222,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3055,6 +3240,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3072,6 +3258,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3089,6 +3276,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3106,6 +3294,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3123,6 +3312,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3140,6 +3330,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3157,6 +3348,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3174,6 +3366,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3191,6 +3384,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3208,6 +3402,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3225,6 +3420,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -3241,6 +3437,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -3257,6 +3454,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -3274,6 +3472,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -3290,6 +3489,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -3306,6 +3506,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -3322,6 +3523,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -3338,6 +3540,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -3354,6 +3557,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -3370,6 +3574,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch6",
   "verified": false,
@@ -3384,6 +3589,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -3400,6 +3606,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -3416,6 +3623,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -3433,6 +3641,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -3451,6 +3660,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -3467,6 +3677,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -3484,6 +3695,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -3501,6 +3713,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -3517,6 +3730,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -3534,6 +3748,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -3551,6 +3766,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -3568,6 +3784,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -3585,6 +3802,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -3601,6 +3819,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3618,6 +3837,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3635,6 +3855,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3652,6 +3873,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3669,6 +3891,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3686,6 +3909,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3703,6 +3927,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3720,6 +3945,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3737,6 +3963,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3754,6 +3981,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3771,6 +3999,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3788,6 +4017,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3805,6 +4035,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3822,6 +4053,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -3839,6 +4071,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -3855,6 +4088,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -3871,6 +4105,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -3888,6 +4123,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -3904,6 +4140,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -3920,6 +4157,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -3936,6 +4174,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -3952,6 +4191,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -3968,6 +4208,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -3984,6 +4225,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch7",
   "verified": false,
@@ -3998,6 +4240,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -4014,6 +4257,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -4030,6 +4274,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -4047,6 +4292,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -4065,6 +4311,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -4081,6 +4328,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -4098,6 +4346,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -4115,6 +4364,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -4131,6 +4381,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -4148,6 +4399,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -4165,6 +4417,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -4182,6 +4435,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -4199,6 +4453,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -4215,6 +4470,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4232,6 +4488,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4249,6 +4506,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4266,6 +4524,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4283,6 +4542,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4300,6 +4560,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4317,6 +4578,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4334,6 +4596,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4351,6 +4614,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4368,6 +4632,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4385,6 +4650,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4402,6 +4668,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4419,6 +4686,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4436,6 +4704,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4453,6 +4722,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -4469,6 +4739,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -4485,6 +4756,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -4502,6 +4774,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -4518,6 +4791,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -4534,6 +4808,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -4550,6 +4825,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -4566,6 +4842,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -4582,6 +4859,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -4598,6 +4876,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch8",
   "verified": false,
@@ -4612,6 +4891,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -4628,6 +4908,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -4644,6 +4925,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -4661,6 +4943,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -4679,6 +4962,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -4695,6 +4979,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -4712,6 +4997,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -4729,6 +5015,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -4745,6 +5032,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -4762,6 +5050,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -4779,6 +5068,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -4796,6 +5086,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -4813,6 +5104,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -4829,6 +5121,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4846,6 +5139,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4863,6 +5157,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4880,6 +5175,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4897,6 +5193,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4914,6 +5211,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4931,6 +5229,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4948,6 +5247,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4965,6 +5265,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4982,6 +5283,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -4999,6 +5301,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5016,6 +5319,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5033,6 +5337,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5050,6 +5355,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5067,6 +5373,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -5083,6 +5390,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -5099,6 +5407,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -5116,6 +5425,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -5132,6 +5442,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -5148,6 +5459,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -5164,6 +5476,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -5180,6 +5493,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -5196,6 +5510,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -5212,6 +5527,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch9",
   "verified": false,
@@ -5226,6 +5542,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -5242,6 +5559,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -5258,6 +5576,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -5275,6 +5594,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -5293,6 +5613,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -5309,6 +5630,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -5326,6 +5648,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -5343,6 +5666,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -5359,6 +5683,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -5376,6 +5701,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -5393,6 +5719,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -5410,6 +5737,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -5427,6 +5755,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -5443,6 +5772,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5460,6 +5790,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5477,6 +5808,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5494,6 +5826,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5511,6 +5844,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5528,6 +5862,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5545,6 +5880,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5562,6 +5898,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5579,6 +5916,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5596,6 +5934,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5613,6 +5952,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5630,6 +5970,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5647,6 +5988,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5664,6 +6006,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5681,6 +6024,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -5697,6 +6041,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch10",
   "verified": false,
@@ -5711,6 +6056,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -5727,6 +6073,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -5743,6 +6090,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -5760,6 +6108,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -5778,6 +6127,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -5794,6 +6144,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -5811,6 +6162,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -5828,6 +6180,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -5844,6 +6197,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -5861,6 +6215,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -5878,6 +6233,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -5895,6 +6251,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -5912,6 +6269,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -5928,6 +6286,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5945,6 +6304,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5962,6 +6322,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5979,6 +6340,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -5996,6 +6358,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6013,6 +6376,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6030,6 +6394,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6047,6 +6412,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6064,6 +6430,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6081,6 +6448,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6098,6 +6466,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6115,6 +6484,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6132,6 +6502,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6149,6 +6520,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6166,6 +6538,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -6182,6 +6555,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch11",
   "verified": false,
@@ -6196,6 +6570,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -6212,6 +6587,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -6228,6 +6604,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -6245,6 +6622,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -6263,6 +6641,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -6279,6 +6658,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -6296,6 +6676,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -6313,6 +6694,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -6329,6 +6711,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -6346,6 +6729,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -6363,6 +6747,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -6380,6 +6765,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -6397,6 +6783,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -6413,6 +6800,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6430,6 +6818,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6447,6 +6836,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6464,6 +6854,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6481,6 +6872,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6498,6 +6890,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6515,6 +6908,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6532,6 +6926,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6549,6 +6944,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6566,6 +6962,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6583,6 +6980,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6600,6 +6998,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6617,6 +7016,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6634,6 +7034,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -6651,6 +7052,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -6667,6 +7069,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -6683,6 +7086,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -6700,6 +7104,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -6716,6 +7121,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -6732,6 +7138,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -6748,6 +7155,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -6764,6 +7172,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -6780,6 +7189,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -6796,6 +7206,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch12",
   "verified": false,
@@ -6810,6 +7221,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -6826,6 +7238,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -6842,6 +7255,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -6859,6 +7273,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -6877,6 +7292,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -6893,6 +7309,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -6910,6 +7327,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -6927,6 +7345,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -6943,6 +7362,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -6960,6 +7380,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -6977,6 +7398,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -6994,6 +7416,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -7011,6 +7434,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -7027,6 +7451,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7044,6 +7469,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7061,6 +7487,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7078,6 +7505,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7095,6 +7523,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7112,6 +7541,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7129,6 +7559,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7146,6 +7577,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7163,6 +7595,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7180,6 +7613,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7197,6 +7631,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7214,6 +7649,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7231,6 +7667,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7248,6 +7685,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7265,6 +7703,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -7281,6 +7720,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -7297,6 +7737,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -7314,6 +7755,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -7330,6 +7772,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -7346,6 +7789,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -7362,6 +7806,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -7378,6 +7823,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -7394,6 +7840,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -7410,6 +7857,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch13",
   "verified": false,
@@ -7424,6 +7872,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -7440,6 +7889,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -7456,6 +7906,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -7473,6 +7924,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -7491,6 +7943,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -7507,6 +7960,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -7524,6 +7978,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -7541,6 +7996,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -7557,6 +8013,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -7574,6 +8031,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -7591,6 +8049,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -7608,6 +8067,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -7625,6 +8085,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -7641,6 +8102,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7658,6 +8120,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7675,6 +8138,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7692,6 +8156,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7709,6 +8174,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7726,6 +8192,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7743,6 +8210,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7760,6 +8228,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7777,6 +8246,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7794,6 +8264,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7811,6 +8282,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7828,6 +8300,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7845,6 +8318,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7862,6 +8336,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -7879,6 +8354,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -7895,6 +8371,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -7911,6 +8388,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -7928,6 +8406,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -7944,6 +8423,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -7960,6 +8440,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -7976,6 +8457,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -7992,6 +8474,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -8008,6 +8491,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -8024,6 +8508,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch14",
   "verified": false,
@@ -8038,6 +8523,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -8054,6 +8540,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -8070,6 +8557,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -8087,6 +8575,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -8105,6 +8594,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -8121,6 +8611,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -8138,6 +8629,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -8155,6 +8647,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -8171,6 +8664,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -8188,6 +8682,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -8205,6 +8700,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -8222,6 +8718,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -8239,6 +8736,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -8255,6 +8753,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8272,6 +8771,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8289,6 +8789,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8306,6 +8807,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8323,6 +8825,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8340,6 +8843,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8357,6 +8861,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8374,6 +8879,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8391,6 +8897,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8408,6 +8915,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8425,6 +8933,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8442,6 +8951,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8459,6 +8969,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8476,6 +8987,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8493,6 +9005,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -8509,6 +9022,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -8525,6 +9039,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -8542,6 +9057,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -8558,6 +9074,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -8574,6 +9091,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -8590,6 +9108,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -8606,6 +9125,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -8622,6 +9142,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -8638,6 +9159,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch15",
   "verified": false,
@@ -8652,6 +9174,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -8668,6 +9191,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -8684,6 +9208,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -8701,6 +9226,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -8719,6 +9245,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -8735,6 +9262,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -8752,6 +9280,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -8769,6 +9298,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -8785,6 +9315,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -8802,6 +9333,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -8819,6 +9351,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -8836,6 +9369,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -8853,6 +9387,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -8869,6 +9404,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8886,6 +9422,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8903,6 +9440,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8920,6 +9458,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8937,6 +9476,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8954,6 +9494,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8971,6 +9512,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -8988,6 +9530,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9005,6 +9548,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9022,6 +9566,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9039,6 +9584,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9056,6 +9602,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9073,6 +9620,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9090,6 +9638,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9107,6 +9656,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -9123,6 +9673,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -9139,6 +9690,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -9156,6 +9708,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -9172,6 +9725,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -9188,6 +9742,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -9204,6 +9759,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -9220,6 +9776,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -9236,6 +9793,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -9252,6 +9810,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch16",
   "verified": false,
@@ -9266,6 +9825,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -9282,6 +9842,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -9298,6 +9859,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -9315,6 +9877,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -9333,6 +9896,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -9349,6 +9913,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -9366,6 +9931,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -9383,6 +9949,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -9399,6 +9966,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -9416,6 +9984,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -9433,6 +10002,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -9450,6 +10020,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -9467,6 +10038,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -9483,6 +10055,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9500,6 +10073,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9517,6 +10091,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9534,6 +10109,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9551,6 +10127,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9568,6 +10145,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9585,6 +10163,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9602,6 +10181,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9619,6 +10199,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9636,6 +10217,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9653,6 +10235,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9670,6 +10253,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9687,6 +10271,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9704,6 +10289,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -9721,6 +10307,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -9737,6 +10324,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -9753,6 +10341,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -9770,6 +10359,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -9786,6 +10376,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -9802,6 +10393,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -9818,6 +10410,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -9834,6 +10427,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -9850,6 +10444,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -9866,6 +10461,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch17",
   "verified": false,
@@ -9880,6 +10476,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -9896,6 +10493,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -9912,6 +10510,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -9929,6 +10528,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -9947,6 +10547,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -9963,6 +10564,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -9980,6 +10582,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -9997,6 +10600,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -10013,6 +10617,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -10030,6 +10635,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -10047,6 +10653,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -10064,6 +10671,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -10081,6 +10689,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -10097,6 +10706,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10114,6 +10724,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10131,6 +10742,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10148,6 +10760,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10165,6 +10778,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10182,6 +10796,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10199,6 +10814,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10216,6 +10832,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10233,6 +10850,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10250,6 +10868,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10267,6 +10886,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10284,6 +10904,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10301,6 +10922,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10318,6 +10940,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10335,6 +10958,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -10351,6 +10975,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -10367,6 +10992,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -10384,6 +11010,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -10400,6 +11027,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -10416,6 +11044,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -10432,6 +11061,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -10448,6 +11078,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -10464,6 +11095,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -10480,6 +11112,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch18",
   "verified": false,
@@ -10494,6 +11127,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -10510,6 +11144,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -10526,6 +11161,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -10543,6 +11179,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -10561,6 +11198,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -10577,6 +11215,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -10594,6 +11233,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -10611,6 +11251,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -10627,6 +11268,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -10644,6 +11286,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -10661,6 +11304,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -10678,6 +11322,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -10695,6 +11340,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -10711,6 +11357,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10728,6 +11375,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10745,6 +11393,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10762,6 +11411,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10779,6 +11429,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10796,6 +11447,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10813,6 +11465,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10830,6 +11483,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10847,6 +11501,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10864,6 +11519,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10881,6 +11537,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10898,6 +11555,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10915,6 +11573,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10932,6 +11591,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -10949,6 +11609,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -10965,6 +11626,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -10981,6 +11643,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -10998,6 +11661,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -11014,6 +11678,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -11030,6 +11695,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -11046,6 +11712,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -11062,6 +11729,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -11078,6 +11746,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -11094,6 +11763,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch19",
   "verified": false,
@@ -11108,6 +11778,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -11124,6 +11795,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -11140,6 +11812,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -11157,6 +11830,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -11175,6 +11849,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -11191,6 +11866,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -11208,6 +11884,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -11225,6 +11902,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -11241,6 +11919,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -11258,6 +11937,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -11275,6 +11955,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -11292,6 +11973,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -11309,6 +11991,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -11325,6 +12008,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11342,6 +12026,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11359,6 +12044,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11376,6 +12062,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11393,6 +12080,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11410,6 +12098,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11427,6 +12116,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11444,6 +12134,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11461,6 +12152,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11478,6 +12170,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11495,6 +12188,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11512,6 +12206,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11529,6 +12224,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11546,6 +12242,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11563,6 +12260,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -11579,6 +12277,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -11595,6 +12294,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -11612,6 +12312,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -11628,6 +12329,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -11644,6 +12346,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -11660,6 +12363,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -11676,6 +12380,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -11692,6 +12397,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -11708,6 +12414,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch20",
   "verified": false,
@@ -11722,6 +12429,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -11738,6 +12446,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -11754,6 +12463,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -11771,6 +12481,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -11789,6 +12500,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -11805,6 +12517,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -11822,6 +12535,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -11839,6 +12553,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -11855,6 +12570,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -11872,6 +12588,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -11889,6 +12606,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -11906,6 +12624,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -11923,6 +12642,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -11939,6 +12659,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11956,6 +12677,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11973,6 +12695,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -11990,6 +12713,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12007,6 +12731,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12024,6 +12749,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12041,6 +12767,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12058,6 +12785,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12075,6 +12803,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12092,6 +12821,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12109,6 +12839,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12126,6 +12857,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12143,6 +12875,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12160,6 +12893,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12177,6 +12911,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -12193,6 +12928,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -12209,6 +12945,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -12226,6 +12963,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -12242,6 +12980,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -12258,6 +12997,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -12274,6 +13014,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -12290,6 +13031,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -12306,6 +13048,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -12322,6 +13065,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch21",
   "verified": false,
@@ -12336,6 +13080,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -12352,6 +13097,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -12368,6 +13114,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -12385,6 +13132,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -12403,6 +13151,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -12419,6 +13168,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -12436,6 +13186,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -12453,6 +13204,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -12469,6 +13221,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -12486,6 +13239,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -12503,6 +13257,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -12520,6 +13275,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -12537,6 +13293,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -12553,6 +13310,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12570,6 +13328,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12587,6 +13346,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12604,6 +13364,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12621,6 +13382,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12638,6 +13400,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12655,6 +13418,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12672,6 +13436,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12689,6 +13454,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12706,6 +13472,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12723,6 +13490,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12740,6 +13508,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12757,6 +13526,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12774,6 +13544,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -12791,6 +13562,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -12807,6 +13579,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -12823,6 +13596,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -12840,6 +13614,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -12856,6 +13631,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -12872,6 +13648,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -12888,6 +13665,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -12904,6 +13682,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -12920,6 +13699,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -12936,6 +13716,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch22",
   "verified": false,
@@ -12950,6 +13731,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -12966,6 +13748,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -12982,6 +13765,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -12999,6 +13783,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -13017,6 +13802,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -13033,6 +13819,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -13050,6 +13837,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -13067,6 +13855,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -13083,6 +13872,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -13100,6 +13890,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -13117,6 +13908,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -13134,6 +13926,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -13151,6 +13944,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -13167,6 +13961,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13184,6 +13979,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13201,6 +13997,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13218,6 +14015,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13235,6 +14033,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13252,6 +14051,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13269,6 +14069,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13286,6 +14087,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13303,6 +14105,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13320,6 +14123,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13337,6 +14141,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13354,6 +14159,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13371,6 +14177,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13388,6 +14195,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13405,6 +14213,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -13421,6 +14230,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -13437,6 +14247,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -13454,6 +14265,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -13470,6 +14282,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -13486,6 +14299,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -13502,6 +14316,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -13518,6 +14333,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -13534,6 +14350,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -13550,6 +14367,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch23",
   "verified": false,
@@ -13564,6 +14382,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -13580,6 +14399,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -13596,6 +14416,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -13613,6 +14434,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -13631,6 +14453,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -13647,6 +14470,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -13664,6 +14488,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -13681,6 +14506,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -13697,6 +14523,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -13714,6 +14541,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -13731,6 +14559,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -13748,6 +14577,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -13765,6 +14595,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -13781,6 +14612,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13798,6 +14630,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13815,6 +14648,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13832,6 +14666,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13849,6 +14684,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13866,6 +14702,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13883,6 +14720,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13900,6 +14738,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13917,6 +14756,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13934,6 +14774,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13951,6 +14792,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13968,6 +14810,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -13985,6 +14828,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14002,6 +14846,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14019,6 +14864,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -14035,6 +14881,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -14051,6 +14898,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -14068,6 +14916,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -14084,6 +14933,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -14100,6 +14950,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -14116,6 +14967,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -14132,6 +14984,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -14148,6 +15001,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -14164,6 +15018,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch24",
   "verified": false,
@@ -14178,6 +15033,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -14194,6 +15050,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -14210,6 +15067,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -14227,6 +15085,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -14245,6 +15104,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -14261,6 +15121,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -14278,6 +15139,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -14295,6 +15157,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -14311,6 +15174,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -14328,6 +15192,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -14345,6 +15210,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -14362,6 +15228,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -14379,6 +15246,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -14395,6 +15263,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14412,6 +15281,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14429,6 +15299,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14446,6 +15317,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14463,6 +15335,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14480,6 +15353,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14497,6 +15371,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14514,6 +15389,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14531,6 +15407,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14548,6 +15425,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14565,6 +15443,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14582,6 +15461,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14599,6 +15479,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14616,6 +15497,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -14633,6 +15515,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -14649,6 +15532,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -14665,6 +15549,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -14682,6 +15567,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -14698,6 +15584,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -14714,6 +15601,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -14730,6 +15618,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -14746,6 +15635,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -14762,6 +15652,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -14778,6 +15669,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch25",
   "verified": false,
@@ -14792,6 +15684,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -14808,6 +15701,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -14824,6 +15718,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -14841,6 +15736,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -14859,6 +15755,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -14875,6 +15772,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -14892,6 +15790,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -14909,6 +15808,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -14925,6 +15825,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -14942,6 +15843,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -14959,6 +15861,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -14976,6 +15879,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -14993,6 +15897,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -15009,6 +15914,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15026,6 +15932,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15043,6 +15950,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15060,6 +15968,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15077,6 +15986,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15094,6 +16004,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15111,6 +16022,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15128,6 +16040,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15145,6 +16058,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15162,6 +16076,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15179,6 +16094,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15196,6 +16112,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15213,6 +16130,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15230,6 +16148,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15247,6 +16166,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -15263,6 +16183,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -15279,6 +16200,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -15296,6 +16218,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -15312,6 +16235,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -15328,6 +16252,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -15344,6 +16269,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -15360,6 +16286,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -15376,6 +16303,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -15392,6 +16320,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch26",
   "verified": false,
@@ -15406,6 +16335,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -15422,6 +16352,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -15438,6 +16369,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -15455,6 +16387,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -15473,6 +16406,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -15489,6 +16423,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -15506,6 +16441,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -15523,6 +16459,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -15539,6 +16476,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -15556,6 +16494,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -15573,6 +16512,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -15590,6 +16530,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -15607,6 +16548,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -15623,6 +16565,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15640,6 +16583,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15657,6 +16601,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15674,6 +16619,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15691,6 +16637,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15708,6 +16655,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15725,6 +16673,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15742,6 +16691,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15759,6 +16709,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15776,6 +16727,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15793,6 +16745,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15810,6 +16763,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15827,6 +16781,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15844,6 +16799,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -15861,6 +16817,7 @@
   "max": null,
   "default": "1",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -15877,6 +16834,7 @@
   "max": 12.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable"
   ],
@@ -15893,6 +16851,7 @@
   "max": 75.0,
   "default": "0",
   "units": "gain.0",
+  "curve": "linear",
   "flags": [
    "storable",
    "mutable"
@@ -15910,6 +16869,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -15926,6 +16886,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -15942,6 +16903,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -15958,6 +16920,7 @@
   "max": null,
   "default": "0",
   "units": "AutoGainStatusList",
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -15974,6 +16937,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -15990,6 +16954,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -16006,6 +16971,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch27",
   "verified": false,
@@ -16020,6 +16986,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -16036,6 +17003,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -16052,6 +17020,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -16069,6 +17038,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -16087,6 +17057,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -16103,6 +17074,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -16120,6 +17092,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -16137,6 +17110,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -16153,6 +17127,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -16170,6 +17145,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -16187,6 +17163,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -16204,6 +17181,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -16221,6 +17199,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -16237,6 +17216,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16254,6 +17234,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16271,6 +17252,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16288,6 +17270,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16305,6 +17288,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16322,6 +17306,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16339,6 +17324,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16356,6 +17342,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16373,6 +17360,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16390,6 +17378,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16407,6 +17396,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16424,6 +17414,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16441,6 +17432,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16458,6 +17450,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16475,6 +17468,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -16491,6 +17485,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch28",
   "verified": false,
@@ -16505,6 +17500,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -16521,6 +17517,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -16537,6 +17534,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -16554,6 +17552,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -16572,6 +17571,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -16588,6 +17588,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -16605,6 +17606,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -16622,6 +17624,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -16638,6 +17641,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -16655,6 +17659,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -16672,6 +17677,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -16689,6 +17695,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -16706,6 +17713,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -16722,6 +17730,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16739,6 +17748,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16756,6 +17766,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16773,6 +17784,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16790,6 +17802,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16807,6 +17820,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16824,6 +17838,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16841,6 +17856,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16858,6 +17874,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16875,6 +17892,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16892,6 +17910,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16909,6 +17928,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16926,6 +17946,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16943,6 +17964,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -16960,6 +17982,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -16976,6 +17999,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch29",
   "verified": false,
@@ -16990,6 +18014,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -17006,6 +18031,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -17022,6 +18048,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -17039,6 +18066,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -17057,6 +18085,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -17073,6 +18102,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -17090,6 +18120,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -17107,6 +18138,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -17123,6 +18155,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -17140,6 +18173,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -17157,6 +18191,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -17174,6 +18209,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -17191,6 +18227,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -17207,6 +18244,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17224,6 +18262,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17241,6 +18280,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17258,6 +18298,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17275,6 +18316,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17292,6 +18334,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17309,6 +18352,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17326,6 +18370,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17343,6 +18388,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17360,6 +18406,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17377,6 +18424,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17394,6 +18442,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17411,6 +18460,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17428,6 +18478,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17445,6 +18496,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -17461,6 +18513,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch30",
   "verified": false,
@@ -17475,6 +18528,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -17491,6 +18545,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -17507,6 +18562,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -17524,6 +18580,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -17542,6 +18599,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -17558,6 +18616,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -17575,6 +18634,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -17592,6 +18652,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -17608,6 +18669,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -17625,6 +18687,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -17642,6 +18705,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -17659,6 +18723,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -17676,6 +18741,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -17692,6 +18758,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17709,6 +18776,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17726,6 +18794,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17743,6 +18812,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17760,6 +18830,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17777,6 +18848,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17794,6 +18866,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17811,6 +18884,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17828,6 +18902,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17845,6 +18920,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17862,6 +18938,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17879,6 +18956,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17896,6 +18974,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17913,6 +18992,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -17930,6 +19010,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -17946,6 +19027,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch31",
   "verified": false,
@@ -17960,6 +19042,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -17976,6 +19059,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -17992,6 +19076,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -18009,6 +19094,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -18027,6 +19113,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -18043,6 +19130,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -18060,6 +19148,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -18077,6 +19166,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -18093,6 +19183,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -18110,6 +19201,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -18127,6 +19219,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -18144,6 +19237,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -18161,6 +19255,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -18177,6 +19272,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18194,6 +19290,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18211,6 +19308,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18228,6 +19326,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18245,6 +19344,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18262,6 +19362,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18279,6 +19380,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18296,6 +19398,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18313,6 +19416,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18330,6 +19434,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18347,6 +19452,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18364,6 +19470,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18381,6 +19488,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18398,6 +19506,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18415,6 +19524,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -18431,6 +19541,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch32",
   "verified": false,
@@ -18445,6 +19556,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -18461,6 +19573,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -18477,6 +19590,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -18494,6 +19608,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -18512,6 +19627,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -18528,6 +19644,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -18545,6 +19662,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -18562,6 +19680,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -18578,6 +19697,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -18595,6 +19715,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -18612,6 +19733,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -18629,6 +19751,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -18646,6 +19769,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -18662,6 +19786,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18679,6 +19804,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18696,6 +19822,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18713,6 +19840,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18730,6 +19858,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18747,6 +19876,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18764,6 +19894,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18781,6 +19912,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18798,6 +19930,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18815,6 +19948,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18832,6 +19966,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18849,6 +19984,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18866,6 +20002,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18883,6 +20020,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -18900,6 +20038,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -18916,6 +20055,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch33",
   "verified": false,
@@ -18930,6 +20070,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -18946,6 +20087,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -18962,6 +20104,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -18979,6 +20122,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -18997,6 +20141,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -19013,6 +20158,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -19030,6 +20176,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -19047,6 +20194,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -19063,6 +20211,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -19080,6 +20229,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -19097,6 +20247,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -19114,6 +20265,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -19131,6 +20283,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -19147,6 +20300,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19164,6 +20318,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19181,6 +20336,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19198,6 +20354,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19215,6 +20372,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19232,6 +20390,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19249,6 +20408,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19266,6 +20426,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19283,6 +20444,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19300,6 +20462,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19317,6 +20480,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19334,6 +20498,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19351,6 +20516,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19368,6 +20534,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19385,6 +20552,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -19401,6 +20569,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch34",
   "verified": false,
@@ -19415,6 +20584,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -19431,6 +20601,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -19447,6 +20618,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -19464,6 +20636,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -19482,6 +20655,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -19498,6 +20672,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -19515,6 +20690,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -19532,6 +20708,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -19548,6 +20725,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -19565,6 +20743,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -19582,6 +20761,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -19599,6 +20779,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -19616,6 +20797,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -19632,6 +20814,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19649,6 +20832,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19666,6 +20850,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19683,6 +20868,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19700,6 +20886,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19717,6 +20904,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19734,6 +20922,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19751,6 +20940,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19768,6 +20958,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19785,6 +20976,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19802,6 +20994,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19819,6 +21012,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19836,6 +21030,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19853,6 +21048,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -19870,6 +21066,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -19886,6 +21083,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch35",
   "verified": false,
@@ -19900,6 +21098,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -19916,6 +21115,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -19932,6 +21132,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -19949,6 +21150,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -19967,6 +21169,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -19983,6 +21186,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20000,6 +21204,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20017,6 +21222,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -20033,6 +21239,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20050,6 +21257,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -20067,6 +21275,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20084,6 +21293,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20101,6 +21311,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -20117,6 +21328,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20134,6 +21346,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20151,6 +21364,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20168,6 +21382,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20185,6 +21400,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20202,6 +21418,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20219,6 +21436,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20236,6 +21454,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20253,6 +21472,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20270,6 +21490,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20287,6 +21508,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20304,6 +21526,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20321,6 +21544,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20338,6 +21562,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20355,6 +21580,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -20371,6 +21597,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "line/ch36",
   "verified": false,
@@ -20385,6 +21612,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -20401,6 +21629,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -20417,6 +21646,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20434,6 +21664,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -20452,6 +21683,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -20468,6 +21700,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20485,6 +21718,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20502,6 +21736,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -20518,6 +21753,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20535,6 +21771,7 @@
   "max": 1.0,
   "default": "0.5",
   "units": "pan.100",
+  "curve": null,
   "flags": [
    "storable",
    "bipolar"
@@ -20552,6 +21789,7 @@
   "max": 1.0,
   "default": "0",
   "units": "percent",
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20569,6 +21807,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20586,6 +21825,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -20602,6 +21842,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20619,6 +21860,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20636,6 +21878,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20653,6 +21896,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20670,6 +21914,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20687,6 +21932,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20704,6 +21950,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20721,6 +21968,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20738,6 +21986,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20755,6 +22004,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20772,6 +22022,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20789,6 +22040,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20806,6 +22058,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20823,6 +22076,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable"
@@ -20840,6 +22094,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -20856,6 +22111,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch1",
   "verified": false,
@@ -20870,6 +22126,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -20886,6 +22143,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -20902,6 +22160,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20919,6 +22178,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -20937,6 +22197,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -20953,6 +22214,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20970,6 +22232,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -20987,6 +22250,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21003,6 +22267,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -21019,6 +22284,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21035,6 +22301,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch2",
   "verified": false,
@@ -21049,6 +22316,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -21065,6 +22333,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -21081,6 +22350,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21098,6 +22368,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -21116,6 +22387,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21132,6 +22404,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21149,6 +22422,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21166,6 +22440,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21182,6 +22457,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -21198,6 +22474,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21214,6 +22491,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch3",
   "verified": false,
@@ -21228,6 +22506,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -21244,6 +22523,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -21260,6 +22540,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21277,6 +22558,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -21295,6 +22577,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21311,6 +22594,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21328,6 +22612,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21345,6 +22630,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21361,6 +22647,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -21377,6 +22664,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21393,6 +22681,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch4",
   "verified": false,
@@ -21407,6 +22696,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -21423,6 +22713,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -21439,6 +22730,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21456,6 +22748,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -21474,6 +22767,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21490,6 +22784,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21507,6 +22802,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21524,6 +22820,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21540,6 +22837,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -21556,6 +22854,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21572,6 +22871,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch5",
   "verified": false,
@@ -21586,6 +22886,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -21602,6 +22903,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -21618,6 +22920,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21635,6 +22938,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -21653,6 +22957,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21669,6 +22974,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21686,6 +22992,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21703,6 +23010,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21719,6 +23027,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -21735,6 +23044,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21751,6 +23061,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch6",
   "verified": false,
@@ -21765,6 +23076,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -21781,6 +23093,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -21797,6 +23110,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21814,6 +23128,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -21832,6 +23147,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21848,6 +23164,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21865,6 +23182,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21882,6 +23200,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21898,6 +23217,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -21914,6 +23234,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -21930,6 +23251,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch7",
   "verified": false,
@@ -21944,6 +23266,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -21960,6 +23283,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -21976,6 +23300,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -21993,6 +23318,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -22011,6 +23337,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22027,6 +23354,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22044,6 +23372,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22061,6 +23390,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22077,6 +23407,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -22093,6 +23424,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22109,6 +23441,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch8",
   "verified": false,
@@ -22123,6 +23456,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -22139,6 +23473,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -22155,6 +23490,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22172,6 +23508,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -22190,6 +23527,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22206,6 +23544,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22223,6 +23562,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22240,6 +23580,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22256,6 +23597,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -22272,6 +23614,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22288,6 +23631,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch9",
   "verified": false,
@@ -22302,6 +23646,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -22318,6 +23663,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -22334,6 +23680,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22351,6 +23698,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -22369,6 +23717,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22385,6 +23734,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22402,6 +23752,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22419,6 +23770,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22435,6 +23787,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -22451,6 +23804,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22467,6 +23821,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch10",
   "verified": false,
@@ -22481,6 +23836,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -22497,6 +23853,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -22513,6 +23870,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22530,6 +23888,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -22548,6 +23907,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22564,6 +23924,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22581,6 +23942,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22598,6 +23960,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22614,6 +23977,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -22630,6 +23994,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22646,6 +24011,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch11",
   "verified": false,
@@ -22660,6 +24026,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -22676,6 +24043,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -22692,6 +24060,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22709,6 +24078,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -22727,6 +24097,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22743,6 +24114,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22760,6 +24132,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22777,6 +24150,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22793,6 +24167,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -22809,6 +24184,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22825,6 +24201,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch12",
   "verified": false,
@@ -22839,6 +24216,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -22855,6 +24233,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -22871,6 +24250,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22888,6 +24268,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -22906,6 +24287,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22922,6 +24304,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22939,6 +24322,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -22956,6 +24340,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -22972,6 +24357,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -22988,6 +24374,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -23004,6 +24391,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch13",
   "verified": false,
@@ -23018,6 +24406,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -23034,6 +24423,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -23050,6 +24440,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -23067,6 +24458,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -23085,6 +24477,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -23101,6 +24494,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -23118,6 +24512,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -23135,6 +24530,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -23151,6 +24547,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -23167,6 +24564,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -23183,6 +24581,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "aux/ch14",
   "verified": false,
@@ -23197,6 +24596,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -23213,6 +24613,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -23229,6 +24630,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -23246,6 +24648,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -23264,6 +24667,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -23280,6 +24684,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -23297,6 +24702,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -23314,6 +24720,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -23330,6 +24737,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -23346,6 +24754,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -23362,6 +24771,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [],
   "component": "main/ch1",
   "verified": false,
@@ -23376,6 +24786,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],
@@ -23392,6 +24803,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "linkable"
   ],
@@ -23408,6 +24820,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -23425,6 +24838,7 @@
   "max": 10.0,
   "default": "-96",
   "units": "gain",
+  "curve": "fader",
   "flags": [
    "storable",
    "linkable",
@@ -23443,6 +24857,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -23459,6 +24874,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -23476,6 +24892,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable",
    "linkable"
@@ -23493,6 +24910,7 @@
   "max": null,
   "default": "0",
   "units": null,
+  "curve": null,
   "flags": [
    "readonly"
   ],
@@ -23509,6 +24927,7 @@
   "max": null,
   "default": null,
   "units": null,
+  "curve": null,
   "flags": [
    "storable"
   ],

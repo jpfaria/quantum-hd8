@@ -16,3 +16,10 @@ def test_paths_inherit_mixin_foreach():
     assert (g.type, g.min, g.max, g.units) == ("float", 0.0, 75.0, "gain.0")
     assert g.flags == ["storable", "mutable"]
     assert g.component == "line/ch2"
+
+
+def test_curve_attr_is_read():
+    params = {p.path: p for p in load_template(str(FX))}
+    assert params["line/ch2/preampgain"].curve == "linear"
+    assert params["line/ch2/volume"].curve == "fader"
+    assert params["global/dim"].curve is None

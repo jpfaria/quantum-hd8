@@ -21,6 +21,10 @@ def record(path: str, before: object, after: object, journal: Path = DEFAULT_JOU
 
 
 def pop(journal: Path = DEFAULT_JOURNAL) -> tuple[str, object] | None:
+    # Rewrites the whole file, no file locking: fine for this CLI's single
+    # local user running one command at a time (incl. `scene load
+    # --keep-gains`, which calls record() several times in a row via
+    # Client.set) -- would race under concurrent writers, out of scope here.
     journal = Path(journal)
     if not journal.exists():
         return None

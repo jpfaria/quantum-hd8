@@ -170,6 +170,13 @@ class WriteFakeClient:
     def connect(self):
         return {}
 
+    # path -> (min, max, type), mirrors the linear-curve rows a real params.json
+    # (+ daemon ranges fallback) would report -- see Client._curve_and_range.
+    _LINEAR = {
+        "line/ch1/preampgain": (0.0, 75.0, "float"),
+        "global/ledBrightness": (1.0, 100.0, "int"),
+    }
+
     def set(self, path, value):
         self.set_calls.append((path, value))
         if path == "line/ch1/preampgain" and value == 80:
@@ -178,11 +185,25 @@ class WriteFakeClient:
             raise PermissionError(f"{path} é readonly")
         if path == "global/ledBrightness" and value == 0.9:
             raise WriteNotConfirmed(path)
+        if path in self._LINEAR:
+            lo, hi, _ = self._LINEAR[path]
+            return (value - lo) / (hi - lo)
         return 0.5
 
     def set_raw(self, path, normalized):
         self.set_raw_calls.append((path, normalized))
         return normalized
+
+    def to_human(self, path, normalized):
+        if path in self._LINEAR:
+            lo, hi, _ = self._LINEAR[path]
+            return lo + normalized * (hi - lo)
+        return None
+
+    def param_row(self, path):
+        if path in self._LINEAR:
+            return {"type": self._LINEAR[path][2]}
+        return {"type": "toggle"}
 
     def load_scene(self, name, keep_gains=False):
         self.load_scene_calls.append((name, keep_gains))
@@ -196,10 +217,22 @@ class WriteFakeClient:
         self.closed = True
 
 
-def test_set_prints_echoed_value(capsys, monkeypatch):
+def test_set_prints_raw_echoed_value_when_not_linear(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    assert main(["set", "line/ch1/48v", "1"]) == 0
+    assert "line/ch1/48v = 0.5" in capsys.readouterr().out
+
+
+def test_set_prints_human_units_for_linear_float_param(capsys, monkeypatch):
     monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
     assert main(["set", "line/ch1/preampgain", "37.5"]) == 0
-    assert "line/ch1/preampgain = 0.5" in capsys.readouterr().out
+    assert "line/ch1/preampgain = 37.5 (0.500)" in capsys.readouterr().out
+
+
+def test_set_prints_human_units_rounded_for_linear_int_param(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    assert main(["set", "global/ledBrightness", "20"]) == 0
+    assert "global/ledBrightness = 20 (0.192)" in capsys.readouterr().out
 
 
 def test_set_out_of_range_prints_error_and_returns_1(capsys, monkeypatch):
