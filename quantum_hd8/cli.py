@@ -2,10 +2,14 @@ import argparse
 import difflib
 import json
 import sys
+import time
 
 from . import __version__
 from . import undo
-from .client import Client, SceneLoadTimeout, WriteNotConfirmed
+from .client import Client, SceneLoadTimeout, WriteNotConfirmed, default_udp_factory
+
+METER_SECTIONS = ("in", "aux", "main")
+METER_REFRESH_SECONDS = 0.1
 
 # Label lists for global/phones1_src, global/phones2_src and
 # global/spdifSource, measured from tests/fixtures/uc-pl.bin (the daemon
@@ -94,6 +98,10 @@ def build_parser() -> argparse.ArgumentParser:
         sp = preamp_sub.add_parser(name)
         sp.add_argument("state", choices=["on", "off"])
 
+    meters = sub.add_parser("meters", help="Medidores de nível (valores crus, sem calibração)")
+    meters.add_argument("--once", action="store_true",
+                         help="Imprime um snapshot JSON e sai, em vez de atualizar continuamente")
+
     route = sub.add_parser("route", help="Fonte de phones1/phones2/spdif")
     route.add_argument("target", choices=sorted(_ROUTE_TARGETS))
     route.add_argument("source", help="Rótulo (ex.: 'Loopback 1') ou índice 0-based")
@@ -136,6 +144,29 @@ def _labeled_source(c: Client, path: str):
     return value
 
 
+def _meters_snapshot(m: dict, labels: dict) -> dict:
+    """{"in": {label: value, ...}, "aux": {...}, "main": {...}} -- the CLI
+    `meters --once` JSON shape (task-9 ruling 5). m may be the
+    ucnet.parse_meters() fallback shape {"raw": [...]} when the footer
+    didn't match the known layout; that is passed through as-is."""
+    if "raw" in m:
+        return {"raw": m["raw"]}
+    return {
+        section: dict(zip(labels[section], m[section]))
+        for section in METER_SECTIONS
+    }
+
+
+def _meters_lines(m: dict, labels: dict) -> list[str]:
+    if "raw" in m:
+        return [f"raw[{i}]: {v}" for i, v in enumerate(m["raw"])]
+    lines = []
+    for section in METER_SECTIONS:
+        for label, value in zip(labels[section], m[section]):
+            lines.append(f"{label}: {value}")
+    return lines
+
+
 def _summary_lines(c: Client) -> list[str]:
     lines = []
     for ch in range(1, 9):
@@ -170,7 +201,8 @@ def main(argv: list[str] | None = None) -> int:
         raw_file = open(args.raw, "ab")
         raw_sink = raw_file.write
 
-    c = Client(raw_sink=raw_sink)
+    udp_factory = default_udp_factory if args.cmd == "meters" else None
+    c = Client(raw_sink=raw_sink, udp_factory=udp_factory)
     try:
         c.connect()
 
@@ -281,6 +313,23 @@ def main(argv: list[str] | None = None) -> int:
                 print(str(e), file=sys.stderr)
                 return 1
             print(f"{path} = {_format_set_result(c, path, echoed)}")
+            return 0
+
+        if args.cmd == "meters":
+            labels = c.meter_labels()
+            if args.once:
+                m = c.read_meters()
+                print(json.dumps(_meters_snapshot(m, labels), ensure_ascii=False))
+                return 0
+
+            print("valores crus do daemon — escala não calibrada")
+            try:
+                while True:
+                    m = c.read_meters()
+                    print("\n".join(_meters_lines(m, labels)))
+                    time.sleep(METER_REFRESH_SECONDS)
+            except KeyboardInterrupt:
+                pass
             return 0
 
         if args.cmd == "route":

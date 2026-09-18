@@ -106,6 +106,40 @@ def parse_pl(m: Message) -> tuple[str, float, list[str]]:
     return path.decode(), round(value, 4), labels
 
 
+def parse_meters(packet: bytes) -> dict[str, list[int]]:
+    """Parse an MS (meter) UDP packet (docs/protocol.md, "Medidores").
+
+    Measured layout: "UC" 00 01 + 2 bytes (unidentified -- not a UCNet
+    frame `size`; the value seen was the TCP port, unexplained) + "MS" +
+    cbytes(4) + "levl" 00 00 + uint16 LE n + n * uint16 LE values + an
+    18-byte footer (+ 1 trailing 00 byte). Unlike the rest of the packet,
+    the footer's fields are big-endian (measured against
+    tests/fixtures/meters-udp-1.bin: little-endian gives nonsense like
+    9216/1024, big-endian gives the documented 0/36/4/36/28/7/64/2). It
+    encodes 3 sections as (?, offset, count) triples at indices
+    (0,1,2)/(3,4,5)/(6,7,8) -- fields 1,2 / 4,5 / 7,8 are (offset, count)
+    pairs (measured: (0, 36), (36, 28), (64, 2)) for in/aux/main.
+
+    Returns {"in": values[0:36], "aux": values[36:64], "main": values[64:66]}
+    when the footer matches that known layout, else {"raw": values} (task-9
+    ruling 3).
+    """
+    n = struct.unpack_from("<H", packet, 18)[0]
+    values = list(struct.unpack_from(f"<{n}H", packet, 20))
+
+    footer = packet[20 + 2 * n:]
+    if len(footer) >= 18:
+        f = struct.unpack_from(">9H", footer)
+        sections = [(f[1], f[2]), (f[4], f[5]), (f[7], f[8])]
+        if sections == [(0, 36), (36, 28), (64, 2)]:
+            return {
+                "in": values[0:36],
+                "aux": values[36:64],
+                "main": values[64:66],
+            }
+    return {"raw": values}
+
+
 def parse_state(m: Message) -> dict:
     """Parse a ZM/ZB payload's zlib-compressed JSON tree.
 

@@ -331,3 +331,52 @@ def test_scene_save_not_implemented(capsys, monkeypatch):
     rc = main(["scene", "save", "whatever"])
     assert rc == 2
     assert "não capturado" in capsys.readouterr().err
+
+
+class MetersFakeClient:
+    """Stands in for Client for `meters` CLI tests. read_meters() yields one
+    snapshot then raises KeyboardInterrupt, like Ctrl-C stopping the redraw
+    loop -- so the loop body runs exactly once in a test."""
+    closed = False
+
+    def __init__(self, *a, **k):
+        self._calls = 0
+
+    def connect(self):
+        return {}
+
+    def meter_labels(self):
+        return {"in": ["In  1", "In  2"], "aux": ["aux/ch1 L", "aux/ch1 R"], "main": ["main L", "main R"]}
+
+    def read_meters(self, timeout=1.0):
+        self._calls += 1
+        if self._calls > 1:
+            raise KeyboardInterrupt
+        return {"in": [5, 0], "aux": [0, 0], "main": [0, 0]}
+
+    def close(self):
+        self.closed = True
+
+
+def test_meters_once_prints_json_snapshot_by_label(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", MetersFakeClient)
+    rc = main(["meters", "--once"])
+    assert rc == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out == {
+        "in": {"In  1": 5, "In  2": 0},
+        "aux": {"aux/ch1 L": 0, "aux/ch1 R": 0},
+        "main": {"main L": 0, "main R": 0},
+    }
+
+
+def test_meters_prints_header_and_one_line_per_channel_until_interrupted(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", MetersFakeClient)
+    rc = main(["meters"])
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "valores crus do daemon" in out
+    assert "não calibrada" in out
+    assert "In  1: 5" in out
+    assert "aux/ch1 L: 0" in out
+    assert "main L: 0" in out

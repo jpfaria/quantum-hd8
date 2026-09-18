@@ -52,6 +52,22 @@ SUBSCRIBE_PAYLOAD = {
 }
 
 UDP_DISCOVERY_PORT = 47809
+
+# Number of "in" meter channels the daemon reports (docs/protocol.md,
+# "Medidores"): line/ch1..36.
+METER_IN_CHANNELS = 36
+# Number of aux meter pairs (14 aux sends x L/R = 28 values).
+METER_AUX_PAIRS = 14
+
+
+def default_udp_factory() -> socket.socket:
+    """A real UDP socket bound to an ephemeral port on 127.0.0.1 -- the
+    default udp_factory for callers that want meters (e.g. the CLI `meters`
+    command). Never used unless explicitly passed in: tests must inject a
+    fake instead (see docs/protocol.md, "Medidores")."""
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind(("127.0.0.1", 0))
+    return s
 CONNECT_TIMEOUT = 3.0
 KEEPALIVE_INTERVAL = 1.0
 
@@ -97,13 +113,21 @@ class Client:
                  sock_factory=socket.create_connection,
                  connect_timeout: float = CONNECT_TIMEOUT,
                  raw_sink=None,
-                 undo_journal: Path | None = None):
+                 undo_journal: Path | None = None,
+                 udp_factory=None):
         self.host = host
         self.port = port
         self._sock_factory = sock_factory
         self.connect_timeout = connect_timeout
         self._raw_sink = raw_sink
         self.undo_journal = Path(undo_journal) if undo_journal is not None else undo.DEFAULT_JOURNAL
+        # Meters are opt-in: no udp_factory (the default) means connect()
+        # never binds a socket -- it just announces UDP_DISCOVERY_PORT in UM
+        # as before (task-9-report.md: preserves existing behaviour/tests).
+        # Pass udp_factory=default_udp_factory (or a fake in tests) to open
+        # a real meter socket and announce its actual port instead.
+        self._udp_factory = udp_factory
+        self.udp_sock = None
         self.sock = None
         self.state: dict[str, object] = {}
         self.ranges: dict[str, dict] = {}
@@ -117,8 +141,12 @@ class Client:
         self.sock = self._sock_factory((self.host, self.port))
         self.sock.settimeout(self.connect_timeout)
 
+        udp_port = UDP_DISCOVERY_PORT
+        if self._udp_factory is not None:
+            self.udp_sock = self._udp_factory()
+            udp_port = self.udp_sock.getsockname()[1]
         self.sock.sendall(ucnet.encode(
-            "UM", b"\x00\x00" + struct.pack("<H", UDP_DISCOVERY_PORT), cbytes=UM_CB))
+            "UM", struct.pack("<H", udp_port), cbytes=UM_CB))
         self.sock.sendall(ucnet.encode(
             "JM", ucnet.json_payload(SUBSCRIBE_PAYLOAD), cbytes=DEVICE_CB))
         self.sock.sendall(ucnet.encode(
@@ -416,6 +444,37 @@ class Client:
                 else:
                     self._handle(m)
 
+    def read_meters(self, timeout: float = 1.0) -> dict:
+        """Read and parse one MS meter UDP packet (docs/protocol.md,
+        "Medidores"). Requires udp_factory to have been passed to
+        __init__ -- raises RuntimeError otherwise."""
+        if self.udp_sock is None:
+            raise RuntimeError(
+                "medidores não habilitados -- passe udp_factory ao criar o Client")
+        self.udp_sock.settimeout(timeout)
+        data = self.udp_sock.recv(4096)
+        return ucnet.parse_meters(data)
+
+    def meter_labels(self) -> dict[str, list[str]]:
+        """Labels matching the shape of ucnet.parse_meters()'s output:
+        {"in": [...36], "aux": [...28], "main": ["L", "R"]} (ruling 4,
+        task-9-brief.md). "in"[i] is line/ch{i+1}'s username (preferred) or
+        chnum from the live Synchronize state when known, else the raw path
+        itself -- state only carries chnum/username for the 8 analog
+        channels (line/ch1..8) today; the rest fall back to "line/chN"."""
+        in_labels = []
+        for i in range(METER_IN_CHANNELS):
+            path = f"line/ch{i + 1}"
+            in_labels.append(
+                self.state.get(f"{path}/username")
+                or self.state.get(f"{path}/chnum")
+                or path)
+        aux_labels = []
+        for k in range(1, METER_AUX_PAIRS + 1):
+            aux_labels.append(f"aux/ch{k} L")
+            aux_labels.append(f"aux/ch{k} R")
+        return {"in": in_labels, "aux": aux_labels, "main": ["main L", "main R"]}
+
     def _start_keepalive(self):
         def loop():
             while not self._keepalive_stop.wait(KEEPALIVE_INTERVAL):
@@ -433,5 +492,10 @@ class Client:
         if self.sock is not None:
             try:
                 self.sock.close()
+            except OSError:
+                pass
+        if self.udp_sock is not None:
+            try:
+                self.udp_sock.close()
             except OSError:
                 pass

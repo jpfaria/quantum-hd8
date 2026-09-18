@@ -118,9 +118,16 @@ nova bateu.
 | n × uint16 LE valores | rodapé
 ```
 
-- Rodapé (18 bytes, lido como `uint16 LE`): `3` seções; os pares
-  `(0, 36)`, `(36, 28)`, `(64, 2)` aparecem com tipos `4`, `7`, `2` (a ordem
-  exata dos campos por seção não está provada). Leitura:
+- Rodapé (18 bytes + 1 byte `00` de sobra, 19 no total): ao contrário do
+  resto do pacote, os campos do rodapé são **big-endian** (medido: `uint16
+  LE` dava lixo tipo 9216/1024; `uint16 BE` dá os valores documentados
+  abaixo). Lido como 9× `uint16 BE`: `(768, 0, 36, 4, 36, 28, 7, 64, 2)`.
+  Os pares `(offset, count)` das seções `in`/`aux`/`main` são os campos 2/3,
+  5/6 e 8/9 (1-based): `(0, 36)`, `(36, 28)`, `(64, 2)` -- o campo antes de
+  cada par (`4`, `7`, ainda não confirmado para o terceiro) provavelmente é
+  um tipo, não provado. `quantum_hd8.ucnet.parse_meters()` usa só os pares
+  `(offset, count)`; cai para `{"raw": values}` se não baterem com esse
+  layout. Leitura:
   - valores 0–35 → entradas `line/ch1..36`
   - valores 36–63 → 14 saídas `aux` × L/R
   - valores 64–65 → `main` L/R
