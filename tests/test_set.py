@@ -180,6 +180,87 @@ def test_set_raises_write_not_confirmed_when_no_echo_arrives(tmp_path):
         c.set("global/ledBrightness", 20)
 
 
+def test_write_not_confirmed_has_meaningful_message(tmp_path):
+    # Fix round 1, finding 2(b): bare `path` as the message left the CLI
+    # printing only the path with no explanation.
+    c, fake = make_client(tmp_path)
+    fake.sendall = lambda b: setattr(fake, "tx", fake.tx + b)  # swallow, no echo queued
+
+    with pytest.raises(WriteNotConfirmed) as exc_info:
+        c.set("global/ledBrightness", 20)
+
+    assert str(exc_info.value) == (
+        "global/ledBrightness: o daemon não confirmou a escrita em 1 s")
+
+
+def test_set_is_noop_when_toggle_already_at_requested_value(tmp_path):
+    # Fix round 1, finding 2(a): measured live -- the daemon does not echo a
+    # PV when the written value equals the current one, so the old code
+    # always raised WriteNotConfirmed for a no-op write.
+    c, fake = make_client(tmp_path)
+    assert c.state["line/ch1/48v"] == 0.0
+
+    echoed = c.set("line/ch1/48v", 0)
+
+    assert echoed == 0.0
+    assert fake.tx == b""  # nothing sent
+    assert not c.undo_journal.exists()  # no undo entry
+
+
+def test_set_is_noop_when_linear_int_param_quantizes_equal(tmp_path):
+    # global/ledBrightness: min=1, max=100 (step 99). current state 0.7475
+    # quantizes to the same integer (74) as requesting human value 75.
+    c, fake = make_client(tmp_path)
+
+    echoed = c.set("global/ledBrightness", 75)
+
+    assert echoed == pytest.approx(0.7475, abs=1e-4)
+    assert fake.tx == b""
+    assert not c.undo_journal.exists()
+
+
+def test_set_is_not_noop_when_linear_int_param_differs_by_a_step(tmp_path):
+    c, fake = make_client(tmp_path)
+
+    echoed = c.set("global/ledBrightness", 76)
+
+    assert fake.tx != b""
+    assert echoed == pytest.approx(75 / 99, abs=1e-4)
+
+
+def test_set_is_noop_when_float_param_within_1e4_of_current(tmp_path):
+    c, fake = make_client(tmp_path)
+    c.ranges["line/ch1/volume"] = {"min": -96.0, "max": 10.0, "curve": "fader"}
+    c.state["line/ch1/volume"] = 0.5
+
+    echoed = c.set("line/ch1/volume", 0.5)
+
+    assert echoed == 0.5
+    assert fake.tx == b""
+    assert not c.undo_journal.exists()
+
+
+def test_set_list_is_noop_when_index_already_current(tmp_path):
+    c, fake = make_client(tmp_path)
+    c.state["global/phones1_src"] = 0.0  # index 0 of 15
+
+    echoed = c.set_list("global/phones1_src", 0, 15)
+
+    assert echoed == 0.0
+    assert fake.tx == b""
+    assert not c.undo_journal.exists()
+
+
+def test_set_list_writes_when_index_differs(tmp_path):
+    c, fake = make_client(tmp_path)
+    c.state["global/phones1_src"] = 0.0
+
+    echoed = c.set_list("global/phones1_src", 1, 15)
+
+    assert fake.tx != b""
+    assert echoed == pytest.approx(1 / 14, abs=1e-4)
+
+
 def test_set_raw_writes_without_conversion_or_validation(tmp_path):
     c, _ = make_client(tmp_path)
 

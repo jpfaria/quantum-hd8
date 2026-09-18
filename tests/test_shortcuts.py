@@ -153,7 +153,7 @@ def test_route_by_label(capsys, monkeypatch):
     monkeypatch.setattr("quantum_hd8.cli.Client", Fake)
     rc = main(["route", "phones1", "Out  3/4"])
     assert rc == 0
-    assert "global/phones1_src = Out  3/4" in capsys.readouterr().out
+    assert "phones1 = Out  3/4" in capsys.readouterr().out
 
 
 def test_route_by_label_case_insensitive_and_whitespace_collapsed(capsys, monkeypatch):
@@ -163,7 +163,7 @@ def test_route_by_label_case_insensitive_and_whitespace_collapsed(capsys, monkey
     monkeypatch.setattr("quantum_hd8.cli.Client", Fake)
     rc = main(["route", "phones1", "out 3/4"])
     assert rc == 0
-    assert "global/phones1_src = Out  3/4" in capsys.readouterr().out
+    assert "phones1 = Out  3/4" in capsys.readouterr().out
 
 
 def test_route_by_index(capsys, monkeypatch):
@@ -173,7 +173,7 @@ def test_route_by_index(capsys, monkeypatch):
     monkeypatch.setattr("quantum_hd8.cli.Client", Fake)
     rc = main(["route", "phones2", "2"])
     assert rc == 0
-    assert "global/phones2_src = Out  5/6" in capsys.readouterr().out
+    assert "phones2 = Out  5/6" in capsys.readouterr().out
 
 
 def test_route_uses_client_lists_when_present_over_static(monkeypatch):

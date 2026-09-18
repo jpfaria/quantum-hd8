@@ -254,6 +254,10 @@ class Client:
                 raise ValueError(f"{path}: {value} fora da faixa normalizada [0, 1]")
             normalized = float(value)
 
+        is_noop, current = self._is_noop_write(path, normalized, row)
+        if is_noop:
+            return current
+
         before = self.state.get(path)
         echoed = self._write_pv(path, normalized)
         undo.record(path, before, echoed, journal=self.undo_journal)
@@ -270,10 +274,44 @@ class Client:
         if not (0 <= index < n):
             raise ValueError(f"{path}: índice {index} fora de [0, {n - 1}]")
         normalized = index / (n - 1)
+
+        try:
+            row = self._param_row(path)
+        except KeyError:
+            row = None
+        is_noop, current = self._is_noop_write(path, normalized, row)
+        if is_noop:
+            return current
+
         before = self.state.get(path)
         echoed = self._write_pv(path, normalized)
         undo.record(path, before, echoed, journal=self.undo_journal)
         return echoed
+
+    def _is_noop_write(self, path: str, normalized: float,
+                        row: dict | None) -> tuple[bool, object]:
+        """(True, current-state-value) when `normalized` already matches
+        self.state[path] -- measured live: the daemon does not echo a PV
+        when the written value equals the current one, so writing it would
+        raise WriteNotConfirmed for what is really a no-op (fix round 1,
+        finding 2a). int params compare after quantizing both values to the
+        param's integer step (round(v * (max-min)) / (max-min)); every
+        other type compares with abs diff < 1e-4."""
+        current = self.state.get(path)
+        if current is None:
+            return False, None
+
+        if row is not None and row.get("type") == "int":
+            _, lo, hi = self._curve_and_range(path)
+            if lo is not None and hi is not None and hi != lo:
+                step = hi - lo
+                if round(normalized * step) == round(current * step):
+                    return True, current
+                return False, None
+
+        if abs(normalized - current) < 1e-4:
+            return True, current
+        return False, None
 
     def set_raw(self, path: str, normalized: float) -> object:
         """Write a raw normalized value directly, bypassing curve conversion,
@@ -287,7 +325,7 @@ class Client:
         m = self._drain_until(
             lambda m: m.code == "PV" and ucnet.parse_pv(m)[0] == path, timeout=1.0)
         if m is None:
-            raise WriteNotConfirmed(path)
+            raise WriteNotConfirmed(f"{path}: o daemon não confirmou a escrita em 1 s")
         return ucnet.parse_pv(m)[1]
 
     def load_scene(self, name: str, keep_gains: bool = False) -> dict:

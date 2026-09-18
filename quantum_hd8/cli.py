@@ -299,7 +299,7 @@ def main(argv: list[str] | None = None) -> int:
                 return 1
             result_idx = round(echoed * (len(labels) - 1))
             result_label = labels[result_idx] if 0 <= result_idx < len(labels) else echoed
-            print(f"{path} = {result_label}")
+            print(f"{args.target} = {result_label}")
             return 0
 
         return 0
