@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uc:ComponentModel xmlns:uc="http://www.presonus.com/xml/uc">
+ <uc:Parameters>
+  <uc:ParamList id="Global" starttag="1">
+   <uc:Param id="dim" name="Main Output Dim" type="toggle" def="0" flags="storable"/>
+  </uc:ParamList>
+  <uc:ParamList id="HeadPhones2" starttag="50">
+   <uc:Param id="phones2_src" name="Phones 2 Source" type="list" units="EmptyParamList" def="0" flags="mutable"/>
+  </uc:ParamList>
+  <uc:ParamList id="GlobalQHD8" starttag="30" inherit="Global" mixin="HeadPhones2"/>
+  <uc:ParamList id="Channel" starttag="100">
+   <uc:Param id="volume" name="Volume" type="float" min="-96" max="10" def="-96" units="gain" flags="storable linkable mutable"/>
+  </uc:ParamList>
+  <uc:ParamList id="Mic" starttag="140" inherit="Channel">
+   <uc:Param id="preampgain" name="Preamp Gain" type="float" min="0" max="75" def="0" units="gain.0" flags="storable mutable"/>
+  </uc:ParamList>
+ </uc:Parameters>
+ <uc:Templates>
+  <uc:Template id="QuantumHd8" flags="public">
+   <uc:Component id="global" name="Global" paramlist="GlobalQHD8"/>
+   <uc:Component id="line" name="Inputs">
+    <uc:foreach id="$i" min="1" max="2">
+     <uc:Component id="ch$i" paramlist="Mic"/>
+    </uc:foreach>
+   </uc:Component>
+  </uc:Template>
+ </uc:Templates>
+</uc:ComponentModel>
