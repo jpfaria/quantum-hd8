@@ -177,6 +177,34 @@ def test_connect_gives_up_on_fd_after_timeout_instead_of_hanging():
     c.close()
 
 
+def test_connect_feeds_raw_sink_every_recv_chunk():
+    rx = (FX / "probe-device-rx.bin").read_bytes()
+    chunks = [rx[:_FD_OFFSET_IN_PROBE_DEVICE_RX], rx[_FD_OFFSET_IN_PROBE_DEVICE_RX:]]
+    fake = FakeSock(list(chunks))
+    seen = []
+    c = Client(sock_factory=lambda *a, **k: fake, raw_sink=seen.append)
+
+    c.connect()
+
+    assert seen == chunks
+    c.close()
+
+
+def test_events_feeds_raw_sink_every_recv_chunk():
+    rx = (FX / "probe-device-rx.bin").read_bytes()
+    pl = (FX / "uc-pl.bin").read_bytes()
+    fake = FakeSock([rx, pl])
+    seen = []
+    c = Client(sock_factory=lambda *a, **k: fake, raw_sink=seen.append)
+    c.connect()
+    seen.clear()
+
+    list(c.events(timeout=0))
+
+    assert seen == [pl]
+    c.close()
+
+
 def test_events_yields_pl_updates_lists_and_state():
     rx = (FX / "probe-device-rx.bin").read_bytes()
     pl = (FX / "uc-pl.bin").read_bytes()

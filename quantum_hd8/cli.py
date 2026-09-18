@@ -19,7 +19,10 @@ def build_parser() -> argparse.ArgumentParser:
     get.add_argument("path")
 
     sub.add_parser("state", help="Resumo legível do estado")
-    sub.add_parser("listen", help="Imprime eventos até Ctrl-C")
+
+    listen = sub.add_parser("listen", help="Imprime eventos até Ctrl-C")
+    listen.add_argument("--raw", metavar="ARQUIVO",
+                         help="Grava cada chunk cru recebido do socket neste arquivo")
 
     return p
 
@@ -65,7 +68,13 @@ def main(argv: list[str] | None = None) -> int:
         p.print_help()
         return 0
 
-    c = Client()
+    raw_file = None
+    raw_sink = None
+    if args.cmd == "listen" and args.raw:
+        raw_file = open(args.raw, "ab")
+        raw_sink = raw_file.write
+
+    c = Client(raw_sink=raw_sink)
     try:
         c.connect()
 
@@ -109,6 +118,8 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     finally:
         c.close()
+        if raw_file is not None:
+            raw_file.close()
 
 
 if __name__ == "__main__":

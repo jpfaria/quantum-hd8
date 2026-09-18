@@ -80,11 +80,13 @@ def _parse_scene_list(m: ucnet.Message) -> list[str]:
 class Client:
     def __init__(self, host: str = "127.0.0.1", port: int = 59791,
                  sock_factory=socket.create_connection,
-                 connect_timeout: float = CONNECT_TIMEOUT):
+                 connect_timeout: float = CONNECT_TIMEOUT,
+                 raw_sink=None):
         self.host = host
         self.port = port
         self._sock_factory = sock_factory
         self.connect_timeout = connect_timeout
+        self._raw_sink = raw_sink
         self.sock = None
         self.state: dict[str, object] = {}
         self.ranges: dict[str, dict] = {}
@@ -130,6 +132,8 @@ class Client:
                 if not got_state:
                     raise TimeoutError(NOT_RESPONDING)
                 break  # connection closed -- proceed with what we have
+            if self._raw_sink is not None:
+                self._raw_sink(data)
             for m in self._decoder.feed(data):
                 kind = self._handle(m)
                 if kind == "state":
@@ -181,6 +185,8 @@ class Client:
                 return
             if not data:
                 return
+            if self._raw_sink is not None:
+                self._raw_sink(data)
             for m in self._decoder.feed(data):
                 if m.code == "PV":
                     path, value = ucnet.parse_pv(m)

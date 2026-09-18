@@ -8,6 +8,30 @@ def test_version(capsys):
     assert "quantum-hd8" in capsys.readouterr().out
 
 
+class RawSinkFakeClient:
+    """Like FakeClient, but records the raw_sink it was constructed with so
+    listen --raw can feed it bytes, and its events() writes through it --
+    matching how the real Client's events() calls raw_sink per recv chunk."""
+
+    closed = False
+
+    def __init__(self, *a, raw_sink=None, **k):
+        self.raw_sink = raw_sink
+
+    def connect(self):
+        return {}
+
+    def events(self, timeout=None):
+        chunks = [b"chunk-one", b"chunk-two"]
+        for chunk in chunks:
+            if self.raw_sink is not None:
+                self.raw_sink(chunk)
+        yield "line/ch1/volume", -6.0
+
+    def close(self):
+        self.closed = True
+
+
 class FakeClient:
     """Stands in for quantum_hd8.client.Client in CLI tests."""
 
@@ -119,3 +143,12 @@ def test_listen_prints_events(capsys, monkeypatch):
     out = capsys.readouterr().out
     assert "line/ch1/volume = -6.0" in out
     assert "main/ch1/mute = 1.0" in out
+
+
+def test_listen_raw_writes_every_chunk_to_file(tmp_path, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", RawSinkFakeClient)
+    out_file = tmp_path / "raw.bin"
+
+    assert main(["listen", "--raw", str(out_file)]) == 0
+
+    assert out_file.read_bytes() == b"chunk-onechunk-two"
