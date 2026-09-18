@@ -29,18 +29,45 @@ daemon not up: tell the user. **Never** restart/stop `ucdaemon`, never `launchct
 | Levels | `quantum-hd8 meters --once` (JSON) or `meters` (live) |
 | Watch changes | `quantum-hd8 listen` |
 
+## Path map (measured: names from the device's `Synchronize`, fields from `params.json`)
+
+| Path | Channel |
+|---|---|
+| `line/ch1..8` | In 1..8 (analog, the only real preamps) |
+| `line/ch9..10` | S/PDIF 1..2 |
+| `line/ch11..26` | ADAT 1..16 (`ch11+k-1` = ADAT k) |
+| `line/ch27..36` | USB 1..10, DAW playback (`ch26+k` = USB k) |
+| `aux/ch1..4` | Out 3/4, 5/6, 7/8, 9/10 |
+| `aux/ch5..12` | ADAT out 1/2, 3/4 … 15/16 |
+| `aux/ch13..14` | Loopback 1, Loopback 2 |
+| `main/ch1` | Main L/R |
+
+Leaves: every `line/chN` has `volume`, `mute`, `pan`, `aux1..aux14` (send to `aux/ch1..14`);
+`aux/chN` and `main/ch1` have `volume`, `mute`. Preamp leaves of In 1..8 are
+`preampgain` (dB 0..75), **`48v`** (not `phantom`), `pad`, `hpf`, `trim` (dB -12..12).
+The CLI verb `preamp N phantom` writes `line/chN/48v`; for `get` use the path.
+Example: "send do USB 3 pro aux 1" = `line/ch29/aux1`; "phantom do 2" = `line/ch2/48v`.
+Exact path unknown? `quantum-hd8 dump | grep` it; never invent one.
+
 ## Values (most common mistake)
 
 The daemon stores every value **normalized 0..1**. `set` converts only some:
 - curve `linear` → **human units** (`line/chN/preampgain` in dB, `global/ledBrightness` 1..100).
 - toggles → `0/1` (`on`/`off`).
 - `fader`, `exp` and anything else → **raw normalized 0..1**. `set main/ch1/volume -6` is an
-  error, not -6 dB. Unsure which? Look the path up in `quantum_hd8/params.json` (fields `curve`,
-  `type`, `min`, `max`, `units`, `verified`), or use a shortcut (`preamp`, `route`) that converts.
-- `get`, `dump` and `listen` always print the **normalized** value (0.202, not 21). Convert with
+  error, not -6 dB. Which curve a path has: `quantum_hd8/params.json` (fields `curve`, `type`,
+  `min`, `max`, `units`), or use a shortcut (`preamp`, `route`) that converts.
+- **The `fader` curve's dB ↔ 0..1 mapping is NOT measured** (every `volume` and `auxN` send).
+  For a dB request on a fader ("main a 0 dB", "send a -10"), do **not** compute a normalized
+  value (not linear over -96..+10, not anything else). Tell the user the mapping isn't
+  calibrated and ask for either a normalized target, or to set it once in UC and read it back
+  with `get`. 0.735 is seen on many faders: its dB is unknown, never call it 0 dB (unity).
+  Only 0 = bottom of the fader (-96, off) is safe: "zera o send" = `set line/ch29/aux1 0`.
+- `get`, `dump` and `listen` always print the **normalized** value (0.192, not 20). Convert with
   min/max for linear params before telling the user a dB number.
 - `route` and `state` print labels (`Loopback 1`), not the normalized index.
-- Output of `set`: `21 (0.202)` = human value, then the normalized echo.
+- Output of `set` (linear params): `global/ledBrightness = 20 (0.192)` = human value, then the
+  normalized echo; other params print the normalized echo only.
 - Writing the value it already has is a **no-op**: the daemon sends no echo, the CLI returns the
   current value. Not an error, not a failed write.
 
@@ -69,7 +96,8 @@ The daemon stores every value **normalized 0..1**. `set` converts only some:
 
 ## Red flags — stop
 
-- About to pass dB/percent to a `fader`/`exp` path.
+- About to pass dB/percent to a `fader`/`exp` path, or converting dB to 0..1 yourself.
+- Using `phantom` in a path, or a path not in the map / `dump`.
 - Reporting a meter value "in dB".
 - `scene load` without `--keep-gains` and without the user asking for the scene's gains.
 - Hunting for a re-amp parameter, or proposing `launchctl`/restarting ucdaemon.
