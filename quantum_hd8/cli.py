@@ -24,6 +24,19 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
+def _labeled_source(c: Client, path: str):
+    """Value for a *_src/spdifSource path: the matching label when the PL
+    label list for it is known (index = round(value * (n - 1))), else the
+    raw normalized value."""
+    value = c.get(path)
+    labels = c.lists.get(path)
+    if labels:
+        idx = round(value * (len(labels) - 1))
+        if 0 <= idx < len(labels):
+            return labels[idx]
+    return value
+
+
 def _summary_lines(c: Client) -> list[str]:
     lines = []
     for ch in range(1, 9):
@@ -36,7 +49,7 @@ def _summary_lines(c: Client) -> list[str]:
         f"main/ch1: mute {'on' if c.get('main/ch1/mute') else 'off'}, "
         f"volume {c.human('main/ch1/volume')}")
     for path in ("global/phones1_src", "global/phones2_src", "global/spdifSource"):
-        lines.append(f"{path} = {c.get(path)}")
+        lines.append(f"{path} = {_labeled_source(c, path)}")
     lines.append("cenas: " + ", ".join(c.scenes))
     return lines
 

@@ -26,6 +26,11 @@ class FakeClient:
     }
     ranges = {"line/ch1/preampgain": {"min": 0.0, "max": 75.0, "curve": "linear"}}
     scenes = ["ELEMENT.scene", "PEDAIS-SYN2-5050.scene"]
+    # global/spdifSource has no known labels -- state must fall back to raw.
+    lists = {
+        "global/phones1_src": ["Main L/R", "Out  3/4", "Out  5/6"],
+        "global/phones2_src": ["Main L/R", "Out  3/4", "Out  5/6"],
+    }
     closed = False
 
     def __init__(self, *a, **k):
@@ -90,6 +95,22 @@ def test_state_shows_summary(capsys, monkeypatch):
     out = capsys.readouterr().out
     assert "19.5 dB" in out  # line/ch1 preamp gain, human
     assert "ELEMENT.scene" in out
+
+
+def test_state_shows_source_label_when_lists_known(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", FakeClient)
+    assert main(["state"]) == 0
+    out = capsys.readouterr().out
+    # global/phones1_src = 0.0, lists[...][0] == "Main L/R" -- index 0.
+    assert "phones1_src = Main L/R" in out
+
+
+def test_state_falls_back_to_raw_when_lists_unknown(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", FakeClient)
+    assert main(["state"]) == 0
+    out = capsys.readouterr().out
+    # global/spdifSource isn't in FakeClient.lists -- raw value, not a label.
+    assert "spdifSource = 0.0" in out
 
 
 def test_listen_prints_events(capsys, monkeypatch):

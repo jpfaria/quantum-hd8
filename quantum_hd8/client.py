@@ -11,6 +11,7 @@ import json
 import socket
 import struct
 import threading
+import time
 from typing import Iterator
 
 from . import ucnet
@@ -78,10 +79,12 @@ def _parse_scene_list(m: ucnet.Message) -> list[str]:
 
 class Client:
     def __init__(self, host: str = "127.0.0.1", port: int = 59791,
-                 sock_factory=socket.create_connection):
+                 sock_factory=socket.create_connection,
+                 connect_timeout: float = CONNECT_TIMEOUT):
         self.host = host
         self.port = port
         self._sock_factory = sock_factory
+        self.connect_timeout = connect_timeout
         self.sock = None
         self.state: dict[str, object] = {}
         self.ranges: dict[str, dict] = {}
@@ -93,7 +96,7 @@ class Client:
 
     def connect(self) -> dict:
         self.sock = self._sock_factory((self.host, self.port))
-        self.sock.settimeout(CONNECT_TIMEOUT)
+        self.sock.settimeout(self.connect_timeout)
 
         self.sock.sendall(ucnet.encode(
             "UM", b"\x00\x00" + struct.pack("<H", UDP_DISCOVERY_PORT), cbytes=UM_CB))
@@ -102,17 +105,37 @@ class Client:
         self.sock.sendall(ucnet.encode(
             "FR", struct.pack("<H", 1) + b"Listscene" + b"\x00\x00", cbytes=DEVICE_CB))
 
+        # ZM/ZB (state) and FD (scene list) can arrive in separate TCP
+        # segments -- i.e. separate recv() calls, possibly split at any byte
+        # boundary. Wait for both, bounded by one deadline covering every
+        # recv() in this loop (not reset per call), so a daemon that answers
+        # state but never sends FD does not hang connect() forever.
         got_state = False
-        while not got_state:
+        got_scenes = False
+        deadline = time.monotonic() + self.connect_timeout
+        while not (got_state and got_scenes):
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                if not got_state:
+                    raise TimeoutError(NOT_RESPONDING)
+                break  # scenes never arrived -- proceed with scenes=[]
+            self.sock.settimeout(remaining)
             try:
                 data = self.sock.recv(4096)
-            except socket.timeout as e:
-                raise TimeoutError(NOT_RESPONDING) from e
+            except socket.timeout:
+                if not got_state:
+                    raise TimeoutError(NOT_RESPONDING)
+                break
             if not data:
-                raise TimeoutError(NOT_RESPONDING)
+                if not got_state:
+                    raise TimeoutError(NOT_RESPONDING)
+                break  # connection closed -- proceed with what we have
             for m in self._decoder.feed(data):
-                if self._handle(m) == "state":
+                kind = self._handle(m)
+                if kind == "state":
                     got_state = True
+                elif kind == "scenes":
+                    got_scenes = True
 
         self._start_keepalive()
         return self.state
@@ -130,6 +153,11 @@ class Client:
             path, value = ucnet.parse_pv(m)
             self.state[path] = value
             return "pv"
+        if m.code == "PL":
+            path, value, labels = ucnet.parse_pl(m)
+            self.lists[path] = labels
+            self.state[path] = value
+            return "pl"
         return None
 
     def get(self, path: str) -> object:
@@ -156,6 +184,11 @@ class Client:
             for m in self._decoder.feed(data):
                 if m.code == "PV":
                     path, value = ucnet.parse_pv(m)
+                    self.state[path] = value
+                    yield path, value
+                elif m.code == "PL":
+                    path, value, labels = ucnet.parse_pl(m)
+                    self.lists[path] = labels
                     self.state[path] = value
                     yield path, value
                 else:

@@ -71,3 +71,32 @@ def test_decoder_skips_garbage_before_magic():
     d = ucnet.Decoder()
     [m] = d.feed(b"\x00garbage\xffbytes" + raw)
     assert (m.code, m.payload) == ("KA", b"")
+
+
+def test_parse_pv_against_real_write_capture():
+    # tests/fixtures/uc-pvwrite.bin: PV the real UC app wrote for
+    # global/mixerMode, value 0.0 (docs/protocol.md, "Escrita").
+    [m] = ucnet.Decoder().feed((FX / "uc-pvwrite.bin").read_bytes())
+    assert m.code == "PV"
+    assert ucnet.parse_pv(m) == ("global/mixerMode", 0.0)
+
+
+def test_parse_pl_splits_path_value_and_labels():
+    # tests/fixtures/uc-pl.bin: path + 00 + uint16 LE flag + float32 LE
+    # value + labels joined by "\n" + 00 (measured, docs/protocol.md).
+    msgs = ucnet.Decoder().feed((FX / "uc-pl.bin").read_bytes())
+    pl = next(m for m in msgs if m.code == "PL")
+    path, value, labels = ucnet.parse_pl(pl)
+    assert path == "global/phones1_src"
+    assert value == 0.0
+    assert labels[:2] == ["Main L/R", "Out  3/4"]
+    assert labels[-1] == "Loopback  2"
+
+
+def test_parse_pl_nonzero_value_and_short_label_list():
+    msgs = ucnet.Decoder().feed((FX / "uc-pl.bin").read_bytes())
+    pl = next(m for m in msgs if b"mainOutVolumeLink" in m.payload)
+    path, value, labels = ucnet.parse_pl(pl)
+    assert path == "global/mainOutVolumeLink"
+    assert value == 0.3333
+    assert labels == ["None", "All", "1-2", "1-4", "1-6", "1-8", "All + ADAT"]

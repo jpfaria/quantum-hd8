@@ -82,6 +82,22 @@ def parse_pv(m: Message) -> tuple[str, float]:
     return key.decode(), round(struct.unpack("<f", rest[-4:])[0], 4)
 
 
+def parse_pl(m: Message) -> tuple[str, float, list[str]]:
+    """Parse a PL (parameter + label list) payload.
+
+    Measured (tests/fixtures/uc-pl.bin, docs/protocol.md): path + 0x00 +
+    uint16 LE flag + float32 LE normalized value + labels joined by "\\n"
+    + a trailing 0x00.
+    """
+    path, _, rest = m.payload.partition(b"\x00")
+    value = struct.unpack_from("<f", rest, 2)[0]
+    labels_blob = rest[6:]
+    if labels_blob.endswith(b"\x00"):
+        labels_blob = labels_blob[:-1]
+    labels = labels_blob.decode().split("\n")
+    return path.decode(), round(value, 4), labels
+
+
 def parse_state(m: Message) -> dict:
     """Parse a ZM/ZB payload's zlib-compressed JSON tree.
 
