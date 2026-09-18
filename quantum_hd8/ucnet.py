@@ -68,6 +68,14 @@ def json_payload(obj) -> bytes:
     return struct.pack("<I", len(b)) + b
 
 
+def compact_json_payload(obj) -> bytes:
+    """Like json_payload, but with the comma/colon spacing the real UC app
+    uses for JM RestorePreset -- no space after a comma (measured,
+    tests/fixtures/uc-restore.bin)."""
+    b = json.dumps(obj, separators=(",", ": ")).encode()
+    return struct.pack("<I", len(b)) + b
+
+
 def parse_json(m: Message) -> dict:
     n = struct.unpack_from("<I", m.payload)[0]
     return json.loads(m.payload[4:4 + n])

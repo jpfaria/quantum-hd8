@@ -1,6 +1,7 @@
 import json
 
 from quantum_hd8.cli import main
+from quantum_hd8.client import SceneLoadTimeout, WriteNotConfirmed
 
 
 def test_version(capsys):
@@ -152,3 +153,148 @@ def test_listen_raw_writes_every_chunk_to_file(tmp_path, monkeypatch):
     assert main(["listen", "--raw", str(out_file)]) == 0
 
     assert out_file.read_bytes() == b"chunk-onechunk-two"
+
+
+class WriteFakeClient:
+    """Stands in for Client in `set`/`undo`/`scene` CLI tests."""
+
+    closed = False
+
+    def __init__(self, *a, **k):
+        from quantum_hd8 import undo as _undo
+        self.undo_journal = k.get("undo_journal") or _undo.DEFAULT_JOURNAL
+        self.set_calls = []
+        self.set_raw_calls = []
+        self.load_scene_calls = []
+
+    def connect(self):
+        return {}
+
+    def set(self, path, value):
+        self.set_calls.append((path, value))
+        if path == "line/ch1/preampgain" and value == 80:
+            raise ValueError(f"{path}: {value} fora da faixa [0.0, 75.0]")
+        if path == "line/ch1/clip":
+            raise PermissionError(f"{path} é readonly")
+        if path == "global/ledBrightness" and value == 0.9:
+            raise WriteNotConfirmed(path)
+        return 0.5
+
+    def set_raw(self, path, normalized):
+        self.set_raw_calls.append((path, normalized))
+        return normalized
+
+    def load_scene(self, name, keep_gains=False):
+        self.load_scene_calls.append((name, keep_gains))
+        if name == "TIMEOUT":
+            raise SceneLoadTimeout(name)
+        gains = [("line/ch1/preampgain", 37.5, 0.0)] if keep_gains else []
+        return {"preset_file": f"{name}.scene" if not name.endswith(".scene") else name,
+                "gains": gains}
+
+    def close(self):
+        self.closed = True
+
+
+def test_set_prints_echoed_value(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    assert main(["set", "line/ch1/preampgain", "37.5"]) == 0
+    assert "line/ch1/preampgain = 0.5" in capsys.readouterr().out
+
+
+def test_set_out_of_range_prints_error_and_returns_1(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    rc = main(["set", "line/ch1/preampgain", "80"])
+    assert rc == 1
+    assert "fora da faixa" in capsys.readouterr().err
+
+
+def test_set_readonly_prints_error_and_returns_1(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    rc = main(["set", "line/ch1/clip", "1"])
+    assert rc == 1
+    assert "readonly" in capsys.readouterr().err
+
+
+def test_set_not_confirmed_prints_error_and_returns_1(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    rc = main(["set", "global/ledBrightness", "0.9"])
+    assert rc == 1
+    assert "global/ledBrightness" in capsys.readouterr().err
+
+
+def test_set_accepts_on_off_for_toggles(monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    client_instances = []
+    orig_init = WriteFakeClient.__init__
+
+    def capture_init(self, *a, **k):
+        orig_init(self, *a, **k)
+        client_instances.append(self)
+
+    monkeypatch.setattr(WriteFakeClient, "__init__", capture_init)
+
+    assert main(["set", "line/ch1/48v", "on"]) == 0
+
+    assert client_instances[0].set_calls == [("line/ch1/48v", 1)]
+
+
+def test_undo_pops_and_sets_raw(tmp_path, capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    from quantum_hd8 import undo as undo_mod
+    monkeypatch.setattr("quantum_hd8.cli.undo.DEFAULT_JOURNAL", tmp_path / "undo.jsonl")
+    undo_mod.record("line/ch1/preampgain", 0.26, 0.5, journal=tmp_path / "undo.jsonl")
+
+    rc = main(["undo"])
+
+    assert rc == 0
+    assert "line/ch1/preampgain" in capsys.readouterr().out
+
+
+def test_undo_with_empty_journal_prints_message(tmp_path, capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    monkeypatch.setattr("quantum_hd8.cli.undo.DEFAULT_JOURNAL", tmp_path / "undo.jsonl")
+
+    rc = main(["undo"])
+
+    assert rc == 0
+    assert "nada para desfazer" in capsys.readouterr().out
+
+
+def test_scene_list_prints_scenes(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", FakeClient)
+    assert main(["scene", "list"]) == 0
+    out = capsys.readouterr().out
+    assert "ELEMENT.scene" in out
+    assert "PEDAIS-SYN2-5050.scene" in out
+
+
+def test_scene_load_prints_nothing_extra_without_keep_gains(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    rc = main(["scene", "load", "MK300-FRFR"])
+    assert rc == 0
+    assert capsys.readouterr().out == ""
+
+
+def test_scene_load_keep_gains_prints_before_after(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    rc = main(["scene", "load", "MK300-FRFR", "--keep-gains"])
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "line/ch1/preampgain" in out
+    assert "37.5" in out
+    assert "0.0" in out
+
+
+def test_scene_load_timeout_prints_error_and_returns_1(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    rc = main(["scene", "load", "TIMEOUT"])
+    assert rc == 1
+    assert "TIMEOUT" in capsys.readouterr().err
+
+
+def test_scene_save_not_implemented(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    rc = main(["scene", "save", "whatever"])
+    assert rc == 2
+    assert "não capturado" in capsys.readouterr().err

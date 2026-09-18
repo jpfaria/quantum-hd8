@@ -1,0 +1,156 @@
+import json
+from pathlib import Path
+
+import pytest
+
+from quantum_hd8 import ucnet
+from quantum_hd8.client import Client, WriteNotConfirmed
+
+
+class FakeSock:
+    """A socket double for write tests: echoes back any PV it receives via
+    sendall(), as the real daemon does within ~1 ms (measured, docs/protocol.md
+    "Eco da escrita"). recv() returns b"" (simulating no more data) once the
+    echo queue is drained, which Client._drain_until treats as "nothing more
+    arrived" -- fast to run, no real waiting."""
+
+    def __init__(self):
+        self.tx = b""
+        self._pending: list[bytes] = []
+
+    def sendall(self, b):
+        self.tx += b
+        for m in ucnet.Decoder().feed(b):
+            if m.code == "PV":
+                path, value = ucnet.parse_pv(m)
+                self._pending.append(
+                    ucnet.encode("PV", ucnet.pv_payload(path, value), cbytes=b"\x69\x00\x6a\x00")
+                )
+
+    def recv(self, n):
+        return self._pending.pop(0) if self._pending else b""
+
+    def settimeout(self, t):
+        pass
+
+    def close(self):
+        pass
+
+
+def make_client(tmp_path) -> tuple[Client, FakeSock]:
+    fake = FakeSock()
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.sock = fake
+    c.undo_journal = tmp_path / "undo.jsonl"
+    c.ranges = {"line/ch1/preampgain": {"min": 0.0, "max": 75.0, "curve": "linear"}}
+    c.state = {
+        "line/ch1/preampgain": 0.26,
+        "line/ch1/48v": 0.0,
+        "global/ledBrightness": 0.7475,
+    }
+    return c, fake
+
+
+def test_set_linear_param_converts_human_db_to_normalized(tmp_path):
+    c, _ = make_client(tmp_path)
+
+    echoed = c.set("line/ch1/preampgain", 37.5)
+
+    assert echoed == pytest.approx(0.5, abs=1e-4)
+
+
+def test_set_records_before_after_in_undo_journal(tmp_path):
+    c, _ = make_client(tmp_path)
+
+    c.set("line/ch1/preampgain", 37.5)
+
+    lines = c.undo_journal.read_text().splitlines()
+    assert len(lines) == 1
+    entry = json.loads(lines[0])
+    assert entry["path"] == "line/ch1/preampgain"
+    assert entry["before"] == 0.26
+    assert entry["after"] == pytest.approx(0.5, abs=1e-4)
+
+
+def test_set_rejects_out_of_range_linear_value(tmp_path):
+    c, fake = make_client(tmp_path)
+
+    with pytest.raises(ValueError):
+        c.set("line/ch1/preampgain", 80)
+
+    assert fake.tx == b""  # never sent -- validated before writing
+
+
+def test_set_rejects_readonly_param(tmp_path):
+    c, fake = make_client(tmp_path)
+
+    with pytest.raises(PermissionError):
+        c.set("line/ch1/clip", 1)
+
+    assert fake.tx == b""
+
+
+def test_set_toggle_accepts_0_or_1(tmp_path):
+    c, _ = make_client(tmp_path)
+
+    echoed = c.set("line/ch1/48v", 1)
+
+    assert echoed == 1.0
+
+
+def test_set_toggle_rejects_value_outside_0_1(tmp_path):
+    c, _ = make_client(tmp_path)
+
+    with pytest.raises(ValueError):
+        c.set("line/ch1/48v", 2)
+
+
+def test_set_other_curve_accepts_normalized_value(tmp_path):
+    c, _ = make_client(tmp_path)
+    c.ranges["line/ch1/volume"] = {"min": -96.0, "max": 10.0, "curve": "fader"}
+    c.state["line/ch1/volume"] = 0.5
+
+    echoed = c.set("line/ch1/volume", 0.8)
+
+    assert echoed == pytest.approx(0.8, abs=1e-4)
+
+
+def test_set_other_curve_rejects_value_outside_0_1(tmp_path):
+    c, _ = make_client(tmp_path)
+    c.ranges["line/ch1/volume"] = {"min": -96.0, "max": 10.0, "curve": "fader"}
+
+    with pytest.raises(ValueError):
+        c.set("line/ch1/volume", 1.5)
+
+
+def test_set_param_without_curve_accepts_normalized_value(tmp_path):
+    # global/ledBrightness has no daemon-reported curve (measured,
+    # docs/protocol.md "Eco da escrita") -- falls into the normalized bucket.
+    c, _ = make_client(tmp_path)
+
+    echoed = c.set("global/ledBrightness", 0.2)
+
+    assert echoed == pytest.approx(0.2, abs=1e-4)
+
+
+def test_set_unknown_path_raises_key_error(tmp_path):
+    c, _ = make_client(tmp_path)
+
+    with pytest.raises(KeyError):
+        c.set("nonexistent/path", 1)
+
+
+def test_set_raises_write_not_confirmed_when_no_echo_arrives(tmp_path):
+    c, fake = make_client(tmp_path)
+    fake.sendall = lambda b: setattr(fake, "tx", fake.tx + b)  # swallow, no echo queued
+
+    with pytest.raises(WriteNotConfirmed):
+        c.set("global/ledBrightness", 0.2)
+
+
+def test_set_raw_writes_without_conversion_or_validation(tmp_path):
+    c, _ = make_client(tmp_path)
+
+    echoed = c.set_raw("line/ch1/preampgain", 0.26)
+
+    assert echoed == pytest.approx(0.26, abs=1e-4)

@@ -4,7 +4,8 @@ import json
 import sys
 
 from . import __version__
-from .client import Client
+from . import undo
+from .client import Client, SceneLoadTimeout, WriteNotConfirmed
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -24,7 +25,31 @@ def build_parser() -> argparse.ArgumentParser:
     listen.add_argument("--raw", metavar="ARQUIVO",
                          help="Grava cada chunk cru recebido do socket neste arquivo")
 
+    set_p = sub.add_parser("set", help="Escreve um parâmetro")
+    set_p.add_argument("path")
+    set_p.add_argument("value")
+
+    sub.add_parser("undo", help="Desfaz a última escrita")
+
+    scene = sub.add_parser("scene", help="Cenas (presets)")
+    scene_sub = scene.add_subparsers(dest="scene_cmd")
+    scene_sub.add_parser("list", help="Lista as cenas")
+    scene_load = scene_sub.add_parser("load", help="Carrega uma cena")
+    scene_load.add_argument("name")
+    scene_load.add_argument("--keep-gains", action="store_true",
+                             help="Regrava os ganhos de pré anteriores após carregar")
+    scene_save = scene_sub.add_parser("save", help="Salva uma cena")
+    scene_save.add_argument("name")
+
     return p
+
+
+def _parse_set_value(raw: str):
+    if raw.lower() == "on":
+        return 1
+    if raw.lower() == "off":
+        return 0
+    return float(raw)
 
 
 def _labeled_source(c: Client, path: str):
@@ -110,6 +135,52 @@ def main(argv: list[str] | None = None) -> int:
                     print(f"{path} = {value}")
             except KeyboardInterrupt:
                 pass
+            return 0
+
+        if args.cmd == "set":
+            try:
+                value = _parse_set_value(args.value)
+            except ValueError:
+                print(f"valor inválido: {args.value}", file=sys.stderr)
+                return 1
+            try:
+                echoed = c.set(args.path, value)
+            except (KeyError, ValueError, PermissionError, WriteNotConfirmed) as e:
+                print(str(e), file=sys.stderr)
+                return 1
+            print(f"{args.path} = {echoed}")
+            return 0
+
+        if args.cmd == "undo":
+            entry = undo.pop(journal=c.undo_journal)
+            if entry is None:
+                print("nada para desfazer")
+                return 0
+            path, before = entry
+            try:
+                echoed = c.set_raw(path, before)
+            except WriteNotConfirmed as e:
+                print(str(e), file=sys.stderr)
+                return 1
+            print(f"{path}: restaurado para {echoed}")
+            return 0
+
+        if args.cmd == "scene":
+            if args.scene_cmd == "list":
+                print("\n".join(c.scenes))
+                return 0
+            if args.scene_cmd == "load":
+                try:
+                    result = c.load_scene(args.name, keep_gains=args.keep_gains)
+                except SceneLoadTimeout as e:
+                    print(f"cena não confirmada (RecalledPreset não chegou): {e}", file=sys.stderr)
+                    return 1
+                for path, before, after in result["gains"]:
+                    print(f"{path}: {before:.1f} dB -> {after:.1f} dB (restaurado)")
+                return 0
+            if args.scene_cmd == "save":
+                print("scene save: formato ainda não capturado", file=sys.stderr)
+                return 2
             return 0
 
         return 0
