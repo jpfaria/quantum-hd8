@@ -96,3 +96,11 @@ Strings de ids de mensagem no binário `ucdaemon` (candidatas, não medidas):
 Fixtures extraídas da captura do UC: `uc-restore.bin` (RestorePreset que o UC
 mandou), `uc-recalled.bin` (resposta RecalledPreset), `uc-pvwrite.bin` (PV que o
 UC escreveu: `global/mixerMode`).
+
+## Eco da escrita (medido, 18/09)
+
+Escrevendo `PV global/ledBrightness` na sessão `6a 00 69 00`, o daemon devolve
+um `PV` com o valor aplicado em ~ms (`tests/fixtures/led-write-echo-rx.bin`).
+Parâmetro inteiro volta quantizado: pedi 0,2 → veio 0,202 (= passo de 1/99 na
+faixa 1..100). Restaurei o valor original (0,7475) e a releitura numa conexão
+nova bateu.
