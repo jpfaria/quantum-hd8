@@ -37,14 +37,14 @@ fica só como documentação.
 |---|---|
 | `quantum_hd8/ucnet.py` | Codec dos pacotes (encode/decode), sem I/O |
 | `quantum_hd8/client.py` | Conexão TCP, subscribe, keepalive, get/set, eventos |
-| `quantum_hd8/params.yaml` | Mapa: caminho, tipo, faixa, unidade, `verified`, `hidden` |
+| `quantum_hd8/params.json` | Mapa: caminho, tipo, faixa, unidade, `verified`, `hidden` |
 | `quantum_hd8/cli.py` | Comando `quantum-hd8` |
 | `tools/probe.py` + `listen --raw` | Grava bytes do daemon (inclusive o eco do que o UC muda) para fixture — sem sniffer, sem sudo |
 | `tools/diff_state.py` | Diff entre dois `dump` → qual parâmetro mudou |
 | `skills/quantum-hd8/SKILL.md` | Skill do plugin (CLI + regras de segurança) |
 | `docs/protocol.md` | Protocolo byte a byte |
 
-Cada entrada de `params.yaml` é `verified: true` só quando o efeito foi medido
+Cada entrada de `params.json` é `verified: true` só quando o efeito foi medido
 no áudio; lida da árvore sem medição = `verified: false`. Veio do binário e o
 UC não mostra = `hidden: true`.
 
