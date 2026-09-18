@@ -1,0 +1,9 @@
+{
+  "name": "quantum-hd8",
+  "description": "Control a PreSonus Quantum HD 8 from Claude without the Universal Control window: preamp gain/phantom/pad/HPF, phones and S/PDIF routing, scenes, raw level meters, any mixer parameter with undo, over the ucdaemon's UCNet socket.",
+  "version": "0.1.0",
+  "author": {
+    "name": "João Paulo"
+  },
+  "homepage": "https://github.com/jpfaria/quantum-hd8"
+}

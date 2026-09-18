@@ -1,0 +1,76 @@
+---
+name: quantum-hd8
+description: Use when the user wants to read or change anything on the PreSonus Quantum HD 8 without the Universal Control window — preamp gain, phantom, pad, HPF, phones/S-PDIF source, scenes, levels, any mixer or global parameter — e.g. "muda o ganho do canal 3 na HD 8", "carrega a cena X", "qual a fonte do fone", "medidores da interface", "roteia o S/PDIF", "liga o phantom do 2", "desfaz", or asks about the re-amp outputs (11/12) of the HD 8.
+---
+
+# quantum-hd8 — Quantum HD 8 via the Universal Control daemon
+
+CLI + Python package that talks UCNet to `ucdaemon` (TCP `127.0.0.1:59791`), the same socket the
+Universal Control (UC) app uses. The UC window can stay open; it mirrors every change.
+Not installed? `pipx install git+https://github.com/jpfaria/quantum-hd8`
+(or `pip install -e "${CLAUDE_PLUGIN_ROOT}"`). `quantum-hd8 <cmd> --help` for arguments.
+Protocol details and what is measured vs hypothesis: `docs/protocol.md` in the repo.
+
+**Requires the UC app installed (ucdaemon running).** Connection refused = UC not installed or
+daemon not up: tell the user. **Never** restart/stop `ucdaemon`, never `launchctl`, never kill UC.
+
+## Commands
+
+| Want | Command |
+|---|---|
+| Readable summary | `quantum-hd8 state` |
+| Everything (path → value) | `quantum-hd8 dump [--out f.json]` |
+| One value | `quantum-hd8 get line/ch3/preampgain` |
+| Preamp 1-8 | `quantum-hd8 preamp 3 gain 30` · `preamp 2 phantom on` · `pad`/`hpf on\|off` |
+| Phones / S/PDIF source | `quantum-hd8 route phones1 "Loopback 1"` (`phones2`, `spdif`; label or 0-based index) |
+| Any parameter | `quantum-hd8 set <path> <value>` |
+| Revert last write | `quantum-hd8 undo` (LIFO, repeat for older ones) |
+| Scenes | `quantum-hd8 scene list` · `scene load NAME --keep-gains` |
+| Levels | `quantum-hd8 meters --once` (JSON) or `meters` (live) |
+| Watch changes | `quantum-hd8 listen` |
+
+## Values (most common mistake)
+
+The daemon stores every value **normalized 0..1**. `set` converts only some:
+- curve `linear` → **human units** (`line/chN/preampgain` in dB, `global/ledBrightness` 1..100).
+- toggles → `0/1` (`on`/`off`).
+- `fader`, `exp` and anything else → **raw normalized 0..1**. `set main/ch1/volume -6` is an
+  error, not -6 dB. Unsure which? Look the path up in `quantum_hd8/params.json` (fields `curve`,
+  `type`, `min`, `max`, `units`, `verified`), or use a shortcut (`preamp`, `route`) that converts.
+- `get`, `dump` and `listen` always print the **normalized** value (0.202, not 21). Convert with
+  min/max for linear params before telling the user a dB number.
+- `route` and `state` print labels (`Loopback 1`), not the normalized index.
+- Output of `set`: `21 (0.202)` = human value, then the normalized echo.
+- Writing the value it already has is a **no-op**: the daemon sends no echo, the CLI returns the
+  current value. Not an error, not a failed write.
+
+## Rules
+
+1. **Read before, write, read after.** `get` the path, write, `get` again and report both values.
+2. **One new parameter at a time.** Written live so far: `global/ledBrightness`, preamp and route
+   paths (the `verified` flag in `params.json` is still false everywhere, don't trust it). Any
+   other path is written alone, re-read, confirmed with the user, before the next.
+3. **Amps/cabinets:** before any write that can raise level on an output feeding the SYN-5050 /
+   cabinets (main/aux volumes, routes, scene load, mutes off), ask the user to turn the volume down
+   and wait for the "ok". Which outputs feed what: vault `music-setup — Mapa de Canais e Cabos`.
+4. **Undo:** every `set`/`preamp`/`route` write is journaled (`~/.quantum-hd8/undo.jsonl`).
+   Tell the user `quantum-hd8 undo` reverts it. `scene load` itself is not undoable.
+5. **Scene load zeroes the preamp gains.** Always `scene load NAME --keep-gains` unless the user
+   wants the scene's gains; it prints each gain it restored. Not yet verified live: re-read
+   `state` after it. `scene save` is not implemented (exits 2): use the UC app.
+6. **Meters are raw and uncalibrated.** Numbers like 270–450 are not dBFS and not dB. Say "raw
+   value, no calibration" and compare only relative (signal vs ~0 silence). For real dBFS use
+   OpenRig's `openrig://meters` or the UC window.
+7. **Re-amp outs (CoreAudio 11/12) are not reachable from the host.** Their source is the front
+   panel: *Global Settings > Reamp Out* (ADAT 1/2 … ADAT 15/16). No `set`/`route` changes it;
+   `aux/ch13-14` are Loopback 1/2, not re-amp. Tell the user to change it on the panel
+   (details: `docs/camada-b-reamp.md`).
+8. No raw frames, no `tools/probe.py` writes, no guessing paths: paths come from `dump`.
+
+## Red flags — stop
+
+- About to pass dB/percent to a `fader`/`exp` path.
+- Reporting a meter value "in dB".
+- `scene load` without `--keep-gains` and without the user asking for the scene's gains.
+- Hunting for a re-amp parameter, or proposing `launchctl`/restarting ucdaemon.
+- Several unverified writes in one command line, or raising output level without asking first.

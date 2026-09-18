@@ -1,0 +1,15 @@
+{
+  "name": "quantum-hd8",
+  "description": "PreSonus Quantum HD 8 without the Universal Control window: the quantum-hd8 CLI/skill.",
+  "owner": {
+    "name": "João Paulo",
+    "url": "https://github.com/jpfaria/quantum-hd8"
+  },
+  "plugins": [
+    {
+      "name": "quantum-hd8",
+      "source": "./",
+      "description": "Control a PreSonus Quantum HD 8 through the Universal Control daemon (UCNet, 127.0.0.1:59791) from Claude: preamps, phones/S-PDIF routing, scenes, raw meters, any parameter with undo."
+    }
+  ]
+}

@@ -5,6 +5,18 @@ com a Quantum HD 8 ligada. **Medido** = visto em bytes reais (fixtures em
 `tests/fixtures/`). **Hipótese** = vem do formato público do UCNet da StudioLive,
 ainda não visto aqui.
 
+## Estado (18/09)
+
+| Parte | Status |
+|---|---|
+| Transporte, enquadramento, handshake, sessão da HD 8 | medido |
+| Leitura (`Synchronize`), eventos `PV`/`PL` | medido |
+| Escrita `PV` + eco (`global/ledBrightness`), no-op sem eco | medido |
+| Cenas: `Listscene` | medido; `RestorePreset` visto no tráfego do UC, não disparado por nós |
+| Salvar cena | não capturado |
+| Medidores `MS levl` (UDP) | layout medido; escala → dBFS não calibrada |
+| Re-amp (saídas 11/12) | fora da camada A: só pelo painel ([`camada-b-reamp.md`](camada-b-reamp.md)) |
+
 ## Transporte
 
 - TCP `127.0.0.1:59791`. O app UC fica conectado nele (visto com `lsof`).
