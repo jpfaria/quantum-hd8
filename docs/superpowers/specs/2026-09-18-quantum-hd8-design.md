@@ -39,7 +39,7 @@ fica só como documentação.
 | `quantum_hd8/client.py` | Conexão TCP, subscribe, keepalive, get/set, eventos |
 | `quantum_hd8/params.yaml` | Mapa: caminho, tipo, faixa, unidade, `verified`, `hidden` |
 | `quantum_hd8/cli.py` | Comando `quantum-hd8` |
-| `tools/capture.py` | Grava tráfego UC ↔ daemon para fixture |
+| `tools/probe.py` + `listen --raw` | Grava bytes do daemon (inclusive o eco do que o UC muda) para fixture — sem sniffer, sem sudo |
 | `tools/diff_state.py` | Diff entre dois `dump` → qual parâmetro mudou |
 | `skills/quantum-hd8/SKILL.md` | Skill do plugin (CLI + regras de segurança) |
 | `docs/protocol.md` | Protocolo byte a byte |
