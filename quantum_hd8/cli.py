@@ -7,6 +7,50 @@ from . import __version__
 from . import undo
 from .client import Client, SceneLoadTimeout, WriteNotConfirmed
 
+# Label lists for global/phones1_src, global/phones2_src and
+# global/spdifSource, measured from tests/fixtures/uc-pl.bin (the daemon
+# does not send PL at subscribe -- task-8-brief.md -- so these are the
+# fallback when Client.lists has no live entry for the path). Verified
+# against the fixture in tests/test_shortcuts.py.
+_ROUTE_LABELS_15 = [
+    "Main L/R", "Out  3/4", "Out  5/6", "Out  7/8", "Out  9/10",
+    "ADAT  1/2", "ADAT  3/4", "ADAT  5/6", "ADAT  7/8", "ADAT  9/10",
+    "ADAT  11/12", "ADAT  13/14", "ADAT  15/16", "Loopback  1", "Loopback  2",
+]
+STATIC_LABELS: dict[str, list[str]] = {
+    "global/phones1_src": _ROUTE_LABELS_15,
+    "global/phones2_src": _ROUTE_LABELS_15,
+    "global/spdifSource": _ROUTE_LABELS_15 + ["S/PDIF Out"],
+}
+
+_ROUTE_TARGETS = {
+    "phones1": "global/phones1_src",
+    "phones2": "global/phones2_src",
+    "spdif": "global/spdifSource",
+}
+
+_PREAMP_TOGGLE_PARAMS = {
+    "phantom": "48v",
+    "pad": "pad",
+    "hpf": "hpf",
+}
+
+
+def _resolve_label_index(source: str, labels: list[str]) -> int | None:
+    """`source` -> index into `labels`: a 0-based numeric index, or a label
+    matched case-insensitively with whitespace collapsed (the device uses
+    double spaces, e.g. "Out  3/4"; users may type "out 3/4"). None when it
+    matches neither."""
+    s = source.strip()
+    if s.isdigit():
+        idx = int(s)
+        return idx if 0 <= idx < len(labels) else None
+    norm = " ".join(s.split()).lower()
+    for i, label in enumerate(labels):
+        if " ".join(label.split()).lower() == norm:
+            return i
+    return None
+
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="quantum-hd8")
@@ -40,6 +84,19 @@ def build_parser() -> argparse.ArgumentParser:
                              help="Regrava os ganhos de pré anteriores após carregar")
     scene_save = scene_sub.add_parser("save", help="Salva uma cena")
     scene_save.add_argument("name")
+
+    preamp = sub.add_parser("preamp", help="Atalho para um canal de entrada analógico (1-8)")
+    preamp.add_argument("channel")
+    preamp_sub = preamp.add_subparsers(dest="preamp_cmd", required=True)
+    preamp_gain = preamp_sub.add_parser("gain", help="Ganho do pré, em dB")
+    preamp_gain.add_argument("db")
+    for name in ("phantom", "pad", "hpf"):
+        sp = preamp_sub.add_parser(name)
+        sp.add_argument("state", choices=["on", "off"])
+
+    route = sub.add_parser("route", help="Fonte de phones1/phones2/spdif")
+    route.add_argument("target", choices=sorted(_ROUTE_TARGETS))
+    route.add_argument("source", help="Rótulo (ex.: 'Loopback 1') ou índice 0-based")
 
     return p
 
@@ -195,6 +252,54 @@ def main(argv: list[str] | None = None) -> int:
             if args.scene_cmd == "save":
                 print("scene save: formato ainda não capturado", file=sys.stderr)
                 return 2
+            return 0
+
+        if args.cmd == "preamp":
+            try:
+                ch = int(args.channel)
+            except ValueError:
+                ch = None
+            if ch is None or not (1 <= ch <= 8):
+                print(f"canal inválido: {args.channel!r} (use 1-8)", file=sys.stderr)
+                return 2
+
+            base = f"line/ch{ch}"
+            if args.preamp_cmd == "gain":
+                try:
+                    value = float(args.db)
+                except ValueError:
+                    print(f"valor inválido: {args.db}", file=sys.stderr)
+                    return 2
+                path = f"{base}/preampgain"
+            else:
+                value = 1 if args.state == "on" else 0
+                path = f"{base}/{_PREAMP_TOGGLE_PARAMS[args.preamp_cmd]}"
+
+            try:
+                echoed = c.set(path, value)
+            except (KeyError, ValueError, PermissionError, WriteNotConfirmed) as e:
+                print(str(e), file=sys.stderr)
+                return 1
+            print(f"{path} = {_format_set_result(c, path, echoed)}")
+            return 0
+
+        if args.cmd == "route":
+            path = _ROUTE_TARGETS[args.target]
+            labels = c.lists.get(path) or STATIC_LABELS[path]
+            idx = _resolve_label_index(args.source, labels)
+            if idx is None:
+                print(f"fonte desconhecida: {args.source!r}", file=sys.stderr)
+                print("válidas: " + ", ".join(labels), file=sys.stderr)
+                return 2
+
+            try:
+                echoed = c.set_list(path, idx, len(labels))
+            except WriteNotConfirmed as e:
+                print(str(e), file=sys.stderr)
+                return 1
+            result_idx = round(echoed * (len(labels) - 1))
+            result_label = labels[result_idx] if 0 <= result_idx < len(labels) else echoed
+            print(f"{path} = {result_label}")
             return 0
 
         return 0

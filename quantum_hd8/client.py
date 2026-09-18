@@ -259,6 +259,22 @@ class Client:
         undo.record(path, before, echoed, journal=self.undo_journal)
         return echoed
 
+    def set_list(self, path: str, index: int, n: int) -> object:
+        """Write a list-type param (label list filled at runtime via PL,
+        units="EmptyParamList") by index: normalized = index / (n - 1)
+        (verified: global/mainOutVolumeLink 0.333 with 7 labels = index 2).
+        Waits for the echo and records undo, same as set() -- reuses
+        _write_pv/undo.record rather than duplicating that logic."""
+        if n < 2:
+            raise ValueError(f"{path}: lista precisa de ao menos 2 rótulos")
+        if not (0 <= index < n):
+            raise ValueError(f"{path}: índice {index} fora de [0, {n - 1}]")
+        normalized = index / (n - 1)
+        before = self.state.get(path)
+        echoed = self._write_pv(path, normalized)
+        undo.record(path, before, echoed, journal=self.undo_journal)
+        return echoed
+
     def set_raw(self, path: str, normalized: float) -> object:
         """Write a raw normalized value directly, bypassing curve conversion,
         range validation and undo recording. Used by the CLI `undo` command
