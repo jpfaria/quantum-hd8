@@ -1,15 +1,17 @@
 import argparse
 import difflib
 import json
+import socket
 import sys
-import time
 
 from . import __version__
 from . import undo
 from .client import Client, SceneLoadTimeout, WriteNotConfirmed, default_udp_factory
 
 METER_SECTIONS = ("in", "aux", "main")
-METER_REFRESH_SECONDS = 0.1
+METER_HEADER = "valores crus do daemon — escala não calibrada"
+METER_MAX_CONSECUTIVE_TIMEOUTS = 5
+METER_CLEAR_SCREEN = "\x1b[H\x1b[2J"
 
 # Label lists for global/phones1_src, global/phones2_src and
 # global/spdifSource, measured from tests/fixtures/uc-pl.bin (the daemon
@@ -322,12 +324,35 @@ def main(argv: list[str] | None = None) -> int:
                 print(json.dumps(_meters_snapshot(m, labels), ensure_ascii=False))
                 return 0
 
-            print("valores crus do daemon — escala não calibrada")
+            is_tty = sys.stdout.isatty()
+            if not is_tty:
+                # Scrolling terminal / redirected output: header once, then
+                # one block of lines per packet (rate = packets arriving,
+                # ~4-5 Hz measured -- no artificial sleep).
+                print(METER_HEADER)
+            consecutive_timeouts = 0
             try:
                 while True:
-                    m = c.read_meters()
-                    print("\n".join(_meters_lines(m, labels)))
-                    time.sleep(METER_REFRESH_SECONDS)
+                    try:
+                        m = c.read_meters()
+                    except socket.timeout:
+                        consecutive_timeouts += 1
+                        if consecutive_timeouts >= METER_MAX_CONSECUTIVE_TIMEOUTS:
+                            print("sem medidores do daemon há 5 s", file=sys.stderr)
+                            return 1
+                        continue
+                    except OSError as e:
+                        print(f"erro lendo medidores: {e}", file=sys.stderr)
+                        return 1
+                    consecutive_timeouts = 0
+                    lines = "\n".join(_meters_lines(m, labels))
+                    if is_tty:
+                        # In-place redraw: clear + cursor home + header +
+                        # lines, repainted on every packet so scrollback
+                        # never fills with 66-line blocks.
+                        print(f"{METER_CLEAR_SCREEN}{METER_HEADER}\n{lines}")
+                    else:
+                        print(lines)
             except KeyboardInterrupt:
                 pass
             return 0

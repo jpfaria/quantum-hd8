@@ -1,4 +1,6 @@
 import json
+import socket
+import sys
 
 from quantum_hd8.cli import main
 from quantum_hd8.client import SceneLoadTimeout, WriteNotConfirmed
@@ -372,6 +374,7 @@ def test_meters_once_prints_json_snapshot_by_label(capsys, monkeypatch):
 
 def test_meters_prints_header_and_one_line_per_channel_until_interrupted(capsys, monkeypatch):
     monkeypatch.setattr("quantum_hd8.cli.Client", MetersFakeClient)
+    monkeypatch.setattr(sys.stdout, "isatty", lambda: False)
     rc = main(["meters"])
     assert rc == 0
     out = capsys.readouterr().out
@@ -380,3 +383,137 @@ def test_meters_prints_header_and_one_line_per_channel_until_interrupted(capsys,
     assert "In  1: 5" in out
     assert "aux/ch1 L: 0" in out
     assert "main L: 0" in out
+
+
+class TimeoutThenValueMetersClient:
+    """read_meters times out twice, then returns one snapshot, then raises
+    KeyboardInterrupt (Ctrl-C) -- exercises the fix-round-1 requirement
+    that a lone socket.timeout must not kill the command."""
+    closed = False
+
+    def __init__(self, *a, **k):
+        self._calls = 0
+
+    def connect(self):
+        return {}
+
+    def meter_labels(self):
+        return {"in": ["In  1"], "aux": ["aux/ch1 L"], "main": ["main L"]}
+
+    def read_meters(self, timeout=1.0):
+        self._calls += 1
+        if self._calls <= 2:
+            raise socket.timeout()
+        if self._calls == 3:
+            return {"in": [7], "aux": [0], "main": [0]}
+        raise KeyboardInterrupt
+
+    def close(self):
+        self.closed = True
+
+
+def test_meters_continuous_survives_occasional_timeouts(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", TimeoutThenValueMetersClient)
+    monkeypatch.setattr(sys.stdout, "isatty", lambda: False)
+
+    rc = main(["meters"])
+
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert out.count("valores crus do daemon") == 1  # header printed once, non-tty
+    assert "In  1: 7" in out
+
+
+class AlwaysTimeoutMetersClient:
+    closed = False
+
+    def __init__(self, *a, **k):
+        pass
+
+    def connect(self):
+        return {}
+
+    def meter_labels(self):
+        return {"in": [], "aux": [], "main": []}
+
+    def read_meters(self, timeout=1.0):
+        raise socket.timeout()
+
+    def close(self):
+        self.closed = True
+
+
+def test_meters_gives_up_after_5_consecutive_timeouts(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", AlwaysTimeoutMetersClient)
+    monkeypatch.setattr(sys.stdout, "isatty", lambda: False)
+
+    rc = main(["meters"])
+
+    assert rc == 1
+    assert "sem medidores do daemon há 5 s" in capsys.readouterr().err
+
+
+class OSErrorMetersClient:
+    closed = False
+
+    def __init__(self, *a, **k):
+        pass
+
+    def connect(self):
+        return {}
+
+    def meter_labels(self):
+        return {"in": [], "aux": [], "main": []}
+
+    def read_meters(self, timeout=1.0):
+        raise OSError("network down")
+
+    def close(self):
+        self.closed = True
+
+
+def test_meters_os_error_prints_clean_message_and_exits_1(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", OSErrorMetersClient)
+    monkeypatch.setattr(sys.stdout, "isatty", lambda: False)
+
+    rc = main(["meters"])
+
+    assert rc == 1
+    err = capsys.readouterr().err
+    assert "network down" in err
+
+
+class TwoFramesMetersClient:
+    closed = False
+
+    def __init__(self, *a, **k):
+        self._calls = 0
+
+    def connect(self):
+        return {}
+
+    def meter_labels(self):
+        return {"in": ["In  1"], "aux": ["aux/ch1 L"], "main": ["main L"]}
+
+    def read_meters(self, timeout=1.0):
+        self._calls += 1
+        if self._calls > 2:
+            raise KeyboardInterrupt
+        return {"in": [self._calls], "aux": [0], "main": [0]}
+
+    def close(self):
+        self.closed = True
+
+
+def test_meters_tty_redraw_clears_screen_and_repeats_header_each_frame(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", TwoFramesMetersClient)
+    monkeypatch.setattr(sys.stdout, "isatty", lambda: True)
+
+    rc = main(["meters"])
+
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert out.count("\x1b[2J") == 2  # one clear per frame, no scrollback
+    assert out.count("valores crus do daemon") == 2  # header re-drawn every frame
+    assert "In  1: 1" in out
+    assert "In  1: 2" in out
