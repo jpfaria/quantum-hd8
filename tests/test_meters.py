@@ -1,10 +1,35 @@
+import json
+import math
 import struct
 from pathlib import Path
+
+import pytest
 
 from quantum_hd8 import ucnet
 from quantum_hd8.client import Client
 
 FX = Path(__file__).parent / "fixtures"
+
+
+def _calibration_points():
+    return json.loads((FX / "meter-calibration.json").read_text())["points"]
+
+
+@pytest.mark.parametrize("point", _calibration_points())
+def test_meter_dbfs_matches_coreaudio_peak_within_tolerance(point):
+    # tests/fixtures/meter-calibration.json (measured 18/09): a tone routed
+    # USB 11 -> Re-amp 1 -> cable -> In 3 (see docs/protocol.md, "Medidores").
+    # The lowest point (tone_amp 0.003) is noisier -- allow more slack there.
+    expected = 20 * math.log10(point["coreaudio_peak"])
+    tolerance = 1.5 if point["tone_amp"] == 0.003 else 0.3
+
+    got = ucnet.meter_dbfs(point["meter_raw"])
+
+    assert got == pytest.approx(expected, abs=tolerance)
+
+
+def test_meter_dbfs_zero_raw_is_negative_infinity():
+    assert ucnet.meter_dbfs(0) == -math.inf
 
 
 def test_parse_meters_splits_in_aux_main_from_real_fixture():

@@ -3,6 +3,7 @@ import json
 import socket
 import sys
 
+from quantum_hd8 import ucnet
 from quantum_hd8.cli import main
 from quantum_hd8.client import SceneLoadTimeout, WriteNotConfirmed
 
@@ -46,6 +47,7 @@ class FakeClient:
         "global/phones1_src": 0.0,
         "global/phones2_src": 0.0,
         "global/spdifSource": 0.0,
+        "global/mixerMode": 0.5,
         **{
             f"line/ch{ch}/{key}": v
             for ch in range(1, 9)
@@ -123,6 +125,14 @@ def test_state_shows_summary(capsys, monkeypatch):
     out = capsys.readouterr().out
     assert "19.5 dB" in out  # line/ch1 preamp gain, human
     assert "ELEMENT.scene" in out
+
+
+def test_state_shows_mixer_mode_label(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", FakeClient)
+    assert main(["state"]) == 0
+    out = capsys.readouterr().out
+    # global/mixerMode = 0.5 -> index 1 of 3 labels -> "Analog + ADAT".
+    assert "mixer: Analog + ADAT" in out
 
 
 def test_state_shows_source_label_when_lists_known(capsys, monkeypatch):
@@ -217,8 +227,8 @@ class WriteFakeClient:
             return {"type": self._LINEAR[path][2]}
         return {"type": "toggle"}
 
-    def load_scene(self, name, keep_gains=False):
-        self.load_scene_calls.append((name, keep_gains))
+    def load_scene(self, name, keep_gains=False, keep_mode=False):
+        self.load_scene_calls.append((name, keep_gains, keep_mode))
         if name == "TIMEOUT":
             raise SceneLoadTimeout(name)
         if name == "WNC":
@@ -228,8 +238,15 @@ class WriteFakeClient:
         if name == "PARTIAL":
             failed = [("line/ch2/preampgain", 30.0, 0.0,
                        "line/ch2/preampgain: o daemon não confirmou a escrita em 1 s")]
+        changed_globals = []
+        mode_restored = None
+        if name == "MODE":
+            changed_globals = [("global/mixerMode", 0.0, 0.5)]
+            if keep_mode:
+                mode_restored = ("global/mixerMode", 0.5, 0.0)
         return {"preset_file": f"{name}.scene" if not name.endswith(".scene") else name,
-                "gains": gains, "failed": failed}
+                "gains": gains, "failed": failed,
+                "changed_globals": changed_globals, "mode_restored": mode_restored}
 
     def close(self):
         self.closed = True
@@ -337,6 +354,25 @@ def test_scene_load_keep_gains_prints_before_after(capsys, monkeypatch):
     assert "0.0" in out
 
 
+def test_scene_load_warns_on_stderr_when_global_param_changed(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    rc = main(["scene", "load", "MODE"])
+    assert rc == 0
+    err = capsys.readouterr().err
+    assert "global/mixerMode: Mixer Bypass -> Analog + ADAT" in err
+
+
+def test_scene_load_keep_mode_passes_flag_and_prints_restore(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    instances = _capture_instances(monkeypatch, WriteFakeClient)
+    rc = main(["scene", "load", "MODE", "--keep-mode"])
+    assert rc == 0
+    assert instances[0].load_scene_calls == [("MODE", False, True)]
+    err = capsys.readouterr().err
+    assert "global/mixerMode: Mixer Bypass -> Analog + ADAT" in err
+    assert "global/mixerMode: restaurado para Mixer Bypass" in err
+
+
 def test_scene_load_timeout_prints_error_and_returns_1(capsys, monkeypatch):
     monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
     rc = main(["scene", "load", "TIMEOUT"])
@@ -382,9 +418,10 @@ def test_meters_once_prints_json_snapshot_by_label(capsys, monkeypatch):
     assert rc == 0
     out = json.loads(capsys.readouterr().out)
     assert out == {
-        "in": {"In  1": 5, "In  2": 0},
-        "aux": {"aux/ch1 L": 0, "aux/ch1 R": 0},
-        "main": {"main L": 0, "main R": 0},
+        "in": {"In  1": {"raw": 5, "dbfs": round(ucnet.meter_dbfs(5), 1)},
+               "In  2": {"raw": 0, "dbfs": None}},
+        "aux": {"aux/ch1 L": {"raw": 0, "dbfs": None}, "aux/ch1 R": {"raw": 0, "dbfs": None}},
+        "main": {"main L": {"raw": 0, "dbfs": None}, "main R": {"raw": 0, "dbfs": None}},
     }
 
 
@@ -394,11 +431,10 @@ def test_meters_prints_header_and_one_line_per_channel_until_interrupted(capsys,
     rc = main(["meters"])
     assert rc == 0
     out = capsys.readouterr().out
-    assert "valores crus do daemon" in out
-    assert "não calibrada" in out
-    assert "In  1: 5" in out
-    assert "aux/ch1 L: 0" in out
-    assert "main L: 0" in out
+    assert "dBFS = 20·log10(cru/65535), calibrado 18/09" in out
+    assert f"In  1: 5 ({ucnet.meter_dbfs(5):.1f} dBFS)" in out
+    assert "aux/ch1 L: 0 (-inf dBFS)" in out
+    assert "main L: 0 (-inf dBFS)" in out
 
 
 class TimeoutThenValueMetersClient:
@@ -436,8 +472,8 @@ def test_meters_continuous_survives_occasional_timeouts(capsys, monkeypatch):
 
     assert rc == 0
     out = capsys.readouterr().out
-    assert out.count("valores crus do daemon") == 1  # header printed once, non-tty
-    assert "In  1: 7" in out
+    assert out.count("dBFS = 20·log10(cru/65535)") == 1  # header printed once, non-tty
+    assert f"In  1: 7 ({ucnet.meter_dbfs(7):.1f} dBFS)" in out
 
 
 class AlwaysTimeoutMetersClient:
@@ -530,9 +566,9 @@ def test_meters_tty_redraw_clears_screen_and_repeats_header_each_frame(capsys, m
     assert rc == 0
     out = capsys.readouterr().out
     assert out.count("\x1b[2J") == 2  # one clear per frame, no scrollback
-    assert out.count("valores crus do daemon") == 2  # header re-drawn every frame
-    assert "In  1: 1" in out
-    assert "In  1: 2" in out
+    assert out.count("dBFS = 20·log10(cru/65535)") == 2  # header re-drawn every frame
+    assert f"In  1: 1 ({ucnet.meter_dbfs(1):.1f} dBFS)" in out
+    assert f"In  1: 2 ({ucnet.meter_dbfs(2):.1f} dBFS)" in out
 
 
 class ForeverMetersClient:

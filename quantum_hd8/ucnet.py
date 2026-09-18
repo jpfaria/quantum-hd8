@@ -21,6 +21,7 @@ public StudioLive UCNet hypothesis, where the two differ:
 """
 from dataclasses import dataclass
 import json
+import math
 import struct
 import zlib
 
@@ -143,6 +144,18 @@ def parse_meters(packet: bytes) -> dict[str, list[int]]:
                 "main": values[64:66],
             }
     return {"raw": values}
+
+
+def meter_dbfs(raw: int) -> float:
+    """Meter raw value -> dBFS, calibrated 18/09 (docs/protocol.md,
+    "Medidores"; tests/fixtures/meter-calibration.json): a tone routed USB
+    11 -> Re-amp 1 -> cable -> In 3 shows `raw` tracking the CoreAudio peak
+    of In 3 as `raw == peak * 65535` at every level measured (0.003 .. 0.2
+    tone amplitude). So dBFS = 20*log10(raw / 65535); raw 0 (silence) has no
+    finite dB, returned as -inf."""
+    if raw == 0:
+        return -math.inf
+    return 20 * math.log10(raw / 65535)
 
 
 def parse_state(m: Message) -> dict:

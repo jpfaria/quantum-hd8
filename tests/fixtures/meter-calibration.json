@@ -1,0 +1,31 @@
+{
+ "measured": "18/09",
+ "path": "USB 11 (tone) -> Re-amp 1 -> cabo -> In 3 (preamp 19.5 dB); pico lido na grava\u00e7\u00e3o CoreAudio do In 3 (tools/rec)",
+ "points": [
+  {
+   "tone_amp": 0.003,
+   "meter_raw": 44,
+   "coreaudio_peak": 0.00057
+  },
+  {
+   "tone_amp": 0.01,
+   "meter_raw": 125,
+   "coreaudio_peak": 0.00191
+  },
+  {
+   "tone_amp": 0.03,
+   "meter_raw": 375,
+   "coreaudio_peak": 0.00571
+  },
+  {
+   "tone_amp": 0.1,
+   "meter_raw": 1251,
+   "coreaudio_peak": 0.01908
+  },
+  {
+   "tone_amp": 0.2,
+   "meter_raw": 2504,
+   "coreaudio_peak": 0.03802
+  }
+ ]
+}

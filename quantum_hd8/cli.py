@@ -1,11 +1,13 @@
 import argparse
 import difflib
 import json
+import math
 import os
 import socket
 import sys
 
 from . import __version__
+from . import ucnet
 from . import undo
 from .client import (NOT_RESPONDING, Client, SceneLoadTimeout, WriteNotConfirmed,
                      default_udp_factory)
@@ -17,7 +19,8 @@ EXIT_RUNTIME = 1
 EXIT_USAGE = 2
 
 METER_SECTIONS = ("in", "aux", "main")
-METER_HEADER = "valores crus do daemon — escala não calibrada"
+# Calibrated 18/09 (docs/protocol.md, "Medidores"; ucnet.meter_dbfs).
+METER_HEADER = "dBFS = 20·log10(cru/65535), calibrado 18/09"
 METER_MAX_CONSECUTIVE_TIMEOUTS = 5
 METER_CLEAR_SCREEN = "\x1b[H\x1b[2J"
 
@@ -31,11 +34,29 @@ _ROUTE_LABELS_15 = [
     "ADAT  1/2", "ADAT  3/4", "ADAT  5/6", "ADAT  7/8", "ADAT  9/10",
     "ADAT  11/12", "ADAT  13/14", "ADAT  15/16", "Loopback  1", "Loopback  2",
 ]
+# global/mixerMode labels, measured from the device's quantumusbdefs.xml
+# MixerModeList (index i -> i / (n - 1)): 0 = Mixer Bypass, 0.5 = Analog +
+# ADAT, 1 = Analog. A scene load can change this (docs/protocol.md,
+# "Escrita": global/mixerMode 0 -> 0.5 measured loading MK300-FRFR).
+MIXER_MODE_PATH = "global/mixerMode"
+MIXER_MODE_LABELS = ["Mixer Bypass", "Analog + ADAT", "Analog"]
+
 STATIC_LABELS: dict[str, list[str]] = {
     "global/phones1_src": _ROUTE_LABELS_15,
     "global/phones2_src": _ROUTE_LABELS_15,
     "global/spdifSource": _ROUTE_LABELS_15 + ["S/PDIF Out"],
+    MIXER_MODE_PATH: MIXER_MODE_LABELS,
 }
+
+
+def _global_value_label(path: str, value: object) -> str:
+    """`value` (raw normalized) -> a label for `path` when known (currently
+    only global/mixerMode), else the raw value itself, str()'d."""
+    if path == MIXER_MODE_PATH and isinstance(value, (int, float)):
+        idx = round(value * (len(MIXER_MODE_LABELS) - 1))
+        if 0 <= idx < len(MIXER_MODE_LABELS):
+            return MIXER_MODE_LABELS[idx]
+    return str(value)
 
 _ROUTE_TARGETS = {
     "phones1": "global/phones1_src",
@@ -96,6 +117,8 @@ def build_parser() -> argparse.ArgumentParser:
     scene_load.add_argument("name")
     scene_load.add_argument("--keep-gains", action="store_true",
                              help="Regrava os ganhos de pré anteriores após carregar")
+    scene_load.add_argument("--keep-mode", action="store_true",
+                             help="Regrava o Mixer Mode anterior se a cena mudou")
     scene_save = scene_sub.add_parser("save", help="Salva uma cena")
     scene_save.add_argument("name")
 
@@ -108,7 +131,7 @@ def build_parser() -> argparse.ArgumentParser:
         sp = preamp_sub.add_parser(name)
         sp.add_argument("state", choices=["on", "off"])
 
-    meters = sub.add_parser("meters", help="Medidores de nível (valores crus, sem calibração)")
+    meters = sub.add_parser("meters", help="Medidores de nível (dBFS, calibrado 18/09)")
     meters.add_argument("--once", action="store_true",
                          help="Imprime um snapshot JSON e sai, em vez de atualizar continuamente")
 
@@ -193,15 +216,30 @@ def _handle_broken_pipe() -> None:
         pass
 
 
+def _dbfs_json(raw: int) -> float | None:
+    """dBFS for `raw`, rounded to 1 decimal; None (-> JSON null) for -inf
+    (silence, raw 0) since JSON has no infinity literal."""
+    dbfs = ucnet.meter_dbfs(raw)
+    return None if dbfs == -math.inf else round(dbfs, 1)
+
+
+def _dbfs_text(raw: int) -> str:
+    dbfs = ucnet.meter_dbfs(raw)
+    return "-inf" if dbfs == -math.inf else f"{dbfs:.1f}"
+
+
 def _meters_snapshot(m: dict, labels: dict) -> dict:
-    """{"in": {label: value, ...}, "aux": {...}, "main": {...}} -- the CLI
-    `meters --once` JSON shape (task-9 ruling 5). m may be the
-    ucnet.parse_meters() fallback shape {"raw": [...]} when the footer
-    didn't match the known layout; that is passed through as-is."""
+    """{"in": {label: {"raw": n, "dbfs": x}, ...}, "aux": {...}, "main":
+    {...}} -- the CLI `meters --once` JSON shape, dBFS calibrated 18/09
+    (ucnet.meter_dbfs). m may be the ucnet.parse_meters() fallback shape
+    {"raw": [...]} when the footer didn't match the known layout (unknown
+    channel layout -- no per-channel calibration possible); that is passed
+    through as-is."""
     if "raw" in m:
         return {"raw": m["raw"]}
     return {
-        section: dict(zip(labels[section], m[section]))
+        section: {label: {"raw": v, "dbfs": _dbfs_json(v)}
+                  for label, v in zip(labels[section], m[section])}
         for section in METER_SECTIONS
     }
 
@@ -212,7 +250,7 @@ def _meters_lines(m: dict, labels: dict) -> list[str]:
     lines = []
     for section in METER_SECTIONS:
         for label, value in zip(labels[section], m[section]):
-            lines.append(f"{label}: {value}")
+            lines.append(f"{label}: {value} ({_dbfs_text(value)} dBFS)")
     return lines
 
 
@@ -227,6 +265,7 @@ def _summary_lines(c: Client) -> list[str]:
     lines.append(
         f"main/ch1: mute {'on' if c.get('main/ch1/mute') else 'off'}, "
         f"volume {c.human('main/ch1/volume')}")
+    lines.append(f"mixer: {_labeled_source(c, MIXER_MODE_PATH)}")
     for path in ("global/phones1_src", "global/phones2_src", "global/spdifSource"):
         lines.append(f"{path} = {_labeled_source(c, path)}")
     lines.append("cenas: " + ", ".join(c.scenes))
@@ -330,7 +369,8 @@ def main(argv: list[str] | None = None) -> int:
                 return 0
             if args.scene_cmd == "load":
                 try:
-                    result = c.load_scene(args.name, keep_gains=args.keep_gains)
+                    result = c.load_scene(args.name, keep_gains=args.keep_gains,
+                                           keep_mode=args.keep_mode)
                 except SceneLoadTimeout as e:
                     print(f"cena não confirmada (RecalledPreset não chegou): {e}", file=sys.stderr)
                     return EXIT_RUNTIME
@@ -338,6 +378,14 @@ def main(argv: list[str] | None = None) -> int:
                     print(f"cena carregada, mas a restauração de ganhos falhou: {e}",
                           file=sys.stderr)
                     return EXIT_RUNTIME
+                for path, before, after in result.get("changed_globals", []):
+                    print(f"{path}: {_global_value_label(path, before)} -> "
+                          f"{_global_value_label(path, after)}", file=sys.stderr)
+                mode_restored = result.get("mode_restored")
+                if mode_restored:
+                    path, _scene_value, restored_value = mode_restored
+                    print(f"{path}: restaurado para {_global_value_label(path, restored_value)}",
+                          file=sys.stderr)
                 for path, before, after in result["gains"]:
                     print(f"{path}: {before:.1f} dB -> {after:.1f} dB (restaurado)")
                 failed = result.get("failed", [])

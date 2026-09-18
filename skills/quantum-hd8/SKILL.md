@@ -25,8 +25,8 @@ daemon not up: tell the user. **Never** restart/stop `ucdaemon`, never `launchct
 | Phones / S/PDIF source | `quantum-hd8 route phones1 "Loopback 1"` (`phones2`, `spdif`; label or 0-based index) |
 | Any parameter | `quantum-hd8 set <path> <value>` |
 | Revert last write | `quantum-hd8 undo` (LIFO, repeat for older ones) |
-| Scenes | `quantum-hd8 scene list` · `scene load NAME --keep-gains` |
-| Levels | `quantum-hd8 meters --once` (JSON) or `meters` (live) |
+| Scenes | `quantum-hd8 scene list` · `scene load NAME --keep-gains --keep-mode` |
+| Levels (dBFS) | `quantum-hd8 meters --once` (JSON) or `meters` (live) |
 | Watch changes | `quantum-hd8 listen` |
 
 ## Path map (measured: names from the device's `Synchronize`, fields from `params.json`)
@@ -82,12 +82,15 @@ The daemon stores every value **normalized 0..1**. `set` converts only some:
    and wait for the "ok". Which outputs feed what: vault `music-setup — Mapa de Canais e Cabos`.
 4. **Undo:** every `set`/`preamp`/`route` write is journaled (`~/.quantum-hd8/undo.jsonl`).
    Tell the user `quantum-hd8 undo` reverts it. `scene load` itself is not undoable.
-5. **Scene load zeroes the preamp gains.** Always `scene load NAME --keep-gains` unless the user
-   wants the scene's gains; it prints each gain it restored. Not yet verified live: re-read
-   `state` after it. `scene save` is not implemented (exits 2): use the UC app.
-6. **Meters are raw and uncalibrated.** Numbers like 270–450 are not dBFS and not dB. Say "raw
-   value, no calibration" and compare only relative (signal vs ~0 silence). For real dBFS use
-   OpenRig's `openrig://meters` or the UC window.
+5. **Scene load zeroes the preamp gains and can change Mixer Mode.** Loading a scene both zeroes
+   preamp gains AND can change `global/mixerMode` (measured 18/09: MK300-FRFR flipped it from
+   "Mixer Bypass" to "Analog + ADAT", which changes routing). Always
+   `scene load NAME --keep-gains --keep-mode` unless the user explicitly wants the scene's gains
+   or mode; it prints each gain and the mode it restored, and warns on stderr about any other
+   `global/*` param the recall changed. Not yet verified live: re-read `state` after it.
+   `scene save` is not implemented (exits 2): use the UC app.
+6. **Meters are dBFS, calibrated 18/09** (peak, not RMS): `dBFS = 20·log10(raw / 65535)` (raw 0 =
+   silence = -inf). `quantum-hd8 meters`/`meters --once` show both the raw value and the dBFS.
 7. **Re-amp outs (CoreAudio 11/12) are not reachable from the host.** Their source is the front
    panel: *Global Settings > Reamp Out* (ADAT 1/2 … ADAT 15/16). No `set`/`route` changes it;
    `aux/ch13-14` are Loopback 1/2, not re-amp. Tell the user to change it on the panel
@@ -98,7 +101,8 @@ The daemon stores every value **normalized 0..1**. `set` converts only some:
 
 - About to pass dB/percent to a `fader`/`exp` path, or converting dB to 0..1 yourself.
 - Using `phantom` in a path, or a path not in the map / `dump`.
-- Reporting a meter value "in dB".
-- `scene load` without `--keep-gains` and without the user asking for the scene's gains.
+- Reporting a meter value as RMS, or without saying it's a peak reading.
+- `scene load` without `--keep-gains --keep-mode` and without the user asking for the scene's
+  gains/mode.
 - Hunting for a re-amp parameter, or proposing `launchctl`/restarting ucdaemon.
 - Several unverified writes in one command line, or raising output level without asking first.

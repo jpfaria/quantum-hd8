@@ -35,9 +35,9 @@ Claude Code plugin (skill `quantum-hd8`): add this repo as a marketplace
 | `quantum-hd8 preamp N phantom\|pad\|hpf on\|off` | Input toggles |
 | `quantum-hd8 route phones1\|phones2\|spdif SOURCE` | Source by label (`"Loopback 1"`) or 0-based index |
 | `quantum-hd8 scene list` | Scenes stored by UC |
-| `quantum-hd8 scene load NAME [--keep-gains]` | Load a scene; `--keep-gains` re-applies the preamp gains it zeroes |
+| `quantum-hd8 scene load NAME [--keep-gains] [--keep-mode]` | Load a scene; `--keep-gains` re-applies the preamp gains it zeroes, `--keep-mode` re-applies the Mixer Mode if the scene changed it |
 | `quantum-hd8 scene save NAME` | Not implemented (format not captured yet); exits 2 |
-| `quantum-hd8 meters [--once]` | Level meters, **raw uncalibrated values** (not dBFS) |
+| `quantum-hd8 meters [--once]` | Level meters, dBFS calibrated 18/09 (raw value shown alongside) |
 
 ### Values
 
@@ -51,6 +51,11 @@ removes it only once the write is confirmed (a failed undo keeps it).
 
 `scene load --keep-gains` waits for the daemon's post-recall PVs to settle (link quiet 300 ms, max
 3 s) before comparing gains; channels it could not restore are listed on stderr and it exits 1.
+
+`scene load` can change `global/*` params as a side effect of the recall — measured 18/09: loading
+`MK300-FRFR` flipped `global/mixerMode` from "Mixer Bypass" to "Analog + ADAT", which changes
+routing. Every `scene load` snapshots `global/*` before and warns on stderr about anything that
+changed; `--keep-mode` writes `global/mixerMode` back if the scene changed it.
 
 ### Exit codes
 
@@ -71,10 +76,9 @@ front-panel setting *Global Settings > Reamp Out* (ADAT 1/2 … ADAT 15/16). See
 | `set` + `undo` on `global/ledBrightness` | verified live |
 | `preamp`, `route` writes (idempotent / no-op path) | verified live |
 | `scene list` | verified live |
-| `meters` stream (UDP, layout in/aux/main) | verified live; values **not calibrated** |
-| `scene load` (+ `--keep-gains`) | not yet live (built from the UC capture) |
+| `meters` stream (UDP, layout in/aux/main) | verified live; values calibrated to dBFS (18/09) |
+| `scene load` (+ `--keep-gains`, `--keep-mode`) | not yet live (built from the UC capture) |
 | `scene save` | not captured, not implemented |
-| Meter calibration (raw → dBFS) | not done |
 | Re-amp source | not reachable from the host (front panel only) |
 
 Protocol notes, measured vs hypothesis: [`docs/protocol.md`](docs/protocol.md).

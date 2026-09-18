@@ -14,8 +14,9 @@ ainda não visto aqui.
 | Escrita `PV` + eco (`global/ledBrightness`), no-op sem eco | medido |
 | Cenas: `Listscene` | medido; `RestorePreset` visto no tráfego do UC, não disparado por nós |
 | Salvar cena | não capturado |
-| Medidores `MS levl` (UDP) | layout medido; escala → dBFS não calibrada |
+| Medidores `MS levl` (UDP) | layout medido; escala → dBFS calibrada (18/09) |
 | Re-amp (saídas 11/12) | fora da camada A: só pelo painel ([`camada-b-reamp.md`](camada-b-reamp.md)) |
+| `scene load` muda `global/mixerMode` | medido (18/09, MK300-FRFR): `--keep-mode` restaura |
 
 ## Transporte
 
@@ -103,6 +104,12 @@ Eventos que o daemon empurra para a sessão (medido):
 - Cena: `JM {"id":"RestorePreset","url":"presets","presetTarget":"",
   "presetTargetSlave":0,"presetFile":"scene/MK300-FRFR.scene"}` → o daemon
   responde `RecalledPreset` e reenvia os `PV` de tudo.
+- **Carregar cena muda `global/mixerMode` (medido, 18/09):** carregar
+  `MK300-FRFR` mudou `global/mixerMode` de `0` para `0,5` -- isso muda o
+  roteamento (rótulos do `MixerModeList` do `quantumusbdefs.xml`, índice
+  `i` → `i/(n-1)`): `0` = "Mixer Bypass", `0,5` = "Analog + ADAT", `1` =
+  "Analog". `quantum-hd8 scene load` sempre compara `global/*` antes/depois
+  e avisa em qualquer mudança; `--keep-mode` regrava o valor anterior.
 - Sair: `JM {"id":"Unsubscribe"}` em cada sessão.
 
 Strings de ids de mensagem no binário `ucdaemon` (candidatas, não medidas):
@@ -149,8 +156,30 @@ nova bateu.
   - valores 64–65 → `main` L/R
 - Prova parcial: `line/ch16` e `ch17` (ADAT 6/7 = ADA #1 In 6/7, retorno da
   MK-300) marcam ~270–450 com a pedaleira ligada; entradas sem nada marcam 0–1.
-- **Não calibrado:** um tom de amplitude 0,5 no USB 4 (vai só para o aux1 →
-  Out 3/4, livres no patchbay) não mexeu em nenhum valor de entrada, aux ou
-  main. Hipóteses abertas: medidor de canal DAW pós-fader (o fader do USB 4
-  está em −∞) e/ou o UC pedir outro modo de medição (`global/meterSource`?).
-  A escala (valor → dBFS) precisa de um sinal conhecido numa entrada física.
+- Um tom de amplitude 0,5 no USB 4 (vai só para o aux1 → Out 3/4, livres no
+  patchbay) não mexeu em nenhum valor de entrada, aux ou main -- medidor de
+  canal DAW é pós-fader (o fader do USB 4 estava em −∞) e/ou usa outro modo
+  de medição; a escala abaixo só vale para entradas físicas (`in`).
+
+### Calibração (medida, 18/09)
+
+Sinal conhecido numa entrada física: gerador de tom no `USB 11` → **Re-amp 1**
+(saída da HD 8, painel em ADAT 1/2, ver [`camada-b-reamp.md`](camada-b-reamp.md))
+→ cabo → `In 3` (pré em 19,5 dB). Gravei o pico do CoreAudio de `In 3`
+(`tools/rec`) ao mesmo tempo que lia `meter_raw` de `line/ch3` — 5 níveis de
+tom, `tests/fixtures/meter-calibration.json`:
+
+| tom (amplitude) | `meter_raw` | pico CoreAudio | dBFS (`20·log10(pico)`) |
+|---|---|---|---|
+| 0,003 | 44 | 0,00057 | −64,9 |
+| 0,01 | 125 | 0,00191 | −54,4 |
+| 0,03 | 375 | 0,00571 | −44,9 |
+| 0,1 | 1251 | 0,01908 | −34,4 |
+| 0,2 | 2504 | 0,03802 | −28,4 |
+
+`meter_raw / pico ≈ 65536` em todo o intervalo (ponto mais baixo mais ruidoso:
+diferença até ~1,5 dB; os outros quatro batem em ≤0,3 dB) -- ou seja `raw` é o
+pico linear × 65535: **dBFS = 20·log10(raw / 65535)**, `raw` 0 (silêncio) →
+`-inf`. Implementado em `quantum_hd8.ucnet.meter_dbfs()`; é **pico, não RMS**
+(o valor mais alto visto na janela do pacote, não uma média). `meters` e
+`meters --once` mostram o valor cru e o dBFS calibrado lado a lado.

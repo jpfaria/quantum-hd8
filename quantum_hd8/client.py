@@ -77,6 +77,13 @@ SCENE_QUIET = 0.3
 SCENE_SETTLE_MAX = 3.0
 # Echo tolerance for non-int params (int params compare quantized steps).
 ECHO_TOLERANCE = 1e-3
+# load_scene() snapshots every state key under this prefix before/after a
+# recall to detect side effects like the mixerMode flip below.
+GLOBAL_PREFIX = "global/"
+# Measured 18/09 (docs/protocol.md, "Escrita"): loading a scene can change
+# this without being asked (Mixer Bypass -> Analog + ADAT loading
+# MK300-FRFR). load_scene(keep_mode=True) writes it back.
+MIXER_MODE_PATH = "global/mixerMode"
 # params.json types whose value is text, not a number -- never writable here.
 TEXT_TYPES = ("string", "color")
 
@@ -398,24 +405,41 @@ class Client:
             raise WriteNotConfirmed(f"{path}: o daemon não confirmou a escrita em 1 s")
         return ucnet.parse_pv(m)[1]
 
-    def load_scene(self, name: str, keep_gains: bool = False) -> dict:
+    def load_scene(self, name: str, keep_gains: bool = False,
+                    keep_mode: bool = False) -> dict:
         """Send JM RestorePreset for scene `name` (".scene" appended if
         missing) and wait up to 3 s for JM RecalledPreset.
 
+        Always snapshots every global/* value before sending, and again
+        after the recall settles (measured 18/09: loading MK300-FRFR flips
+        global/mixerMode from Mixer Bypass to Analog + ADAT --
+        docs/protocol.md, "Escrita" -- and a scene recall can change any
+        other global/* the same way). The settle wait (link quiet for
+        scene_quiet s, bounded by scene_settle_max s, since the daemon
+        re-sends every PV *after* RecalledPreset) always runs, not only for
+        keep_gains, so the global/* comparison sees the daemon's re-sent
+        values rather than stale in-flight ones.
+
         With keep_gains=True: snapshot line/ch1..8/preampgain (human dB)
-        before sending; after RecalledPreset keep reading (the daemon
-        re-sends every PV *after* it, docs/protocol.md) until the link is
-        quiet for scene_quiet s, bounded by scene_settle_max s; then
-        re-set (via `set`, one at a time) every channel whose value changed
-        -- loading a scene resets preamp gains on the rig.
+        before sending; after settling, re-set (via `set`, one at a time)
+        every channel whose value changed -- loading a scene resets preamp
+        gains on the rig.
+
+        With keep_mode=True: if global/mixerMode changed, write the
+        pre-scene value back (via `set`, which journals it for undo like
+        any other write) and report it in "mode_restored".
+
         Returns {"preset_file": ..., "gains": [(path, before, after), ...],
-        "failed": [(path, before, after, error), ...]}: a channel whose
-        re-set fails (WriteNotConfirmed/ValueError) is collected in
-        "failed" and the rest still run.
+        "failed": [(path, before, after, error), ...],
+        "changed_globals": [(path, before, after), ...],
+        "mode_restored": (path, scene_value, restored_value) | None}.
+        A channel whose gain re-set fails (WriteNotConfirmed/ValueError) is
+        collected in "failed" and the rest still run.
         """
         preset_file = name if name.endswith(".scene") else f"{name}.scene"
         gain_paths = [f"line/ch{ch}/preampgain" for ch in range(1, 9)]
-        before = {p: self._human_value(p) for p in gain_paths} if keep_gains else {}
+        before_gains = {p: self._human_value(p) for p in gain_paths} if keep_gains else {}
+        before_globals = {p: v for p, v in self.state.items() if p.startswith(GLOBAL_PREFIX)}
 
         payload = ucnet.compact_json_payload({
             "id": "RestorePreset",
@@ -432,13 +456,24 @@ class Client:
         if m is None:
             raise SceneLoadTimeout(name)
 
+        # The daemon re-sends every PV after RecalledPreset; wait for the
+        # link to go quiet before reading back global/* (and, below, gains)
+        # so we compare against the settled post-recall state.
+        self._drain_quiet(self.scene_quiet, self.scene_settle_max)
+
+        after_globals = {p: self.state.get(p) for p in before_globals}
+        changed_globals = [
+            (p, before_globals[p], after_globals[p])
+            for p in before_globals
+            if after_globals[p] != before_globals[p]
+        ]
+
         gains = []
         failed = []
         if keep_gains:
-            self._drain_quiet(self.scene_quiet, self.scene_settle_max)
-            after = {p: self._human_value(p) for p in gain_paths}
+            after_gains = {p: self._human_value(p) for p in gain_paths}
             for p in gain_paths:
-                b, a = before[p], after[p]
+                b, a = before_gains[p], after_gains[p]
                 if a != b:
                     try:
                         self.set(p, b)
@@ -446,7 +481,22 @@ class Client:
                         failed.append((p, b, a, str(e)))
                         continue
                     gains.append((p, b, a))
-        return {"preset_file": preset_file, "gains": gains, "failed": failed}
+
+        mode_restored = None
+        if keep_mode:
+            before_mode = before_globals.get(MIXER_MODE_PATH)
+            after_mode = after_globals.get(MIXER_MODE_PATH)
+            if (before_mode is not None and after_mode is not None
+                    and after_mode != before_mode):
+                try:
+                    self.set(MIXER_MODE_PATH, before_mode)
+                except (WriteNotConfirmed, ValueError):
+                    pass
+                else:
+                    mode_restored = (MIXER_MODE_PATH, after_mode, before_mode)
+
+        return {"preset_file": preset_file, "gains": gains, "failed": failed,
+                "changed_globals": changed_globals, "mode_restored": mode_restored}
 
     def _drain_quiet(self, quiet: float, max_total: float) -> None:
         """Feed every incoming message through _handle() until nothing

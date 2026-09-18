@@ -231,3 +231,79 @@ def test_keep_gains_collects_failed_channels_and_continues(tmp_path):
 
     assert [p for p, *_ in result["failed"]] == ["line/ch1/preampgain"]
     assert [p for p, *_ in result["gains"]] == ["line/ch2/preampgain"]
+
+
+# --- global/* tracking (measured 18/09: loading MK300-FRFR flipped
+# global/mixerMode 0 -> 0.5) -----------------------------------------------
+
+
+def test_load_scene_reports_changed_global_params(tmp_path):
+    # The daemon re-sends every PV after RecalledPreset (docs/protocol.md,
+    # "Escrita"); global/mixerMode comes back changed, global/ledBrightness
+    # unchanged (same value re-sent).
+    recalled = (FX / "uc-recalled.bin").read_bytes()
+    fake = EchoSceneSock([
+        recalled,
+        _pv("global/mixerMode", 0.5) + _pv("global/ledBrightness", 0.7475),
+    ])
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.sock = fake
+    c.undo_journal = tmp_path / "undo.jsonl"
+    c.ranges = {}
+    c.state = {"global/mixerMode": 0.0, "global/ledBrightness": 0.7475}
+
+    result = c.load_scene("MK300-FRFR")
+
+    assert result["changed_globals"] == [("global/mixerMode", 0.0, 0.5)]
+
+
+def test_load_scene_without_global_changes_reports_none(tmp_path):
+    recalled = (FX / "uc-recalled.bin").read_bytes()
+    fake = EchoSceneSock([recalled])
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.sock = fake
+    c.undo_journal = tmp_path / "undo.jsonl"
+    c.ranges = {}
+    c.state = {"global/mixerMode": 0.0}
+
+    result = c.load_scene("MK300-FRFR")
+
+    assert result["changed_globals"] == []
+    assert result["mode_restored"] is None
+
+
+def test_load_scene_keep_mode_restores_changed_mixer_mode(tmp_path):
+    recalled = (FX / "uc-recalled.bin").read_bytes()
+    fake = EchoSceneSock([
+        recalled,
+        _pv("global/mixerMode", 0.5),
+    ])
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.sock = fake
+    c.undo_journal = tmp_path / "undo.jsonl"
+    c.ranges = {}
+    c.state = {"global/mixerMode": 0.0}
+
+    result = c.load_scene("MK300-FRFR", keep_mode=True)
+
+    assert result["changed_globals"] == [("global/mixerMode", 0.0, 0.5)]
+    assert result["mode_restored"] == ("global/mixerMode", 0.5, 0.0)
+    assert c.state["global/mixerMode"] == pytest.approx(0.0, abs=1e-4)
+    # the restoring write went through the normal set() path -> journaled.
+    from quantum_hd8 import undo as undo_mod
+    assert undo_mod.peek(journal=c.undo_journal) == ("global/mixerMode", 0.5)
+
+
+def test_load_scene_keep_mode_does_nothing_when_mode_unchanged(tmp_path):
+    recalled = (FX / "uc-recalled.bin").read_bytes()
+    fake = EchoSceneSock([recalled])
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.sock = fake
+    c.undo_journal = tmp_path / "undo.jsonl"
+    c.ranges = {}
+    c.state = {"global/mixerMode": 0.0}
+
+    result = c.load_scene("MK300-FRFR", keep_mode=True)
+
+    assert result["mode_restored"] is None
+    assert b"global/mixerMode" not in fake.tx  # no extra PV sent for it
