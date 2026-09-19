@@ -78,16 +78,19 @@ front-panel setting *Global Settings > Reamp Out* (ADAT 1/2 … ADAT 15/16). See
 
 ## Verified live vs not
 
-| Feature | Status (18/09) |
+| Feature | Status (19/09) |
 |---|---|
 | `state`, `dump`, `get` | verified live |
 | `set` + `undo` on `global/ledBrightness` | verified live |
 | `preamp`, `route` writes (idempotent / no-op path) | verified live |
+| `preamp N gain` real change + `undo` (In 3, 20.3 / 21 dB) | verified live |
+| Re-amp 1 output from USB 11 (Mixer Bypass) | verified live (cable Re-amp 1 → In 3, 18/09) |
 | `scene list` | verified live |
 | `meters` stream (UDP, layout in/aux/main) | verified live; values calibrated to dBFS (18/09) |
-| `scene load` (+ `--keep-gains`, `--keep-mode`) | not yet live (built from the UC capture) |
-| `scene save` | not live-tested by the tool (built from a UC capture, 19/09) |
-| Re-amp source | not reachable from the host (front panel only) |
+| `scene load` (+ `--keep-gains`, `--keep-mode`) | verified live (MK300-FRFR; the scene switched Mixer Mode, `--keep-mode` restored it) |
+| `scene save` (+ overwrite guard) | verified live (new scene `TESTE`, 19/09) |
+| Re-amp source when the mixer is on | not reachable from the host (front panel Reamp Out); not measured |
+| Fader/send dB ↔ 0..1 mapping | not measured |
 
 Protocol notes, measured vs hypothesis: [`docs/protocol.md`](docs/protocol.md).
 
