@@ -1,0 +1,75 @@
+{
+ "measured": "19/09",
+ "method": "tom 0.1 (-20 dBFS) no USB 4 (line/ch30), send line/ch30/aux13 (Loopback 1) variado; mediana do medidor aux13 (dBFS calibrado) ap\u00f3s 1,2 s; ganho = dBFS + 20",
+ "param": "line/ch30/aux13 (curve fader)",
+ "points": [
+  {
+   "normalized": 0.05,
+   "gain_db": -49.48
+  },
+  {
+   "normalized": 0.1,
+   "gain_db": -39.3
+  },
+  {
+   "normalized": 0.15,
+   "gain_db": -35.27
+  },
+  {
+   "normalized": 0.2,
+   "gain_db": -31.32
+  },
+  {
+   "normalized": 0.3,
+   "gain_db": -23.44
+  },
+  {
+   "normalized": 0.4,
+   "gain_db": -15.53
+  },
+  {
+   "normalized": 0.5,
+   "gain_db": -8.87
+  },
+  {
+   "normalized": 0.6,
+   "gain_db": -5.1
+  },
+  {
+   "normalized": 0.65,
+   "gain_db": -3.21
+  },
+  {
+   "normalized": 0.7,
+   "gain_db": -1.32
+  },
+  {
+   "normalized": 0.735,
+   "gain_db": -0.0
+  },
+  {
+   "normalized": 0.75,
+   "gain_db": 0.57
+  },
+  {
+   "normalized": 0.8,
+   "gain_db": 2.45
+  },
+  {
+   "normalized": 0.85,
+   "gain_db": 4.34
+  },
+  {
+   "normalized": 0.9,
+   "gain_db": 6.23
+  },
+  {
+   "normalized": 0.95,
+   "gain_db": 8.11
+  },
+  {
+   "normalized": 1.0,
+   "gain_db": 10.0
+  }
+ ]
+}
