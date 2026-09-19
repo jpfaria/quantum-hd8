@@ -86,6 +86,12 @@ Respostas (`tests/fixtures/probe-device-rx.bin`):
 2. `JM` → `SubscriptionReply`.
 3. `FD` → cabeçalho binário (14 bytes) + JSON `{"files":[{"name":"ELEMENT.scene",…}]}`.
 
+> **Armadilha (medido, 18/09):** o `FD` chega em outro segmento TCP, até ~4 s
+> depois do `ZM`. Quem para de ler no primeiro `ZM` fica com a lista de cenas
+> vazia. O cliente lê até ter `ZM`/`ZB` **e** `FD`, sob um único prazo. Teste
+> com fake socket precisa entregar os bytes fatiados (em ≥ 2 `recv()`, ou byte a
+> byte): entregar a fixture inteira num `recv()` esconde esse bug.
+
 Eventos que o daemon empurra para a sessão (medido):
 - `PV` → `caminho` + `00` + `uint16 LE` (flag, visto 0) + `float32 LE` normalizado. Ex.: `aux/ch1/volume`
   = `0x3f3c28f6` = 0,735.
