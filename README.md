@@ -92,12 +92,14 @@ without asking first.
 ### Re-amp outputs
 
 CoreAudio outputs 11/12 (Reamp 1/2) are **not** directly controllable from the host: their source
-selector (front-panel *Global Settings > Reamp Out*, ADAT 1/2 … ADAT 15/16) cannot be changed by
-`quantum-hd8`. But a mixer mix **can** reach them: measured 19/09, on this unit's current panel
-setting (ADAT 3/4), a signal sent only to `aux/ch6` (the mixer's ADAT 3/4 bus) also appeared on
-Re-amp 1, same path loss as the direct USB 11/12 → Re-amp path. Send to the aux matching the
-panel's selected ADAT pair (`aux/ch5` = ADAT 1/2 … `aux/ch12` = ADAT 15/16), with the mixer not in
-"Mixer Bypass". See [`docs/camada-b-reamp.md`](docs/camada-b-reamp.md) for the measurement.
+selector (front-panel *Global Settings > Reamp Out*, currently ADAT 1/2 on this unit) cannot be
+changed by `quantum-hd8`. To send audio to the re-amp outs, play it on USB 11/12 (CoreAudio
+outputs 11/12) — verified live. The earlier claim that a mixer aux/ADAT bus also reaches Re-amp 1
+was a measurement artifact (stale reading, two variables changed at once); re-measured 19/09,
+signal sent only to `aux/ch1` (Out 3/4) or only to `aux/ch6` (ADAT 3/4) does **not** reach Re-amp 1
+(noise floor). Whether the panel's selected ADAT bus (`aux/ch5` = ADAT 1/2, this unit's setting)
+reaches the re-amp outs is untested. See [`docs/camada-b-reamp.md`](docs/camada-b-reamp.md) for
+the measurement.
 
 ## Verified live vs not
 
@@ -112,7 +114,7 @@ panel's selected ADAT pair (`aux/ch5` = ADAT 1/2 … `aux/ch12` = ADAT 15/16), w
 | `meters` stream (UDP, layout in/aux/main) | verified live; values calibrated to dBFS (18/09) |
 | `scene load` (+ `--keep-gains`, `--keep-mode`) | verified live (MK300-FRFR; the scene switched Mixer Mode, `--keep-mode` restored it) |
 | `scene save` (+ overwrite guard) | verified live (new scene `TESTE`, 19/09) |
-| Re-amp reachable from a mixer aux (ADAT bus matching the panel's Reamp Out) | verified live for ADAT 3/4, this unit's current panel setting (19/09); the front-panel selector itself still can't be changed from the host |
+| Re-amp reachable from a mixer aux (Out 3/4 or ADAT 3/4 bus) | disproven (19/09): neither reaches Re-amp 1 (noise floor); earlier "reaches at -40.4 dBFS" claim was a measurement artifact. ADAT 1/2 (this unit's panel setting) untested; front-panel selector itself still can't be changed from the host |
 | Fader/send dB ↔ 0..1 mapping | measured 19/09 (`line/ch30/aux13`, `quantum_hd8/fader.py`); applied to every `fader`-curve param as an assumption, not separately measured per path |
 
 Protocol notes, measured vs hypothesis: [`docs/protocol.md`](docs/protocol.md).

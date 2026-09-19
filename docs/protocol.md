@@ -15,7 +15,7 @@ ainda não visto aqui.
 | Cenas: `Listscene` | medido; `RestorePreset` visto no tráfego do UC, não disparado por nós |
 | Salvar cena | medido (19/09, captura do UC salvando); `Client.save_scene`/`scene save` disparam, não verificado ao vivo pela ferramenta |
 | Medidores `MS levl` (UDP) | layout medido; escala → dBFS calibrada (18/09) |
-| Re-amp (saídas 11/12) | seletor do painel fora da camada A; mixer alcança o re-amp pelo aux do bus ADAT selecionado ([`camada-b-reamp.md`](camada-b-reamp.md), medido 19/09) |
+| Re-amp (saídas 11/12) | seletor do painel fora da camada A; só USB 11/12 confirmado alimentando o re-amp; aux `Out 3/4` e `ADAT 3/4` **não** alcançam (re-medido 19/09, claim anterior era artefato — ver [`camada-b-reamp.md`](camada-b-reamp.md)) |
 | `scene load` muda `global/mixerMode` | medido (18/09, MK300-FRFR): `--keep-mode` restaura |
 | Curva `fader` (dB ↔ 0..1) | medido (19/09, `line/ch30/aux13`); `quantum_hd8/fader.py`, aplicado a todo parâmetro `curve="fader"` por hipótese (mesma curva na XML) |
 
@@ -199,6 +199,13 @@ nova bateu.
 Sinal conhecido numa entrada física: gerador de tom no `USB 11` → **Re-amp 1**
 (saída da HD 8, painel em ADAT 1/2, ver [`camada-b-reamp.md`](camada-b-reamp.md))
 → cabo → `In 3` (pré em 19,5 dB). Gravei o pico do CoreAudio de `In 3`
+
+**Lição de método (19/09):** a claim "aux/ADAT 3/4 alcança o re-amp a −40,4 dBFS" caiu por usar o
+**máximo** de uma janela de leitura que ainda continha o tom anterior (USB 11), com uma segunda
+variável (USB 4) mudando ao mesmo tempo. Re-medindo com a **mediana** dos pacotes do medidor ao
+longo de 1,5 s, depois de um tempo de acomodação, e mudando **uma variável por vez**, o resultado
+inverteu (não alcança). Regra: medir com mediana pós-acomodação, uma variável por vez; máximo sobre
+janela com transição de tom anterior é não confiável.
 (`tools/rec`) ao mesmo tempo que lia `meter_raw` de `line/ch3` — 5 níveis de
 tom, `tests/fixtures/meter-calibration.json`:
 

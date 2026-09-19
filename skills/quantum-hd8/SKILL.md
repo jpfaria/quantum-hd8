@@ -100,15 +100,15 @@ The daemon stores every value **normalized 0..1**. `set` converts only some:
    live by this tool (built from a UC capture, 19/09).
 6. **Meters are dBFS, calibrated 18/09** (peak, not RMS): `dBFS = 20·log10(raw / 65535)` (raw 0 =
    silence = -inf). `quantum-hd8 meters`/`meters --once` show both the raw value and the dBFS.
-7. **Re-amp outs (CoreAudio 11/12): the panel selector isn't reachable from the host, but the
-   mixer can still feed them.** *Global Settings > Reamp Out* (ADAT 1/2 … ADAT 15/16) can't be
-   set/read by `set`/`route` — tell the user to change it on the panel. But measured 19/09: a
-   signal sent to the mixer aux matching whatever ADAT pair the panel is currently set to (e.g.
-   `aux/ch6` for ADAT 3/4, this unit's current setting) **does** reach the re-amp outs, with the
-   mixer not in "Mixer Bypass" — so "manda um sinal pro re-amp pelo mixer" is answerable with
-   `set line/chN/auxK ...` once you know the panel's current pair (ask the user, or infer from
-   which `aux/ch5..12` a known signal shows up on when re-amp is monitored). `aux/ch13-14` are
-   Loopback 1/2, unrelated to re-amp either way. Details: `docs/camada-b-reamp.md`.
+7. **Re-amp outs (CoreAudio 11/12): to send audio there, play it on USB 11/12.** *Global Settings
+   > Reamp Out* (ADAT 1/2 … ADAT 15/16, currently ADAT 1/2 on this unit) can't be set/read by
+   `set`/`route` — tell the user to change it on the panel. Do **not** claim a mixer aux/bus
+   reaches the re-amp outs: re-measured 19/09 (median over 1.5 s, one variable at a time), signal
+   sent only to `aux/ch1` (Out 3/4) or only to `aux/ch6` (ADAT 3/4) does **not** reach Re-amp 1
+   (noise floor) — the earlier "reaches at −40.4 dBFS" claim was a stale-reading artifact. Whether
+   the panel's currently selected ADAT bus (`aux/ch5` = ADAT 1/2) reaches the re-amp outs is
+   **untested**; don't assert it either way. `aux/ch13-14` are Loopback 1/2, unrelated to re-amp.
+   Details: `docs/camada-b-reamp.md`.
 8. No raw frames, no `tools/probe.py` writes, no guessing paths: paths come from `dump`.
 
 ## Red flags — stop

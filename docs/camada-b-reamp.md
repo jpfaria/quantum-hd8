@@ -187,37 +187,49 @@ porta MIDI "Quantum HD 8 Control") que não investiguei.
    decide entre H e H'.
 3. Escutar a notificação `PaRi` sel 12 ao mudar no painel. Isso confirma F sem escrever nada.
 
-## 6. Medição 19/09 (cabo Re-amp 1 → In 3, medidores calibrados)
+## 6. Medição 19/09 (cabo Re-amp 1 → In 3, medidores calibrados, MEDIANA sobre 1,5 s)
 
-Executado o passo 5 acima. Painel deste aparelho não foi lido diretamente (sem acesso físico
-durante a medição), mas o resultado abaixo o revela indiretamente: **está em ADAT 3/4.**
+Executado o passo 5 acima. João leu o painel frontal diretamente: **Global Settings > Reamp Out =
+ADAT 1/2** neste aparelho (não ADAT 3/4 — a leitura anterior estava errada, ver "conclusão
+errada" abaixo).
 
 **(1) USB 11 → Re-amp 1, Mixer Bypass vs. Analog + ADAT:** tom 0,05 no `line/ch27` (USB 11), lido
 em `In 3` (pré 19,5 dB) via o cabo Re-amp 1 → In 3. Com `global/mixerMode` = "Mixer Bypass" **e**
-com "Analog + ADAT", `In 3` mediu **-40,4 dBFS** nos dois casos -- o caminho USB 11/12 → Re-amp
-independe do modo do mixer (o firmware, não o mixer do UC, decide essa rota; ver §1, §3).
+com "Analog + ADAT", `In 3` mediu **-40,4 dBFS** nos dois casos (confirmado duas vezes) -- o
+caminho USB 11/12 → Re-amp independe do modo do mixer (o firmware, não o mixer do UC, decide essa
+rota; ver §1, §3). **Confirmado, alta confiança.**
 
-**(2) Mixer ligado, tom só no aux/ch6 (bus ADAT 3/4):** com o mixer em "Analog + ADAT" (não
-Bypass), tom enviado **apenas** para `aux/ch6` (`line/ch30/aux6`, i.e. o bus de saída ADAT 3/4 do
-mixer -- `aux/ch5..12` = ADAT 1/2..15/16, ver SKILL.md). Medidor do próprio `aux/ch6` marcou
--26,0 dBFS. **`In 3` (via Re-amp 1) também marcou -40,4 dBFS** -- os mesmos 14,4 dB de perda de
-caminho vistos em (1) para USB 11/12. Nenhum outro aux foi tocado nesse teste.
+**(2) Mixer ligado ("Analog + ADAT"), tom só no aux/ch1 (Out 3/4):** tom 0,05 enviado **apenas**
+para `aux/ch1` (`line/ch30/aux1`). Medidor do próprio `aux1` marcou -26,0 dBFS (sinal presente no
+bus). `In 3` (via Re-amp 1) marcou **-90,3 dBFS = piso de ruído** -- **não chega** ao re-amp.
 
-### Conclusão
+**(3) Mixer ligado, tom só no aux/ch6 (bus ADAT 3/4, nome confirmado pelo `chnum` do
+dispositivo):** tom enviado **apenas** para `aux/ch6`. Medidor do `aux6` marcou -26,0 dBFS. `In 3`
+marcou **-90,3 dBFS = piso de ruído** -- **não chega** ao re-amp.
 
-A saída Re-amp = **USB 11/12 somado ao bus de mix ADAT selecionado no painel (Global Settings >
-Reamp Out)**. Neste aparelho, o painel está em **ADAT 3/4** -- só esse par foi testado; os outros
-sete pares (ADAT 1/2, 5/6 … 15/16) alimentam equipamento real e não foram tocados para não
-interromper o que está conectado. Logo:
+**Não testado:** `aux/ch5` (ADAT 1/2, o ajuste atual do painel) alimenta `ADA #1 Out 1/2` = FX
+RETURN/IN do Ampero (equipamento real ligado) e não foi tocado para não interromper o que está
+conectado. A hipótese H (Reamp Out = barramento de saída ADAT do mixer) segue **não testada** para
+o par correto; H' também segue em aberto.
 
-- **H confirmada** (para o ajuste atual do painel): "ADAT k/k+1" no menu Reamp Out é o **barramento
-  de saída** ADAT do mixer (`aux/ch(4+k)`), não o par de entrada -- uma mix do mixer chega ao
-  re-amp mandando sinal para esse aux, com o mixer fora de "Mixer Bypass".
-- **H' refutada** para este caminho: não é (só) o par de *entrada* ADAT em uso standalone; o
-  bus de *saída* do mixer contribui, medido diretamente.
-- Ressalva: `aux/ch6` (ADAT 3/4) também alimenta a saída física `ADA #1 Out 3/4` (ver vault
-  `music-setup — Mapa de Canais e Cabos`) -- mandar sinal para esse aux para alimentar o re-amp
-  também soa nesse par ADAT físico, não é um caminho isolado.
-- O seletor do painel (*qual* par ADAT vai para o re-amp) continua não mudável pelo host (§3c,
-  `PaRi` sel 12 ignorado na escrita) -- a ferramenta pode *alimentar* o re-amp pelo mixer, mas não
-  pode *escolher* qual par ADAT o painel está roteando para lá.
+### Conclusão errada de 19/09 (revertida)
+
+A tabela e o SKILL.md chegaram a afirmar "mixer aux/ADAT 3/4 alcança o Re-amp 1 a -40,4 dBFS,
+painel em ADAT 3/4". Isso era um **artefato de medição**: a leitura de -40,4 dBFS em `aux/ch6`
+usou o **máximo** de uma janela que ainda continha o tom anterior de USB 11 (que de fato alimenta
+o re-amp, ver (1)), e ao mesmo tempo o USB 4 também estava indo para o aux1 -- duas variáveis
+mudando junto, sem tempo de acomodação nem mediana. Reexecutando com mediana pós-acomodação e uma
+variável por vez, (2) e (3) mostram claramente piso de ruído. **A conclusão foi revertida.**
+
+### Conclusão (corrigida)
+
+- O único caminho **confirmado** para o re-amp é **USB 11/12** (CoreAudio outputs 11/12).
+- `Out 3/4` (aux1) e o bus `ADAT 3/4` (aux6) **não** alcançam o re-amp — refutado por medição direta.
+- O painel deste aparelho está em **ADAT 1/2** (lido diretamente, não em ADAT 3/4).
+- Se um mix do mixer chega ao re-amp pelo bus ADAT que o painel seleciona (H) continua **em
+  aberto**, não confirmado nem refutado — só ADAT 1/2 resolveria isso e não foi testado (alimenta
+  equipamento real).
+- O seletor do painel (*qual* saída vai para o re-amp) continua não mudável pelo host (§3c, `PaRi`
+  sel 12 ignorado na escrita).
+- Lição de método: medir com **mediana** após tempo de acomodação, **uma variável por vez**; nunca
+  usar máximo sobre uma janela que ainda contém a transição do teste anterior.
