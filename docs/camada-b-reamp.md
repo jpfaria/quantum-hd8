@@ -207,10 +207,10 @@ bus). `In 3` (via Re-amp 1) marcou **-90,3 dBFS = piso de ruído** -- **não che
 dispositivo):** tom enviado **apenas** para `aux/ch6`. Medidor do `aux6` marcou -26,0 dBFS. `In 3`
 marcou **-90,3 dBFS = piso de ruído** -- **não chega** ao re-amp.
 
-**Não testado:** `aux/ch5` (ADAT 1/2, o ajuste atual do painel) alimenta `ADA #1 Out 1/2` = FX
-RETURN/IN do Ampero (equipamento real ligado) e não foi tocado para não interromper o que está
-conectado. A hipótese H (Reamp Out = barramento de saída ADAT do mixer) segue **não testada** para
-o par correto; H' também segue em aberto.
+**(4) Mixer ligado, tom só no aux/ch5 (bus ADAT 1/2 = ajuste do painel, lido pelo jpfaria),
+com o OK dele (alimenta o Ampero):** medidor do `aux5` −26,0 dBFS; `In 3` **−96,3 dBFS** (piso).
+**Não chega.** H (Reamp Out = barramento de saída ADAT do mixer) **refutada** com o host
+conectado. Resta H' (par de *entrada* ADAT) ou efeito só no modo standalone — não medido.
 
 ### Conclusão errada de 19/09 (revertida)
 

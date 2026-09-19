@@ -114,7 +114,7 @@ the measurement.
 | `meters` stream (UDP, layout in/aux/main) | verified live; values calibrated to dBFS (18/09) |
 | `scene load` (+ `--keep-gains`, `--keep-mode`) | verified live (MK300-FRFR; the scene switched Mixer Mode, `--keep-mode` restored it) |
 | `scene save` (+ overwrite guard) | verified live (new scene `TESTE`, 19/09) |
-| Re-amp reachable from a mixer aux (Out 3/4 or ADAT 3/4 bus) | disproven (19/09): neither reaches Re-amp 1 (noise floor); earlier "reaches at -40.4 dBFS" claim was a measurement artifact. ADAT 1/2 (this unit's panel setting) untested; front-panel selector itself still can't be changed from the host |
+| Re-amp reachable from a mixer aux (Out 3/4 or ADAT 3/4 bus) | disproven (19/09): neither reaches Re-amp 1 (noise floor); earlier "reaches at -40.4 dBFS" claim was a measurement artifact. ADAT 1/2 (this unit's panel setting) also does not reach it (19/09); front-panel selector itself still can't be changed from the host |
 | Fader/send dB ↔ 0..1 mapping | measured 19/09 (`line/ch30/aux13`, `quantum_hd8/fader.py`); applied to every `fader`-curve param as an assumption, not separately measured per path |
 
 Protocol notes, measured vs hypothesis: [`docs/protocol.md`](docs/protocol.md).

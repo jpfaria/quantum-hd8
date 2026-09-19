@@ -105,9 +105,10 @@ The daemon stores every value **normalized 0..1**. `set` converts only some:
    `set`/`route` — tell the user to change it on the panel. Do **not** claim a mixer aux/bus
    reaches the re-amp outs: re-measured 19/09 (median over 1.5 s, one variable at a time), signal
    sent only to `aux/ch1` (Out 3/4) or only to `aux/ch6` (ADAT 3/4) does **not** reach Re-amp 1
-   (noise floor) — the earlier "reaches at −40.4 dBFS" claim was a stale-reading artifact. Whether
-   the panel's currently selected ADAT bus (`aux/ch5` = ADAT 1/2) reaches the re-amp outs is
-   **untested**; don't assert it either way. `aux/ch13-14` are Loopback 1/2, unrelated to re-amp.
+   (noise floor) — the earlier "reaches at −40.4 dBFS" claim was a stale-reading artifact. The
+   panel's selected bus was tested too (19/09): signal only on `aux/ch5` (ADAT 1/2, −26 dBFS)
+   does **not** reach Re-amp 1 either. No mixer bus feeds the re-amp outs while the host is
+   connected; the Reamp Out selector's effect (standalone? ADAT input?) is unmeasured. `aux/ch13-14` are Loopback 1/2, unrelated to re-amp.
    Details: `docs/camada-b-reamp.md`.
 8. No raw frames, no `tools/probe.py` writes, no guessing paths: paths come from `dump`.
 
