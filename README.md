@@ -41,13 +41,32 @@ Claude Code plugin (skill `quantum-hd8`): add this repo as a marketplace
 
 ### Values
 
-The daemon keeps every value normalized 0..1. `set` takes human units only for `linear` curves
-(e.g. `line/chN/preampgain` in dB, `global/ledBrightness` 1..100), `0/1` (`on`/`off`) for toggles
-(`on`/`off` is refused on any non-toggle path), and the normalized 0..1 value for `fader`/`exp` and
-everything else. Text params (`string`/`color`, e.g. `line/chN/username`) are not writable. Curves and ranges per path:
-`quantum_hd8/params.json`. Writing the value a parameter already has is a no-op (the daemon does
-not echo it). Every write goes to `~/.quantum-hd8/undo.jsonl`; `undo` restores the last entry and
-removes it only once the write is confirmed (a failed undo keeps it).
+The daemon keeps every value normalized 0..1. `set` takes human units for `linear` curves
+(e.g. `line/chN/preampgain` in dB, `global/ledBrightness` 1..100) and for `fader` curves (every
+`volume` and `auxN` send, `main/ch1/volume`): dB, e.g. `-6`, `-6dB`, `0`, `+3`, `-inf` (fader
+bottom); `0/1` (`on`/`off`) for toggles (`on`/`off` is refused on any non-toggle path); and the
+normalized 0..1 value for `exp` and everything else. Pass `--raw` to `set` to write a normalized
+0..1 value directly for any curve, bypassing the human-unit conversion (`Client.set(path, value,
+raw=True)` in the library). Text params (`string`/`color`, e.g. `line/chN/username`) are not
+writable. Curves and ranges per path: `quantum_hd8/params.json`. Writing the value a parameter
+already has is a no-op (the daemon does not echo it). Every write goes to
+`~/.quantum-hd8/undo.jsonl`; `undo` restores the last entry and removes it only once the write is
+confirmed (a failed undo keeps it).
+
+`quantum-hd8 set line/ch30/aux13 -6` → `line/ch30/aux13 = -6.0 dB (0.593)` (human dB, then the raw
+normalized echo -- fader output gets the `dB` suffix since, unlike `linear`, a bare number there
+wouldn't say what unit it is).
+
+#### Fader curve dB mapping (measured 19/09)
+
+The `fader` curve's dB ↔ normalized mapping is now measured (`quantum_hd8/fader.py`,
+`tests/fixtures/fader-curve.json`): a tone into `line/ch30` (USB 4), `line/ch30/aux13`'s send
+varied across 17 points, aux13's calibrated meter read at each -- see the fixture for the method.
+Piecewise-linear between those points; below the lowest measured point (0.05) the mapping
+extrapolates that segment's slope and clamps at -96 dB (the param's own floor); 0 (fader bottom)
+is always -inf. **Assumption, not separately measured:** this curve was measured on one send
+(`line/ch30/aux13`) and is applied to every param whose `params.json` `curve` is `"fader"` --
+they share the same XML curve name and the same daemon-reported range (-96..10 dB).
 
 `scene load --keep-gains` waits for the daemon's post-recall PVs to settle (link quiet 300 ms, max
 3 s) before comparing gains; channels it could not restore are listed on stderr and it exits 1.
@@ -72,9 +91,13 @@ without asking first.
 
 ### Re-amp outputs
 
-CoreAudio outputs 11/12 (Reamp 1/2) are **not** controllable from the host: their source is the
-front-panel setting *Global Settings > Reamp Out* (ADAT 1/2 … ADAT 15/16). See
-[`docs/camada-b-reamp.md`](docs/camada-b-reamp.md).
+CoreAudio outputs 11/12 (Reamp 1/2) are **not** directly controllable from the host: their source
+selector (front-panel *Global Settings > Reamp Out*, ADAT 1/2 … ADAT 15/16) cannot be changed by
+`quantum-hd8`. But a mixer mix **can** reach them: measured 19/09, on this unit's current panel
+setting (ADAT 3/4), a signal sent only to `aux/ch6` (the mixer's ADAT 3/4 bus) also appeared on
+Re-amp 1, same path loss as the direct USB 11/12 → Re-amp path. Send to the aux matching the
+panel's selected ADAT pair (`aux/ch5` = ADAT 1/2 … `aux/ch12` = ADAT 15/16), with the mixer not in
+"Mixer Bypass". See [`docs/camada-b-reamp.md`](docs/camada-b-reamp.md) for the measurement.
 
 ## Verified live vs not
 
@@ -84,13 +107,13 @@ front-panel setting *Global Settings > Reamp Out* (ADAT 1/2 … ADAT 15/16). See
 | `set` + `undo` on `global/ledBrightness` | verified live |
 | `preamp`, `route` writes (idempotent / no-op path) | verified live |
 | `preamp N gain` real change + `undo` (In 3, 20.3 / 21 dB) | verified live |
-| Re-amp 1 output from USB 11 (Mixer Bypass) | verified live (cable Re-amp 1 → In 3, 18/09) |
+| Re-amp 1 output from USB 11 (Mixer Bypass and Analog + ADAT) | verified live (cable Re-amp 1 → In 3, 18/09 and 19/09) |
 | `scene list` | verified live |
 | `meters` stream (UDP, layout in/aux/main) | verified live; values calibrated to dBFS (18/09) |
 | `scene load` (+ `--keep-gains`, `--keep-mode`) | verified live (MK300-FRFR; the scene switched Mixer Mode, `--keep-mode` restored it) |
 | `scene save` (+ overwrite guard) | verified live (new scene `TESTE`, 19/09) |
-| Re-amp source when the mixer is on | not reachable from the host (front panel Reamp Out); not measured |
-| Fader/send dB ↔ 0..1 mapping | not measured |
+| Re-amp reachable from a mixer aux (ADAT bus matching the panel's Reamp Out) | verified live for ADAT 3/4, this unit's current panel setting (19/09); the front-panel selector itself still can't be changed from the host |
+| Fader/send dB ↔ 0..1 mapping | measured 19/09 (`line/ch30/aux13`, `quantum_hd8/fader.py`); applied to every `fader`-curve param as an assumption, not separately measured per path |
 
 Protocol notes, measured vs hypothesis: [`docs/protocol.md`](docs/protocol.md).
 

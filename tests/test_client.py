@@ -2,8 +2,11 @@ import json
 import socket
 from pathlib import Path
 
+import pytest
+
 from quantum_hd8 import ucnet
 from quantum_hd8.client import Client, flatten
+from quantum_hd8.fader import fader_db
 
 FX = Path(__file__).parent / "fixtures"
 
@@ -113,13 +116,35 @@ def test_human_formats_linear_curve_with_units():
     c.close()
 
 
-def test_human_notes_normalized_for_non_linear_curve():
+def test_human_notes_normalized_for_curve_without_a_known_mapping():
+    # global/mixerMode: type "list", curve None (no linear/fader mapping).
     rx = (FX / "probe-device-rx.bin").read_bytes()
     fake = FakeSock(rx)
     c = Client(sock_factory=lambda *a, **k: fake)
     c.connect()
 
-    assert "normalizado" in c.human("line/ch1/volume")
+    assert "normalizado" in c.human("global/mixerMode")
+    c.close()
+
+
+def test_human_formats_fader_curve_as_db():
+    # line/ch1/volume: curve "fader", measured 19/09 (quantum_hd8.fader).
+    rx = (FX / "probe-device-rx.bin").read_bytes()
+    fake = FakeSock(rx)
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.connect()
+
+    assert c.human("line/ch1/volume") == f"{fader_db(c.get('line/ch1/volume')):.1f} dB"
+    c.close()
+
+
+def test_to_human_converts_fader_curve_normalized_to_db():
+    rx = (FX / "probe-device-rx.bin").read_bytes()
+    fake = FakeSock(rx)
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.connect()
+
+    assert c.to_human("line/ch1/volume", 0.735) == pytest.approx(0.0, abs=0.01)
     c.close()
 
 

@@ -107,8 +107,10 @@ def test_set_toggle_rejects_value_outside_0_1(tmp_path):
 
 
 def test_set_other_curve_accepts_normalized_value(tmp_path):
+    # "exp" (not "linear", "fader" or "toggle") -- still bare normalized 0..1
+    # (fader has its own dB conversion, tested separately below).
     c, _ = make_client(tmp_path)
-    c.ranges["line/ch1/volume"] = {"min": -96.0, "max": 10.0, "curve": "fader"}
+    c.ranges["line/ch1/volume"] = {"min": -96.0, "max": 10.0, "curve": "exp"}
     c.state["line/ch1/volume"] = 0.5
 
     echoed = c.set("line/ch1/volume", 0.8)
@@ -118,7 +120,7 @@ def test_set_other_curve_accepts_normalized_value(tmp_path):
 
 def test_set_other_curve_rejects_value_outside_0_1(tmp_path):
     c, _ = make_client(tmp_path)
-    c.ranges["line/ch1/volume"] = {"min": -96.0, "max": 10.0, "curve": "fader"}
+    c.ranges["line/ch1/volume"] = {"min": -96.0, "max": 10.0, "curve": "exp"}
 
     with pytest.raises(ValueError):
         c.set("line/ch1/volume", 1.5)
@@ -230,7 +232,7 @@ def test_set_is_not_noop_when_linear_int_param_differs_by_a_step(tmp_path):
 
 def test_set_is_noop_when_float_param_within_1e4_of_current(tmp_path):
     c, fake = make_client(tmp_path)
-    c.ranges["line/ch1/volume"] = {"min": -96.0, "max": 10.0, "curve": "fader"}
+    c.ranges["line/ch1/volume"] = {"min": -96.0, "max": 10.0, "curve": "exp"}
     c.state["line/ch1/volume"] = 0.5
 
     echoed = c.set("line/ch1/volume", 0.5)
@@ -259,6 +261,61 @@ def test_set_list_writes_when_index_differs(tmp_path):
 
     assert fake.tx != b""
     assert echoed == pytest.approx(1 / 14, abs=1e-4)
+
+
+def test_set_fader_param_converts_db_to_normalized(tmp_path):
+    c, fake = make_client(tmp_path)
+    c.ranges["line/ch30/aux13"] = {"min": -96.0, "max": 10.0, "curve": "fader"}
+    c.state["line/ch30/aux13"] = 0.0
+
+    echoed = c.set("line/ch30/aux13", -6)
+
+    from quantum_hd8.fader import fader_normalized
+    assert echoed == pytest.approx(fader_normalized(-6), abs=1e-3)
+    [sent] = [m for m in ucnet.Decoder().feed(fake.tx) if m.code == "PV"]
+    _, sent_value = ucnet.parse_pv(sent)
+    assert sent_value == pytest.approx(fader_normalized(-6), abs=1e-3)
+
+
+def test_set_fader_param_minus_inf_string_maps_to_zero(tmp_path):
+    c, fake = make_client(tmp_path)
+    c.ranges["line/ch30/aux13"] = {"min": -96.0, "max": 10.0, "curve": "fader"}
+    c.state["line/ch30/aux13"] = 0.5
+
+    echoed = c.set("line/ch30/aux13", float("-inf"))
+
+    assert echoed == 0.0
+
+
+def test_set_fader_param_rejects_db_above_top(tmp_path):
+    c, _ = make_client(tmp_path)
+    c.ranges["line/ch30/aux13"] = {"min": -96.0, "max": 10.0, "curve": "fader"}
+
+    with pytest.raises(ValueError):
+        c.set("line/ch30/aux13", 10.1)
+
+
+def test_set_fader_param_raw_flag_bypasses_db_conversion(tmp_path):
+    c, fake = make_client(tmp_path)
+    c.ranges["line/ch30/aux13"] = {"min": -96.0, "max": 10.0, "curve": "fader"}
+    c.state["line/ch30/aux13"] = 0.0
+
+    echoed = c.set("line/ch30/aux13", 0.593, raw=True)
+
+    assert echoed == pytest.approx(0.593, abs=1e-4)
+    [sent] = [m for m in ucnet.Decoder().feed(fake.tx) if m.code == "PV"]
+    _, sent_value = ucnet.parse_pv(sent)
+    assert sent_value == pytest.approx(0.593, abs=1e-4)
+
+
+def test_set_raw_flag_on_linear_param_bypasses_human_conversion(tmp_path):
+    # raw=True means "this is already the normalized value", regardless of
+    # curve -- also true for linear params (line/ch1/preampgain is 0..75 dB).
+    c, fake = make_client(tmp_path)
+
+    echoed = c.set("line/ch1/preampgain", 0.5, raw=True)
+
+    assert echoed == pytest.approx(0.5, abs=1e-4)
 
 
 def test_set_raw_writes_without_conversion_or_validation(tmp_path):

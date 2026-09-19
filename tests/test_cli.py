@@ -193,8 +193,12 @@ class WriteFakeClient:
         "global/ledBrightness": (1.0, 100.0, "int"),
     }
 
-    def set(self, path, value):
-        self.set_calls.append((path, value))
+    # Fader-curve param used by the dB-set CLI tests: measured 19/09
+    # (quantum_hd8.fader), min/max -96..10 like every real "fader" param.
+    _FADER_PATH = "line/ch30/aux13"
+
+    def set(self, path, value, raw=False):
+        self.set_calls.append((path, value, raw))
         if path.startswith("nope/"):
             raise KeyError(f"caminho desconhecido: {path}")
         if path == "line/ch1/preampgain" and value == 80:
@@ -203,7 +207,14 @@ class WriteFakeClient:
             raise PermissionError(f"{path} é readonly")
         if path == "global/ledBrightness" and value == 0.9:
             raise WriteNotConfirmed(path)
+        if path == self._FADER_PATH:
+            if raw:
+                return float(value)
+            from quantum_hd8.fader import fader_normalized
+            return fader_normalized(value)
         if path in self._LINEAR:
+            if raw:
+                return float(value)
             lo, hi, _ = self._LINEAR[path]
             return (value - lo) / (hi - lo)
         return 0.5
@@ -213,6 +224,9 @@ class WriteFakeClient:
         return normalized
 
     def to_human(self, path, normalized):
+        if path == self._FADER_PATH:
+            from quantum_hd8.fader import fader_db
+            return fader_db(normalized)
         if path in self._LINEAR:
             lo, hi, _ = self._LINEAR[path]
             return lo + normalized * (hi - lo)
@@ -223,6 +237,8 @@ class WriteFakeClient:
     def param_row(self, path):
         if path.startswith("nope/"):
             raise KeyError(f"caminho desconhecido: {path}")
+        if path == self._FADER_PATH:
+            return {"type": "float", "curve": "fader"}
         if path in self._TYPES:
             return {"type": self._TYPES[path]}
         if path in self._LINEAR:
@@ -300,6 +316,56 @@ def test_set_not_confirmed_prints_error_and_returns_1(capsys, monkeypatch):
     assert "global/ledBrightness" in capsys.readouterr().err
 
 
+def test_set_fader_param_prints_db_with_suffix_and_normalized_echo(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    rc = main(["set", "line/ch30/aux13", "-6"])
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert out.startswith("line/ch30/aux13 = -6.0 dB (")
+    assert out.rstrip().endswith(")")
+
+
+def test_set_fader_param_accepts_db_suffix(monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    instances = _capture_instances(monkeypatch, WriteFakeClient)
+    rc = main(["set", "line/ch30/aux13", "-6dB"])
+    assert rc == 0
+    assert instances[0].set_calls == [("line/ch30/aux13", -6.0, False)]
+
+
+def test_set_fader_param_accepts_plus_sign(monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    instances = _capture_instances(monkeypatch, WriteFakeClient)
+    rc = main(["set", "line/ch30/aux13", "+3"])
+    assert rc == 0
+    assert instances[0].set_calls == [("line/ch30/aux13", 3.0, False)]
+
+
+def test_set_fader_param_accepts_minus_inf(monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    instances = _capture_instances(monkeypatch, WriteFakeClient)
+    rc = main(["set", "line/ch30/aux13", "-inf"])
+    assert rc == 0
+    assert instances[0].set_calls == [("line/ch30/aux13", float("-inf"), False)]
+
+
+def test_set_raw_flag_passes_normalized_value_through(monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    instances = _capture_instances(monkeypatch, WriteFakeClient)
+    rc = main(["set", "line/ch30/aux13", "0.593", "--raw"])
+    assert rc == 0
+    assert instances[0].set_calls == [("line/ch30/aux13", 0.593, True)]
+
+
+def test_set_raw_flag_prints_normalized_echo(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    rc = main(["set", "line/ch30/aux13", "0.593", "--raw"])
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "line/ch30/aux13 = " in out
+    assert "0.593" in out
+
+
 def test_set_accepts_on_off_for_toggles(monkeypatch):
     monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
     client_instances = []
@@ -313,7 +379,7 @@ def test_set_accepts_on_off_for_toggles(monkeypatch):
 
     assert main(["set", "line/ch1/48v", "on"]) == 0
 
-    assert client_instances[0].set_calls == [("line/ch1/48v", 1)]
+    assert client_instances[0].set_calls == [("line/ch1/48v", 1, False)]
 
 
 def test_undo_pops_and_sets_raw(tmp_path, capsys, monkeypatch):

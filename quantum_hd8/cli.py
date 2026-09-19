@@ -107,6 +107,8 @@ def build_parser() -> argparse.ArgumentParser:
     set_p = sub.add_parser("set", help="Escreve um parâmetro")
     set_p.add_argument("path")
     set_p.add_argument("value")
+    set_p.add_argument("--raw", action="store_true",
+                        help="Valor já normalizado 0..1 (pula a conversão de unidades humanas)")
 
     sub.add_parser("undo", help="Desfaz a última escrita")
 
@@ -146,16 +148,36 @@ def build_parser() -> argparse.ArgumentParser:
 
 def _parse_set_value(raw: str, param_type: str | None):
     """"on"/"off" -> 1/0, only for toggle params (a fader must never jump
-    to 1.0 = +10 dB); anything else must parse as a float. ValueError
-    otherwise."""
+    to 1.0 = +10 dB); anything else must parse as a float -- including a
+    trailing "dB"/"db" suffix (curve "fader" dB input, e.g. "-6dB"; "-6",
+    "+3", "-inf" all parse as plain floats already, float("-inf") being
+    valid Python). ValueError otherwise."""
     if raw.lower() in ("on", "off"):
         if param_type != "toggle":
             raise ValueError(f"on/off só vale para parâmetros toggle (tipo: {param_type})")
         return 1 if raw.lower() == "on" else 0
+    text = raw[:-2] if raw.lower().endswith("db") else raw
     try:
-        return float(raw)
+        return float(text)
     except ValueError:
         raise ValueError(f"valor inválido: {raw}") from None
+
+
+# Known optional flags of the `set` subcommand -- see _protect_set_value.
+_SET_FLAGS = ("--raw",)
+
+
+def _protect_set_value(argv: list[str]) -> list[str]:
+    """argparse treats any token starting with "-" that isn't a bare
+    negative number (regex `^-\\d+$|^-\\d*\\.\\d+$`) as an unknown option --
+    "-6dB" and "-inf" both fail that regex and would be rejected before
+    ever reaching _parse_set_value. Reorders `set`'s argv as
+    [flags..., "--", path, value] so "--" tells argparse everything after
+    it is positional, regardless of how the value is spelled."""
+    rest = argv[1:]
+    flags = [a for a in rest if a in _SET_FLAGS]
+    positionals = [a for a in rest if a not in _SET_FLAGS]
+    return [argv[0], *flags, "--", *positionals]
 
 
 def _print_unknown_path(c: Client, path: str) -> None:
@@ -178,15 +200,21 @@ def _write_errors(c: Client, path: str, e: Exception) -> int:
 
 def _format_set_result(c: Client, path: str, echoed: object) -> str:
     """"21 (0.202)" for a linear param (human units, then the raw echo);
-    the raw echo alone otherwise (controller decision, fix round 1)."""
+    "-6.0 dB (0.593)" for a fader param (same, but dB needs the unit
+    spelled out -- unlike linear's implicit dB, "-6.0" alone would read as
+    a bare number); the raw echo alone otherwise (controller decision, fix
+    round 1)."""
     human_value = c.to_human(path, echoed)
     if human_value is None:
         return str(echoed)
     try:
-        is_int = c.param_row(path).get("type") == "int"
+        row = c.param_row(path)
     except KeyError:
-        is_int = False
+        row = {}
+    is_int = row.get("type") == "int"
     human_str = str(round(human_value)) if is_int else f"{human_value:.1f}"
+    if row.get("curve") == "fader":
+        human_str += " dB"
     return f"{human_str} ({echoed:.3f})"
 
 
@@ -276,6 +304,9 @@ def _summary_lines(c: Client) -> list[str]:
 
 def main(argv: list[str] | None = None) -> int:
     p = build_parser()
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv and argv[0] == "set":
+        argv = _protect_set_value(argv)
     try:
         args = p.parse_args(argv)
     except SystemExit as e:
@@ -337,7 +368,7 @@ def main(argv: list[str] | None = None) -> int:
             try:
                 param_type = c.param_row(args.path).get("type")
                 value = _parse_set_value(args.value, param_type)
-                echoed = c.set(args.path, value)
+                echoed = c.set(args.path, value, raw=args.raw)
             except (KeyError, ValueError, PermissionError, WriteNotConfirmed) as e:
                 return _write_errors(c, args.path, e)
             print(f"{args.path} = {_format_set_result(c, args.path, echoed)}")

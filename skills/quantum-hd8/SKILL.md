@@ -53,21 +53,27 @@ Exact path unknown? `quantum-hd8 dump | grep` it; never invent one.
 
 The daemon stores every value **normalized 0..1**. `set` converts only some:
 - curve `linear` → **human units** (`line/chN/preampgain` in dB, `global/ledBrightness` 1..100).
+- curve `fader` (every `volume` and `auxN` send, `main/ch1/volume`) → **dB**, measured 19/09
+  (`quantum_hd8/fader.py`, piecewise-linear over the measured curve, `-96..+10`): `set
+  line/ch29/aux1 -6`, `-6dB`, `0`, `+3`, `-inf` (fader bottom) all work now. **Assumption, not
+  separately measured per path:** the curve was measured on one send (`line/ch30/aux13`) and
+  applied to every `fader`-curve param, since they share the XML curve name and range.
+  0.735 is seen on many faders at unity (0 dB) — that's now what `fader_db(0.735)` returns, not a
+  guess.
 - toggles → `0/1` (`on`/`off`).
-- `fader`, `exp` and anything else → **raw normalized 0..1**. `set main/ch1/volume -6` is an
-  error, not -6 dB. Which curve a path has: `quantum_hd8/params.json` (fields `curve`, `type`,
-  `min`, `max`, `units`), or use a shortcut (`preamp`, `route`) that converts.
-- **The `fader` curve's dB ↔ 0..1 mapping is NOT measured** (every `volume` and `auxN` send).
-  For a dB request on a fader ("main a 0 dB", "send a -10"), do **not** compute a normalized
-  value (not linear over -96..+10, not anything else). Tell the user the mapping isn't
-  calibrated and ask for either a normalized target, or to set it once in UC and read it back
-  with `get`. 0.735 is seen on many faders: its dB is unknown, never call it 0 dB (unity).
-  Only 0 = bottom of the fader (-96, off) is safe: "zera o send" = `set line/ch29/aux1 0`.
+- `exp` and anything else → **raw normalized 0..1**.
+- `--raw` on `set` (or `Client.set(path, value, raw=True)`) writes a **normalized 0..1** value
+  directly for any curve, bypassing the human/dB conversion — use it when you already have the
+  normalized number (e.g. from `get`) and don't want it reinterpreted.
+- Which curve a path has: `quantum_hd8/params.json` (fields `curve`, `type`, `min`, `max`,
+  `units`), or use a shortcut (`preamp`, `route`) that converts.
 - `get`, `dump` and `listen` always print the **normalized** value (0.192, not 20). Convert with
-  min/max for linear params before telling the user a dB number.
+  min/max for linear params, or `quantum_hd8.fader.fader_db()` for fader params, before telling
+  the user a dB number. `state` already prints `main/ch1` volume in dB.
 - `route` and `state` print labels (`Loopback 1`), not the normalized index.
-- Output of `set` (linear params): `global/ledBrightness = 20 (0.192)` = human value, then the
-  normalized echo; other params print the normalized echo only.
+- Output of `set`: `global/ledBrightness = 20 (0.192)` for linear (human value, then the
+  normalized echo); `line/ch30/aux13 = -6.0 dB (0.593)` for fader (dB, explicitly labeled, then
+  the normalized echo); other params print the normalized echo only.
 - Writing the value it already has is a **no-op**: the daemon sends no echo, the CLI returns the
   current value. Not an error, not a failed write.
 
@@ -94,15 +100,22 @@ The daemon stores every value **normalized 0..1**. `set` converts only some:
    live by this tool (built from a UC capture, 19/09).
 6. **Meters are dBFS, calibrated 18/09** (peak, not RMS): `dBFS = 20·log10(raw / 65535)` (raw 0 =
    silence = -inf). `quantum-hd8 meters`/`meters --once` show both the raw value and the dBFS.
-7. **Re-amp outs (CoreAudio 11/12) are not reachable from the host.** Their source is the front
-   panel: *Global Settings > Reamp Out* (ADAT 1/2 … ADAT 15/16). No `set`/`route` changes it;
-   `aux/ch13-14` are Loopback 1/2, not re-amp. Tell the user to change it on the panel
-   (details: `docs/camada-b-reamp.md`).
+7. **Re-amp outs (CoreAudio 11/12): the panel selector isn't reachable from the host, but the
+   mixer can still feed them.** *Global Settings > Reamp Out* (ADAT 1/2 … ADAT 15/16) can't be
+   set/read by `set`/`route` — tell the user to change it on the panel. But measured 19/09: a
+   signal sent to the mixer aux matching whatever ADAT pair the panel is currently set to (e.g.
+   `aux/ch6` for ADAT 3/4, this unit's current setting) **does** reach the re-amp outs, with the
+   mixer not in "Mixer Bypass" — so "manda um sinal pro re-amp pelo mixer" is answerable with
+   `set line/chN/auxK ...` once you know the panel's current pair (ask the user, or infer from
+   which `aux/ch5..12` a known signal shows up on when re-amp is monitored). `aux/ch13-14` are
+   Loopback 1/2, unrelated to re-amp either way. Details: `docs/camada-b-reamp.md`.
 8. No raw frames, no `tools/probe.py` writes, no guessing paths: paths come from `dump`.
 
 ## Red flags — stop
 
-- About to pass dB/percent to a `fader`/`exp` path, or converting dB to 0..1 yourself.
+- About to pass dB/percent to an `exp` path (still raw normalized 0..1), or converting dB to 0..1
+  yourself for a `linear`/`fader` path instead of letting `set` do it (or `--raw` when you
+  already have the normalized value).
 - Using `phantom` in a path, or a path not in the map / `dump`.
 - Reporting a meter value as RMS, or without saying it's a peak reading.
 - `scene load` without `--keep-gains --keep-mode` and without the user asking for the scene's

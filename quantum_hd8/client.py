@@ -15,6 +15,7 @@ import time
 from pathlib import Path
 from typing import Iterator
 
+from . import fader
 from . import ucnet
 from . import undo
 
@@ -253,6 +254,8 @@ class Client:
 
     def human(self, path: str) -> str:
         curve, lo, hi = self._curve_and_range(path)
+        if curve == "fader":
+            return f"{fader.fader_db(self.state[path]):.1f} dB"
         if curve != "linear" or lo is None or hi is None:
             return f"{self.get(path)} (normalizado)"
         return f"{self._human_value(path):.1f} dB"
@@ -262,9 +265,13 @@ class Client:
         return lo + self.state[path] * (hi - lo)
 
     def to_human(self, path: str, normalized: float) -> float | None:
-        """normalized -> human units for `path`, or None when it isn't a
-        linear-curve param with a known range (daemon or params.json)."""
+        """normalized -> human units for `path`: dB for curve "linear"
+        (known min/max, daemon or params.json) and curve "fader" (the
+        measured piecewise curve, quantum_hd8.fader); None for anything
+        else (fader/exp params without a known curve, toggles, lists)."""
         curve, lo, hi = self._curve_and_range(path)
+        if curve == "fader":
+            return fader.fader_db(normalized)
         if curve != "linear" or lo is None or hi is None:
             return None
         return lo + normalized * (hi - lo)
@@ -292,7 +299,7 @@ class Client:
         except KeyError:
             raise KeyError(f"caminho desconhecido: {path}") from None
 
-    def set(self, path: str, value) -> object:
+    def set(self, path: str, value, raw: bool = False) -> object:
         """Write `path`, validated/converted per params.json + self.ranges,
         wait for the daemon's echo, record before/after in the undo journal
         and return the echoed (raw normalized) value.
@@ -300,8 +307,15 @@ class Client:
         Ruling (task-7-brief.md): curve "linear" params take HUMAN units
         (e.g. dB), converted with the known min/max (self.ranges, falling
         back to params.json -- see _curve_and_range); type "toggle" takes
-        0/1; every other curve (fader, exp, unknown/None) takes a raw
-        normalized value in 0..1.
+        0/1; curve "fader" (every volume/auxN send -- measured 19/09,
+        quantum_hd8.fader) takes dB, converted with fader.fader_normalized
+        ("-inf"/<= -96 -> 0.0, > +10 raises); every other curve (exp,
+        unknown/None) takes a raw normalized value in 0..1.
+
+        `raw=True` bypasses all of the above and writes `value` as the
+        literal normalized 0..1 value, for any curve (the CLI `set --raw`
+        flag; matches Client.set_raw's "bypassing human conversion" ruling,
+        but still going through the normal validated/undo-journaled path).
         """
         row = self._param_row(path)
         if "readonly" in row.get("flags", []):
@@ -310,10 +324,16 @@ class Client:
             raise ValueError(f"{path}: parâmetro de texto não suportado")
 
         curve, lo, hi = self._curve_and_range(path)
-        if curve == "linear" and lo is not None and hi is not None:
+        if raw:
+            if not (0.0 <= value <= 1.0):
+                raise ValueError(f"{path}: {value} fora da faixa normalizada [0, 1]")
+            normalized = float(value)
+        elif curve == "linear" and lo is not None and hi is not None:
             if not (lo <= value <= hi):
                 raise ValueError(f"{path}: {value} fora da faixa [{lo}, {hi}]")
             normalized = (value - lo) / (hi - lo)
+        elif curve == "fader":
+            normalized = fader.fader_normalized(value)
         elif row.get("type") == "toggle":
             if value not in (0, 1):
                 raise ValueError(f"{path}: {value} não é 0/1 (toggle)")

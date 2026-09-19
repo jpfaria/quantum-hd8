@@ -15,8 +15,9 @@ ainda não visto aqui.
 | Cenas: `Listscene` | medido; `RestorePreset` visto no tráfego do UC, não disparado por nós |
 | Salvar cena | medido (19/09, captura do UC salvando); `Client.save_scene`/`scene save` disparam, não verificado ao vivo pela ferramenta |
 | Medidores `MS levl` (UDP) | layout medido; escala → dBFS calibrada (18/09) |
-| Re-amp (saídas 11/12) | fora da camada A: só pelo painel ([`camada-b-reamp.md`](camada-b-reamp.md)) |
+| Re-amp (saídas 11/12) | seletor do painel fora da camada A; mixer alcança o re-amp pelo aux do bus ADAT selecionado ([`camada-b-reamp.md`](camada-b-reamp.md), medido 19/09) |
 | `scene load` muda `global/mixerMode` | medido (18/09, MK300-FRFR): `--keep-mode` restaura |
+| Curva `fader` (dB ↔ 0..1) | medido (19/09, `line/ch30/aux13`); `quantum_hd8/fader.py`, aplicado a todo parâmetro `curve="fader"` por hipótese (mesma curva na XML) |
 
 ## Transporte
 
@@ -215,3 +216,25 @@ pico linear × 65535: **dBFS = 20·log10(raw / 65535)**, `raw` 0 (silêncio) →
 `-inf`. Implementado em `quantum_hd8.ucnet.meter_dbfs()`; é **pico, não RMS**
 (o valor mais alto visto na janela do pacote, não uma média). `meters` e
 `meters --once` mostram o valor cru e o dBFS calibrado lado a lado.
+
+## Curva `fader` (medida, 19/09)
+
+Método (`tests/fixtures/fader-curve.json`): tom 0,1 (-20 dBFS) no USB 4
+(`line/ch30`), `line/ch30/aux13` (Loopback 1) variado em 17 pontos entre 0,05
+e 1,0; para cada ponto, mediana do medidor calibrado de `aux/ch13` após
+1,2 s de assentamento; ganho = dBFS + 20 (o tom de entrada). 0 (fundo do
+fader) não foi medido em dBFS -- é `-inf` por definição (mute).
+
+Pontos medidos (`normalized` → `gain_db`): 0,05 → -49,48; 0,1 → -39,3; 0,15 →
+-35,27; 0,2 → -31,32; 0,3 → -23,44; 0,4 → -15,53; 0,5 → -8,87; 0,6 → -5,1;
+0,65 → -3,21; 0,7 → -1,32; **0,735 → 0,0 (unidade)**; 0,75 → 0,57; 0,8 → 2,45;
+0,85 → 4,34; 0,9 → 6,23; 0,95 → 8,11; 1,0 → 10,0.
+
+`quantum_hd8.fader.fader_db()`/`fader_normalized()` interpolam linearmente
+entre esses pontos (e entre eles, a inversa); abaixo de 0,05 extrapolam a
+inclinação do primeiro segmento e prendem em -96 dB (o piso do parâmetro).
+**Hipótese, não medida por caminho:** a curva foi medida numa única saída
+(`line/ch30/aux13`) e é aplicada a todo parâmetro cujo `curve` no
+`params.json` é `"fader"` (todo `volume` e `auxN` de canal, `main/ch1/volume`)
+-- eles compartilham o mesmo nome de curva na XML e a mesma faixa relatada
+pelo daemon (-96..+10 dB).
