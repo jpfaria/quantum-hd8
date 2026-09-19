@@ -13,7 +13,7 @@ ainda não visto aqui.
 | Leitura (`Synchronize`), eventos `PV`/`PL` | medido |
 | Escrita `PV` + eco (`global/ledBrightness`), no-op sem eco | medido |
 | Cenas: `Listscene` | medido; `RestorePreset` visto no tráfego do UC, não disparado por nós |
-| Salvar cena | não capturado |
+| Salvar cena | medido (19/09, captura do UC salvando); `Client.save_scene`/`scene save` disparam, não verificado ao vivo pela ferramenta |
 | Medidores `MS levl` (UDP) | layout medido; escala → dBFS calibrada (18/09) |
 | Re-amp (saídas 11/12) | fora da camada A: só pelo painel ([`camada-b-reamp.md`](camada-b-reamp.md)) |
 | `scene load` muda `global/mixerMode` | medido (18/09, MK300-FRFR): `--keep-mode` restaura |
@@ -125,6 +125,32 @@ Strings de ids de mensagem no binário `ucdaemon` (candidatas, não medidas):
 Fixtures extraídas da captura do UC: `uc-restore.bin` (RestorePreset que o UC
 mandou), `uc-recalled.bin` (resposta RecalledPreset), `uc-pvwrite.bin` (PV que o
 UC escreveu: `global/mixerMode`).
+
+## Salvar cena (medido, 19/09)
+
+Captura do app UC real salvando a cena `PEDAIS-SYN2-FRFR`:
+
+- UC → daemon, sessão da HD 8 (`JM` cbytes `6a 00 69 00`):
+  `{"id": "StorePreset","url": "presets","presetTarget": "","presetFile":
+  "scene/PEDAIS-SYN2-FRFR.scene"}` (`tests/fixtures/uc-store.bin` --
+  espaçamento/ordem de chaves iguais ao `RestorePreset` de `uc-restore.bin`,
+  exceto que `StorePreset` não carrega `presetTargetSlave`).
+- daemon → UC (`JM` cbytes `69 00 6a 00`, o par trocado):
+  `{"id": "StoredPreset","presetFile": "scene/PEDAIS-SYN2-FRFR.scene",
+  "presetName": "scene/PEDAIS-SYN2-FRFR.scene","presetType": "scene"}`
+  (`tests/fixtures/uc-stored.bin`).
+- Depois de salvar, o UC repetiu o pedido de lista de cenas: `FR` payload
+  `02 00 "Listscene" 00 00` -- o primeiro par de bytes parece um contador de
+  pedido (`01 00` na conexão, `02 00` depois de salvar); o daemon respondeu
+  `FD` com o mesmo contador no cabeçalho.
+
+`Client.save_scene(name)` reproduz essa troca: manda `StorePreset` (byte a
+byte igual a `uc-store.bin` para `"PEDAIS-SYN2-FRFR"`), espera até 3 s por
+`StoredPreset` (`SceneSaveTimeout` se não chegar) e então manda `FR
+Listscene` com o próximo contador (`self._fr_counter`, incrementado a cada
+chamada) para atualizar `self.scenes`, esperando o `FD` de resposta.
+**Não verificado ao vivo pela ferramenta** -- construído a partir da captura
+do UC, não disparado por nós contra o `ucdaemon` real ainda.
 
 ## Eco da escrita (medido, 18/09)
 

@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from quantum_hd8 import ucnet
-from quantum_hd8.client import Client, DEVICE_REPLY_CB, SceneLoadTimeout
+from quantum_hd8.client import Client, DEVICE_REPLY_CB, SceneLoadTimeout, SceneSaveTimeout
 
 FX = Path(__file__).parent / "fixtures"
 
@@ -307,3 +307,112 @@ def test_load_scene_keep_mode_does_nothing_when_mode_unchanged(tmp_path):
 
     assert result["mode_restored"] is None
     assert b"global/mixerMode" not in fake.tx  # no extra PV sent for it
+
+
+# --- scene save (measured 19/09 from a UC capture: uc-store.bin/uc-stored.bin) ---
+
+import json as _json
+import struct as _struct
+
+
+def _fd(names):
+    body = _json.dumps({"files": [{"name": n} for n in names]}).encode()
+    header = b"\x00" * 14  # header content unparsed by _parse_scene_list
+    return ucnet.encode("FD", header + body, cbytes=DEVICE_REPLY_CB)
+
+
+class SaveEchoSock:
+    """Daemon double for save_scene: hands out queued rx chunks; sendall()
+    is recorded but does not auto-reply (the test supplies StoredPreset/FD
+    explicitly, matching the real message order)."""
+
+    def __init__(self, rx):
+        self.tx = b""
+        self.rx = list(rx)
+
+    def sendall(self, b):
+        self.tx += b
+
+    def recv(self, n):
+        return self.rx.pop(0) if self.rx else b""
+
+    def settimeout(self, t):
+        pass
+
+    def close(self):
+        pass
+
+
+def test_save_scene_sends_byte_identical_store_preset():
+    fake = SaveEchoSock([(FX / "uc-stored.bin").read_bytes(), _fd(["PEDAIS-SYN2-FRFR.scene"])])
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.sock = fake
+
+    c.save_scene("PEDAIS-SYN2-FRFR")
+
+    assert fake.tx.startswith((FX / "uc-store.bin").read_bytes())
+
+
+def test_save_scene_appends_scene_suffix_if_missing():
+    fake = SaveEchoSock([(FX / "uc-stored.bin").read_bytes(), _fd(["PEDAIS-SYN2-FRFR.scene"])])
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.sock = fake
+
+    c.save_scene("PEDAIS-SYN2-FRFR.scene")
+
+    assert fake.tx.startswith((FX / "uc-store.bin").read_bytes())
+
+
+def test_save_scene_returns_stored_preset_file():
+    fake = SaveEchoSock([(FX / "uc-stored.bin").read_bytes(), _fd(["PEDAIS-SYN2-FRFR.scene"])])
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.sock = fake
+
+    result = c.save_scene("PEDAIS-SYN2-FRFR")
+
+    assert result == "scene/PEDAIS-SYN2-FRFR.scene"
+
+
+def test_save_scene_raises_when_no_stored_preset_arrives():
+    fake = SaveEchoSock([])
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.sock = fake
+
+    with pytest.raises(SceneSaveTimeout):
+        c.save_scene("PEDAIS-SYN2-FRFR")
+
+
+def test_save_scene_refreshes_scene_list_with_next_fr_counter():
+    fake = SaveEchoSock([(FX / "uc-stored.bin").read_bytes(), _fd(["PEDAIS-SYN2-FRFR.scene"])])
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.sock = fake
+
+    c.save_scene("PEDAIS-SYN2-FRFR")
+
+    assert c.scenes == ["PEDAIS-SYN2-FRFR.scene"]
+    # FR payload after StorePreset/StoredPreset: counter 02 00, then
+    # "Listscene" + 00 00 (docs/protocol.md: 01 00 at connect, 02 00 after save).
+    fr_payload = _struct.pack("<H", 2) + b"Listscene" + b"\x00\x00"
+    assert ucnet.encode("FR", fr_payload, cbytes=b"\x6a\x00\x69\x00") in fake.tx
+
+
+# --- fix: global/* comparison must tolerate float-rounding noise, same
+# tolerance as echo matching (measured live: global/mainOutVolumeLink
+# 0.3333333432674408 -> 0.3333 is not a real change) -----------------------
+
+
+def test_load_scene_ignores_global_float_rounding_noise(tmp_path):
+    recalled = (FX / "uc-recalled.bin").read_bytes()
+    fake = EchoSceneSock([
+        recalled,
+        _pv("global/mainOutVolumeLink", 0.3333),
+    ])
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.sock = fake
+    c.undo_journal = tmp_path / "undo.jsonl"
+    c.ranges = {}
+    c.state = {"global/mainOutVolumeLink": 0.3333333432674408}
+
+    result = c.load_scene("MK300-FRFR")
+
+    assert result["changed_globals"] == []

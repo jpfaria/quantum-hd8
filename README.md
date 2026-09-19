@@ -36,7 +36,7 @@ Claude Code plugin (skill `quantum-hd8`): add this repo as a marketplace
 | `quantum-hd8 route phones1\|phones2\|spdif SOURCE` | Source by label (`"Loopback 1"`) or 0-based index |
 | `quantum-hd8 scene list` | Scenes stored by UC |
 | `quantum-hd8 scene load NAME [--keep-gains] [--keep-mode]` | Load a scene; `--keep-gains` re-applies the preamp gains it zeroes, `--keep-mode` re-applies the Mixer Mode if the scene changed it |
-| `quantum-hd8 scene save NAME` | Not implemented (format not captured yet); exits 2 |
+| `quantum-hd8 scene save NAME` | Save the current state as scene `NAME` (refuses to overwrite an existing scene unless `--overwrite`) |
 | `quantum-hd8 meters [--once]` | Level meters, dBFS calibrated 18/09 (raw value shown alongside) |
 
 ### Values
@@ -55,7 +55,15 @@ removes it only once the write is confirmed (a failed undo keeps it).
 `scene load` can change `global/*` params as a side effect of the recall — measured 18/09: loading
 `MK300-FRFR` flipped `global/mixerMode` from "Mixer Bypass" to "Analog + ADAT", which changes
 routing. Every `scene load` snapshots `global/*` before and warns on stderr about anything that
-changed; `--keep-mode` writes `global/mixerMode` back if the scene changed it.
+changed (compared with the same tolerance as write-echo matching, so float-rounding noise from the
+daemon's re-sent PVs — e.g. `global/mainOutVolumeLink` read back as `0.3333` instead of the
+original `0.3333333432674408` — is not reported as a change); `--keep-mode` writes
+`global/mixerMode` back if the scene changed it.
+
+`scene save NAME` sends `StorePreset` (measured 19/09 from a capture of the UC app saving a scene)
+and waits for the daemon's `StoredPreset` confirmation, then refreshes `scene list`. It refuses to
+overwrite a scene already in `scene list` unless you pass `--overwrite` — never overwrite a scene
+without asking first.
 
 ### Exit codes
 
@@ -78,7 +86,7 @@ front-panel setting *Global Settings > Reamp Out* (ADAT 1/2 … ADAT 15/16). See
 | `scene list` | verified live |
 | `meters` stream (UDP, layout in/aux/main) | verified live; values calibrated to dBFS (18/09) |
 | `scene load` (+ `--keep-gains`, `--keep-mode`) | not yet live (built from the UC capture) |
-| `scene save` | not captured, not implemented |
+| `scene save` | not live-tested by the tool (built from a UC capture, 19/09) |
 | Re-amp source | not reachable from the host (front panel only) |
 
 Protocol notes, measured vs hypothesis: [`docs/protocol.md`](docs/protocol.md).

@@ -9,8 +9,8 @@ import sys
 from . import __version__
 from . import ucnet
 from . import undo
-from .client import (NOT_RESPONDING, Client, SceneLoadTimeout, WriteNotConfirmed,
-                     default_udp_factory)
+from .client import (NOT_RESPONDING, Client, SceneLoadTimeout, SceneSaveTimeout,
+                     WriteNotConfirmed, default_udp_factory)
 
 # Exit codes: 0 ok, 1 runtime/device error (daemon down, write not
 # confirmed, no meters), 2 usage/validation error (bad value, unknown path,
@@ -121,6 +121,8 @@ def build_parser() -> argparse.ArgumentParser:
                              help="Regrava o Mixer Mode anterior se a cena mudou")
     scene_save = scene_sub.add_parser("save", help="Salva uma cena")
     scene_save.add_argument("name")
+    scene_save.add_argument("--overwrite", action="store_true",
+                             help="Permite sobrescrever uma cena já existente")
 
     preamp = sub.add_parser("preamp", help="Atalho para um canal de entrada analógico (1-8)")
     preamp.add_argument("channel")
@@ -394,8 +396,18 @@ def main(argv: list[str] | None = None) -> int:
                           file=sys.stderr)
                 return EXIT_RUNTIME if failed else 0
             if args.scene_cmd == "save":
-                print("scene save: formato ainda não capturado", file=sys.stderr)
-                return EXIT_USAGE
+                preset_file = args.name if args.name.endswith(".scene") else f"{args.name}.scene"
+                if preset_file in c.scenes and not args.overwrite:
+                    print(f"cena já existe: {preset_file} (use --overwrite para sobrescrever)",
+                          file=sys.stderr)
+                    return EXIT_USAGE
+                try:
+                    c.save_scene(args.name)
+                except SceneSaveTimeout as e:
+                    print(f"cena não confirmada (StoredPreset não chegou): {e}", file=sys.stderr)
+                    return EXIT_RUNTIME
+                print(f"cena salva: {args.name}")
+                return 0
             return EXIT_USAGE
 
         if args.cmd == "preamp":

@@ -38,6 +38,10 @@ class WriteNotConfirmed(Exception):
 class SceneLoadTimeout(Exception):
     """Client.load_scene sent RestorePreset but no RecalledPreset arrived."""
 
+
+class SceneSaveTimeout(Exception):
+    """Client.save_scene sent StorePreset but no StoredPreset arrived."""
+
 # Same clientName/clientDescription/clientIdentifier as
 # tests/fixtures/probe-device-tx.bin, which is a real, working capture.
 SUBSCRIBE_PAYLOAD = {
@@ -75,6 +79,12 @@ KEEPALIVE_INTERVAL = 1.0
 # been quiet this long, bounded by SCENE_SETTLE_MAX, before comparing gains.
 SCENE_QUIET = 0.3
 SCENE_SETTLE_MAX = 3.0
+# save_scene() timeout waiting for JM StoredPreset after StorePreset
+# (measured 19/09: uc-store.bin/uc-stored.bin, same 3 s budget as load_scene).
+SCENE_SAVE_TIMEOUT = 3.0
+# FR "Listscene" request counter, first two bytes of the FR payload
+# (docs/protocol.md: measured 01 00 at connect, 02 00 after a save).
+INITIAL_FR_COUNTER = 1
 # Echo tolerance for non-int params (int params compare quantized steps).
 ECHO_TOLERANCE = 1e-3
 # load_scene() snapshots every state key under this prefix before/after a
@@ -157,6 +167,9 @@ class Client:
         self._send_lock = threading.Lock()
         self.scene_quiet = SCENE_QUIET
         self.scene_settle_max = SCENE_SETTLE_MAX
+        # FR "Listscene" request counter (docs/protocol.md): 1 is sent by
+        # connect(); save_scene() increments it before each refresh.
+        self._fr_counter = INITIAL_FR_COUNTER
 
     def _send(self, data: bytes) -> None:
         with self._send_lock:
@@ -175,7 +188,8 @@ class Client:
         self._send(ucnet.encode(
             "JM", ucnet.json_payload(SUBSCRIBE_PAYLOAD), cbytes=DEVICE_CB))
         self._send(ucnet.encode(
-            "FR", struct.pack("<H", 1) + b"Listscene" + b"\x00\x00", cbytes=DEVICE_CB))
+            "FR", struct.pack("<H", self._fr_counter) + b"Listscene" + b"\x00\x00",
+            cbytes=DEVICE_CB))
 
         # ZM/ZB (state) and FD (scene list) can arrive in separate TCP
         # segments -- i.e. separate recv() calls, possibly split at any byte
@@ -370,6 +384,24 @@ class Client:
                 return round(wanted * step) == round(got * step)
         return abs(wanted - got) < tolerance
 
+    def _global_changed(self, path: str, before: object, after: object) -> bool:
+        """True when `before` -> `after` is a real change for a global/*
+        param tracked by load_scene(), not just float-rounding noise (fix:
+        `before` comes from the initial Synchronize/ZM read -- full float
+        precision -- while `after` comes from the daemon's re-sent PV,
+        rounded to 4 decimals by ucnet.parse_pv; measured live:
+        global/mainOutVolumeLink 0.3333333432674408 -> 0.3333 is not a real
+        change). Same tolerance as echo matching (quantized step for int
+        params via _values_match, ECHO_TOLERANCE otherwise); non-numeric
+        values (unexpected here) fall back to plain !=."""
+        if not isinstance(before, (int, float)) or not isinstance(after, (int, float)):
+            return before != after
+        try:
+            row = self._param_row(path)
+        except KeyError:
+            row = None
+        return not self._values_match(path, after, before, row, ECHO_TOLERANCE)
+
     def set_raw(self, path: str, normalized: float) -> object:
         """Write a raw normalized value directly, bypassing curve conversion,
         range validation and undo recording. Used by the CLI `undo` command
@@ -465,7 +497,7 @@ class Client:
         changed_globals = [
             (p, before_globals[p], after_globals[p])
             for p in before_globals
-            if after_globals[p] != before_globals[p]
+            if self._global_changed(p, before_globals[p], after_globals[p])
         ]
 
         gains = []
@@ -541,6 +573,45 @@ class Client:
                 self._handle(m)
                 if predicate(m):
                     return m
+
+    def save_scene(self, name: str) -> str:
+        """Send JM StorePreset for scene `name` (".scene" appended if
+        missing) and wait up to SCENE_SAVE_TIMEOUT s for JM StoredPreset
+        (measured 19/09 from a capture of the UC app saving a scene:
+        tests/fixtures/uc-store.bin/uc-stored.bin). Raises SceneSaveTimeout
+        if it never arrives.
+
+        On success, refreshes self.scenes the same way connect() populates
+        it: FR "Listscene" with the next request counter (docs/protocol.md:
+        01 00 at connect, 02 00 after save), waiting for the daemon's FD
+        reply. A missing FD (unlikely, but not fatal) leaves self.scenes as
+        it was -- same leniency as connect()'s scene-list wait.
+
+        Returns the presetFile the daemon confirms in StoredPreset.
+        """
+        preset_file = name if name.endswith(".scene") else f"{name}.scene"
+        payload = ucnet.compact_json_payload({
+            "id": "StorePreset",
+            "url": "presets",
+            "presetTarget": "",
+            "presetFile": f"scene/{preset_file}",
+        })
+        self._send(ucnet.encode("JM", payload, cbytes=DEVICE_CB))
+
+        m = self._drain_until(
+            lambda m: m.code == "JM" and ucnet.parse_json(m).get("id") == "StoredPreset",
+            timeout=SCENE_SAVE_TIMEOUT)
+        if m is None:
+            raise SceneSaveTimeout(name)
+        stored = ucnet.parse_json(m)
+
+        self._fr_counter += 1
+        self._send(ucnet.encode(
+            "FR", struct.pack("<H", self._fr_counter) + b"Listscene" + b"\x00\x00",
+            cbytes=DEVICE_CB))
+        self._drain_until(lambda m: m.code == "FD", timeout=self.connect_timeout)
+
+        return stored.get("presetFile", f"scene/{preset_file}")
 
     def events(self, timeout: float | None = None) -> Iterator[tuple[str, object]]:
         self.sock.settimeout(timeout)

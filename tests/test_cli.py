@@ -5,7 +5,7 @@ import sys
 
 from quantum_hd8 import ucnet
 from quantum_hd8.cli import main
-from quantum_hd8.client import SceneLoadTimeout, WriteNotConfirmed
+from quantum_hd8.client import SceneLoadTimeout, SceneSaveTimeout, WriteNotConfirmed
 
 
 def test_version(capsys):
@@ -173,6 +173,7 @@ class WriteFakeClient:
     """Stands in for Client in `set`/`undo`/`scene` CLI tests."""
 
     closed = False
+    scenes = ["ELEMENT.scene", "PEDAIS-SYN2-5050.scene"]
 
     def __init__(self, *a, **k):
         from quantum_hd8 import undo as _undo
@@ -180,6 +181,7 @@ class WriteFakeClient:
         self.set_calls = []
         self.set_raw_calls = []
         self.load_scene_calls = []
+        self.save_scene_calls = []
 
     def connect(self):
         return {}
@@ -247,6 +249,13 @@ class WriteFakeClient:
         return {"preset_file": f"{name}.scene" if not name.endswith(".scene") else name,
                 "gains": gains, "failed": failed,
                 "changed_globals": changed_globals, "mode_restored": mode_restored}
+
+    def save_scene(self, name):
+        self.save_scene_calls.append(name)
+        if name == "TIMEOUT":
+            raise SceneSaveTimeout(name)
+        preset_file = name if name.endswith(".scene") else f"{name}.scene"
+        return f"scene/{preset_file}"
 
     def close(self):
         self.closed = True
@@ -380,11 +389,49 @@ def test_scene_load_timeout_prints_error_and_returns_1(capsys, monkeypatch):
     assert "TIMEOUT" in capsys.readouterr().err
 
 
-def test_scene_save_not_implemented(capsys, monkeypatch):
+def test_scene_save_prints_success(capsys, monkeypatch):
     monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
-    rc = main(["scene", "save", "whatever"])
+    instances = _capture_instances(monkeypatch, WriteFakeClient)
+    rc = main(["scene", "save", "NEWSCENE"])
+    assert rc == 0
+    assert instances[0].save_scene_calls == ["NEWSCENE"]
+    assert "cena salva: NEWSCENE" in capsys.readouterr().out
+
+
+def test_scene_save_refuses_existing_scene_without_overwrite(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    instances = _capture_instances(monkeypatch, WriteFakeClient)
+    rc = main(["scene", "save", "ELEMENT.scene"])
     assert rc == 2
-    assert "não capturado" in capsys.readouterr().err
+    assert instances[0].save_scene_calls == []
+    err = capsys.readouterr().err
+    assert "ELEMENT.scene" in err
+
+
+def test_scene_save_refuses_existing_scene_by_bare_name(capsys, monkeypatch):
+    # "ELEMENT" (no .scene suffix) must also be recognized as a clash with
+    # the stored "ELEMENT.scene".
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    instances = _capture_instances(monkeypatch, WriteFakeClient)
+    rc = main(["scene", "save", "ELEMENT"])
+    assert rc == 2
+    assert instances[0].save_scene_calls == []
+
+
+def test_scene_save_overwrite_flag_allows_existing_scene(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    instances = _capture_instances(monkeypatch, WriteFakeClient)
+    rc = main(["scene", "save", "ELEMENT.scene", "--overwrite"])
+    assert rc == 0
+    assert instances[0].save_scene_calls == ["ELEMENT.scene"]
+    assert "cena salva: ELEMENT.scene" in capsys.readouterr().out
+
+
+def test_scene_save_timeout_prints_error_and_returns_1(capsys, monkeypatch):
+    monkeypatch.setattr("quantum_hd8.cli.Client", WriteFakeClient)
+    rc = main(["scene", "save", "TIMEOUT"])
+    assert rc == 1
+    assert "TIMEOUT" in capsys.readouterr().err
 
 
 class MetersFakeClient:

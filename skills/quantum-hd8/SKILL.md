@@ -25,7 +25,7 @@ daemon not up: tell the user. **Never** restart/stop `ucdaemon`, never `launchct
 | Phones / S/PDIF source | `quantum-hd8 route phones1 "Loopback 1"` (`phones2`, `spdif`; label or 0-based index) |
 | Any parameter | `quantum-hd8 set <path> <value>` |
 | Revert last write | `quantum-hd8 undo` (LIFO, repeat for older ones) |
-| Scenes | `quantum-hd8 scene list` · `scene load NAME --keep-gains --keep-mode` |
+| Scenes | `quantum-hd8 scene list` · `scene load NAME --keep-gains --keep-mode` · `scene save NAME` |
 | Levels (dBFS) | `quantum-hd8 meters --once` (JSON) or `meters` (live) |
 | Watch changes | `quantum-hd8 listen` |
 
@@ -88,7 +88,10 @@ The daemon stores every value **normalized 0..1**. `set` converts only some:
    `scene load NAME --keep-gains --keep-mode` unless the user explicitly wants the scene's gains
    or mode; it prints each gain and the mode it restored, and warns on stderr about any other
    `global/*` param the recall changed. Not yet verified live: re-read `state` after it.
-   `scene save` is not implemented (exits 2): use the UC app.
+   `scene save NAME` saves the current state as a scene. **Never overwrite a user's scene without
+   explicit ask:** it refuses (exit 2) when `NAME` already exists in `scene list`, unless
+   `--overwrite` is passed -- confirm with the user before adding `--overwrite`. Not yet verified
+   live by this tool (built from a UC capture, 19/09).
 6. **Meters are dBFS, calibrated 18/09** (peak, not RMS): `dBFS = 20·log10(raw / 65535)` (raw 0 =
    silence = -inf). `quantum-hd8 meters`/`meters --once` show both the raw value and the dBFS.
 7. **Re-amp outs (CoreAudio 11/12) are not reachable from the host.** Their source is the front
