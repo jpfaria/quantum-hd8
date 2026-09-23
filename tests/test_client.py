@@ -138,6 +138,20 @@ def test_human_formats_fader_curve_as_db():
     c.close()
 
 
+def test_human_value_follows_the_fader_curve():
+    """0.735 is 0 dB on a fader (measured 19/09). _human_value read it as
+    -18.1 dB -- the linear min/max mapping -- and on 22/09 that made a correct
+    scene recovery look like it had failed on every 0 dB send."""
+    rx = (FX / "probe-device-rx.bin").read_bytes()
+    fake = FakeSock(rx)
+    c = Client(sock_factory=lambda *a, **k: fake)
+    c.connect()
+
+    c.state["line/ch1/volume"] = 0.735
+    assert c._human_value("line/ch1/volume") == pytest.approx(0.0, abs=0.01)
+    c.close()
+
+
 def test_to_human_converts_fader_curve_normalized_to_db():
     rx = (FX / "probe-device-rx.bin").read_bytes()
     fake = FakeSock(rx)

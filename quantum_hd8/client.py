@@ -261,7 +261,12 @@ class Client:
         return f"{self._human_value(path):.1f} dB"
 
     def _human_value(self, path: str) -> float:
-        _, lo, hi = self._curve_and_range(path)
+        """The current value in human units. Follows the curve: a fader is
+        not linear, so the min/max mapping read 0 dB (0.735) as -18.1 dB and
+        made a correct scene recovery look like a failed one (22/09)."""
+        curve, lo, hi = self._curve_and_range(path)
+        if curve == "fader":
+            return fader.fader_db(self.state[path])
         return lo + self.state[path] * (hi - lo)
 
     def to_human(self, path: str, normalized: float) -> float | None:
