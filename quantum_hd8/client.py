@@ -58,6 +58,30 @@ SUBSCRIBE_PAYLOAD = {
 
 UDP_DISCOVERY_PORT = 47809
 
+# The daemon's TCP port and the HD 8's session address are NOT fixed (measured
+# 2026-09-23): after the laptop was moved and ucdaemon restarted, the port went
+# 59791 -> 62586 and the session's second cbyte 0x69 -> 0x66. Every write then
+# went unconfirmed. So when the defaults do not answer, connect() finds the
+# daemon's listening ports and tries each session byte in this range.
+SESSION_BYTES = range(0x60, 0x70)
+DISCOVER_TIMEOUT = 0.5      # s per (port, session) probe
+
+
+def daemon_ports(run=None) -> list[int]:
+    """TCP ports ucdaemon listens on at 127.0.0.1, from `netstat -anv`."""
+    import subprocess
+    run = run or subprocess.run
+    out = run(["netstat", "-anv", "-p", "tcp"], capture_output=True, text=True).stdout
+    ports = []
+    for line in out.splitlines():
+        cols = line.split()
+        if "LISTEN" in cols and "ucdaemon" in line and len(cols) > 3 \
+                and cols[3].startswith("127.0.0.1."):
+            port = int(cols[3].rsplit(".", 1)[1])
+            if port not in ports:
+                ports.append(port)
+    return ports
+
 # Number of "in" meter channels the daemon reports (docs/protocol.md,
 # "Medidores"): line/ch1..36.
 METER_IN_CHANNELS = 36
@@ -141,8 +165,15 @@ class Client:
                  connect_timeout: float = CONNECT_TIMEOUT,
                  raw_sink=None,
                  undo_journal: Path | None = None,
-                 udp_factory=None):
+                 udp_factory=None,
+                 discover=None,
+                 ports_finder=daemon_ports):
         self.host = host
+        self.device_cb = DEVICE_CB
+        # Discovery only against a real daemon: a fake socket in the tests
+        # must fail the way it was told to.
+        self._discover = (sock_factory is socket.create_connection) if discover is None else discover
+        self._ports_finder = ports_finder
         self.port = port
         self._sock_factory = sock_factory
         self.connect_timeout = connect_timeout
@@ -177,6 +208,51 @@ class Client:
             self.sock.sendall(data)
 
     def connect(self) -> dict:
+        try:
+            return self._connect_once()
+        except (ConnectionRefusedError, TimeoutError):
+            if not self._discover:
+                raise
+            self._close_quietly()
+        return self.rediscover()
+
+    def rediscover(self, skip_current: bool = False) -> dict:
+        """Find the (port, session) the daemon answers on now. With
+        `skip_current`, the pair in use is not tried: it answered reads but
+        stopped confirming writes."""
+        current = (self.port, self.device_cb)
+        self._close_quietly()
+        ports = [self.port] + [p for p in self._ports_finder() if p != self.port]
+        timeout, self.connect_timeout = self.connect_timeout, DISCOVER_TIMEOUT
+        try:
+            for port in ports:
+                for b in [self.device_cb[2]] + [x for x in SESSION_BYTES if x != self.device_cb[2]]:
+                    cb = bytes([DEVICE_CB[0], 0, b, 0])
+                    if skip_current and (port, cb) == current:
+                        continue
+                    self.port, self.device_cb = port, cb
+                    try:
+                        return self._connect_once()
+                    except (OSError, TimeoutError, ValueError):   # wrong session: junk
+                        self._close_quietly()
+        finally:
+            self.connect_timeout = timeout
+        self.port, self.device_cb = current
+        raise TimeoutError(NOT_RESPONDING)
+
+    def _close_quietly(self) -> None:
+        self._keepalive_stop.set()
+        if self.sock is not None:
+            try:
+                self.sock.close()
+            except OSError:
+                pass
+        self.sock = None
+        self._decoder = ucnet.Decoder()
+        self._keepalive_stop = threading.Event()
+        self._keepalive_thread = None
+
+    def _connect_once(self) -> dict:
         self.sock = self._sock_factory((self.host, self.port))
         self.sock.settimeout(self.connect_timeout)
 
@@ -187,10 +263,10 @@ class Client:
         self._send(ucnet.encode(
             "UM", struct.pack("<H", udp_port), cbytes=UM_CB))
         self._send(ucnet.encode(
-            "JM", ucnet.json_payload(SUBSCRIBE_PAYLOAD), cbytes=DEVICE_CB))
+            "JM", ucnet.json_payload(SUBSCRIBE_PAYLOAD), cbytes=self.device_cb))
         self._send(ucnet.encode(
             "FR", struct.pack("<H", self._fr_counter) + b"Listscene" + b"\x00\x00",
-            cbytes=DEVICE_CB))
+            cbytes=self.device_cb))
 
         # ZM/ZB (state) and FD (scene list) can arrive in separate TCP
         # segments -- i.e. separate recv() calls, possibly split at any byte
@@ -449,7 +525,7 @@ class Client:
         matches `normalized` (quantized step for int params, ECHO_TOLERANCE
         otherwise). Stale PVs for the same path -- e.g. re-sent by a scene
         recall still in flight -- update state but are not the echo."""
-        self._send(ucnet.encode("PV", ucnet.pv_payload(path, normalized), cbytes=DEVICE_CB))
+        self._send(ucnet.encode("PV", ucnet.pv_payload(path, normalized), cbytes=self.device_cb))
 
         def is_echo(m):
             if m.code != "PV":
@@ -505,7 +581,7 @@ class Client:
             "presetTargetSlave": 0,
             "presetFile": f"scene/{preset_file}",
         })
-        self._send(ucnet.encode("JM", payload, cbytes=DEVICE_CB))
+        self._send(ucnet.encode("JM", payload, cbytes=self.device_cb))
 
         m = self._drain_until(
             lambda m: m.code == "JM" and ucnet.parse_json(m).get("id") == "RecalledPreset",
@@ -621,7 +697,7 @@ class Client:
             "presetTarget": "",
             "presetFile": f"scene/{preset_file}",
         })
-        self._send(ucnet.encode("JM", payload, cbytes=DEVICE_CB))
+        self._send(ucnet.encode("JM", payload, cbytes=self.device_cb))
 
         m = self._drain_until(
             lambda m: m.code == "JM" and ucnet.parse_json(m).get("id") == "StoredPreset",
@@ -633,7 +709,7 @@ class Client:
         self._fr_counter += 1
         self._send(ucnet.encode(
             "FR", struct.pack("<H", self._fr_counter) + b"Listscene" + b"\x00\x00",
-            cbytes=DEVICE_CB))
+            cbytes=self.device_cb))
         self._drain_until(lambda m: m.code == "FD", timeout=self.connect_timeout)
 
         return stored.get("presetFile", f"scene/{preset_file}")
@@ -694,10 +770,12 @@ class Client:
         return {"in": in_labels, "aux": aux_labels, "main": ["main L", "main R"]}
 
     def _start_keepalive(self):
+        stop = self._keepalive_stop     # rediscover() swaps in a new one
+
         def loop():
-            while not self._keepalive_stop.wait(KEEPALIVE_INTERVAL):
+            while not stop.wait(KEEPALIVE_INTERVAL):
                 try:
-                    self._send(ucnet.encode("KA", b"", cbytes=DEVICE_CB))
+                    self._send(ucnet.encode("KA", b"", cbytes=self.device_cb))
                 except OSError:
                     return
         self._keepalive_thread = threading.Thread(target=loop, daemon=True)
