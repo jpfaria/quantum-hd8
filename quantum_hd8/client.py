@@ -689,7 +689,13 @@ class Client:
         it was -- same leniency as connect()'s scene-list wait.
 
         Returns the presetFile the daemon confirms in StoredPreset.
+
+        Rejects "/" in `name`: the daemon treats it as a path, creating a
+        folder under scene/ that UC lists as a scene and cannot delete
+        (measured 29/09: "ANALOGICO + FX SEND/RETURN DIGITAL").
         """
+        if "/" in name:
+            raise ValueError(f"nome de cena não pode ter '/': {name!r}")
         preset_file = name if name.endswith(".scene") else f"{name}.scene"
         payload = ucnet.compact_json_payload({
             "id": "StorePreset",
