@@ -150,8 +150,14 @@ byte igual a `uc-store.bin` para `"PEDAIS-SYN2-FRFR"`), espera até 3 s por
 `StoredPreset` (`SceneSaveTimeout` se não chegar) e então manda `FR
 Listscene` com o próximo contador (`self._fr_counter`, incrementado a cada
 chamada) para atualizar `self.scenes`, esperando o `FD` de resposta.
-**Não verificado ao vivo pela ferramenta** -- construído a partir da captura
-do UC, não disparado por nós contra o `ucdaemon` real ainda.
+**Verificado ao vivo (19/09):** `scene save TESTE` criou a cena, um segundo
+`scene save TESTE` foi recusado sem `--overwrite`, e depois `scene save
+MAIN-FRFR` gravou o estado em uso.
+
+Os arquivos de cena ficam em `/Library/Application Support/PreSonus/Quantum HD
+8/scene/NOME.scene`, pasta do **root**: a ferramenta salva pelo daemon, mas
+apagar uma cena exige `sudo rm` fora dela. Não existe `scene delete` porque o
+comando de apagar do UC nunca foi capturado -- não chutar o formato.
 
 ## Eco da escrita (medido, 18/09)
 
